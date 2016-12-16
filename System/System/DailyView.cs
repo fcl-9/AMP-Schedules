@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System
 {
-    public class DailyView
+    public class DailyView:IViewHandler
     {
     }
 }

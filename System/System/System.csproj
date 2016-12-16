@@ -40,7 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include=" TimeTableItem.cs" />
     <Compile Include="DailyView.cs" />
+    <Compile Include="IObserver.cs" />
+    <Compile Include="IViewHandler.cs" />
+    <Compile Include="MonthlyView.cs" />
     <Compile Include="IFilterHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchForClasses.cs" />
@@ -49,6 +53,7 @@
     <Compile Include="Student.cs" />
     <Compile Include="Teacher.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="WeeklyView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,6 @@
 ﻿namespace System
 {
-    public interface  TimeTableItem
+    public interface  ITimeTableItem
     {
         DateTime StarTime { get; set; }
         DateTime EndTime { get; set; }

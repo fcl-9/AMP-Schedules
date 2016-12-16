@@ -54,6 +54,7 @@
     <Compile Include="MonthlyView.cs" />
     <Compile Include="IFilterHandler.cs" />
     <Compile Include="Lesson.cs" />
+    <Compile Include="Factory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="SearchForClasses.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Teacher.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WeeklyView.cs" />
+    <Compile Include="Timetable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,8 +2,16 @@
 {
     public class Teacher : User
     {
-        public int Room { get; set; }
-        public int OfficeHours { get; set; }
         public string Email { get; set; }
+
+        public Room Room { get; set; }
+
+        public Teacher(string aUsername, string aPassword,string aEmail, Room aRoom)
+        {
+            Username = aUsername;
+            Password = aPassword;
+            Email = aEmail;
+            Room = aRoom;
+        }
     }
 }

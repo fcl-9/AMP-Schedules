@@ -11,6 +11,6 @@ namespace System
         public DateTime StarTime { get; set; }
         public DateTime EndTime { get; set; }
         public DateTime Day { get; set; }
-        public ITimeTableItem item { get; set; }
+        public ITimeTableItem Item { get; set; }
     }
 }

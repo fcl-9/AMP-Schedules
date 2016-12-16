@@ -4,6 +4,6 @@ namespace System
 {
     public interface IDecorator: ITimeTableItem
     {
-        ITimeTableItem item { get; set; }
+        ITimeTableItem Item { get; set; }
     }
 }

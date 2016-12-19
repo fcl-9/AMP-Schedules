@@ -42,7 +42,9 @@
   <ItemGroup>
     <Compile Include="Building.cs" />
     <Compile Include="Course.cs" />
+    <Compile Include="DataHandler.cs" />
     <Compile Include="EvaluationMoment.cs" />
+    <Compile Include="IDataHandler.cs" />
     <Compile Include="ITimeTableItem.cs" />
     <Compile Include="Alert.cs" />
     <Compile Include="ColorDecorator.cs" />

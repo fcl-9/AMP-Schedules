@@ -3,7 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace AMPSystem.Interfaces
 {
-    public interface ISubject:IDecorator
+    public interface ISubject
     {
         IEnumerator<IObserver> Observers { get; set; }
         void Add(IObserver observer);

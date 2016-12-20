@@ -6,7 +6,7 @@ namespace AMPSystem.Classes
     {
         public string Username { get; set; }
         public string Password { get; set; }
+        public ICollection<string> Roles { get; set; }
         public ICollection<Course> Courses { get; set; }
-
     }
 }

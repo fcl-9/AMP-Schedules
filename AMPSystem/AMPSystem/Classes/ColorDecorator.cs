@@ -7,25 +7,28 @@ using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    class ColorDecorator:ISubject
+    class ColorDecorator : IDecorator, ISubject
     {
+        public string Color { get; set; }
+        public ITimeTableItem Item { get; set; }
+
         public DateTime StarTime { get; set; }
         public DateTime EndTime { get; set; }
         public DateTime Day { get; set; }
-        public ITimeTableItem Item { get; set; }
         public IEnumerator<IObserver> Observers { get; set; }
-
-        /*Adds the ones who will be listening to my changes*/
         public void Add(IObserver observer)
         {
+            throw new NotImplementedException();
         }
-        /*Remove one of my listeners*/
+
         public void Remove(IObserver observer)
         {
+            throw new NotImplementedException();
         }
-        /*Notifies all the listeners*/
+
         public void Notify()
         {
+            throw new NotImplementedException();
         }
     }
 }

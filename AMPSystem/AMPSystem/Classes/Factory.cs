@@ -9,7 +9,7 @@ namespace AMPSystem.Classes
 {
     class Factory
     {
-        #region singleton
+        #region Singleton
     
         private static Factory instance;
 

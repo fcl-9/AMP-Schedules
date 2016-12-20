@@ -45,28 +45,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AlertDecorator.cs" />
+    <Compile Include="Classes\Name.cs" />
+    <Compile Include="Classes\OrCompositeFilter .cs" />
+    <Compile Include="Classes\AndCompositeFilter.cs" />
     <Compile Include="Classes\Building.cs" />
     <Compile Include="Classes\ColorDecorator.cs" />
     <Compile Include="Classes\Course.cs" />
     <Compile Include="Classes\DailyView.cs" />
-    <Compile Include="Classes\DataHandler.cs" />
     <Compile Include="Classes\EvaluationMoment.cs" />
     <Compile Include="Classes\Factory.cs" />
     <Compile Include="Classes\Lesson.cs" />
     <Compile Include="Classes\MonthlyView.cs" />
+    <Compile Include="Classes\OfficeHours.cs" />
+    <Compile Include="Classes\Repository.cs" />
     <Compile Include="Classes\Room.cs" />
-    <Compile Include="Classes\SearchForClasses.cs" />
-    <Compile Include="Classes\SearchForExams.cs" />
-    <Compile Include="Classes\SearchForTeacher.cs" />
-    <Compile Include="Classes\Student.cs" />
+    <Compile Include="Classes\SimpleFilter.cs" />
     <Compile Include="Classes\Summary.cs" />
-    <Compile Include="Classes\Teacher.cs" />
     <Compile Include="Classes\TextHandler.cs" />
     <Compile Include="Classes\Timetable.cs" />
+    <Compile Include="Classes\Type.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\WeeklyView.cs" />
     <Compile Include="Interfaces\IDecorator.cs" />
-    <Compile Include="Interfaces\IFilterHandler.cs" />
+    <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Interfaces\IObserver.cs" />
     <Compile Include="Interfaces\ISubject.cs" />
     <Compile Include="Interfaces\ITimeTableItem.cs" />

@@ -6,6 +6,7 @@ namespace AMPSystem.Classes
     {
         public int Number { get; set; }
         public int Floor { get; set; }
-        public ICollection<Lesson> Lessons;
+        public Lesson Lessons { get; set; }
+        public OfficeHours OfficeHours { get; set; }
     }
 }

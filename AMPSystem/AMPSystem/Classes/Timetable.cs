@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace AMPSystem.Classes
 {
-    
-    class Timetable
+    public class Timetable
     {
         public DateTime TimeInterval { get; set; }
     }

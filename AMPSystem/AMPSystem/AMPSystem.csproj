@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Classes\AlertDecorator.cs" />
     <Compile Include="Classes\Name.cs" />
-    <Compile Include="Classes\OrCompositeFilter .cs" />
     <Compile Include="Classes\AndCompositeFilter.cs" />
     <Compile Include="Classes\Building.cs" />
     <Compile Include="Classes\ColorDecorator.cs" />

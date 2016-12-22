@@ -4,7 +4,7 @@ namespace AMPSystem.Interfaces
 {
     public interface IFilter
     {
-        Timetable Timatable { get; set; }
+        Timetable TimatableInstance { get; set; }
 
         void ApplyFilter(string aName);
     }

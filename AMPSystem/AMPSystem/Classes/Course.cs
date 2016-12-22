@@ -4,18 +4,15 @@ namespace AMPSystem.Classes
 {
     public class Course
     {
-        public int Year { get; set; }
+        public int ID { get; set; }
+        public ICollection<int> Years { get; set; }
         public string Name { get; set; }
-        public ICollection<User> Users { get; set; }
-        public ICollection<EvaluationMoment> EvaluationMoments { get; set; }
 
-        public Course(int year, string name, ICollection<User> users, ICollection<EvaluationMoment> evaluationMoments)
+        public Course(int id, string name, ICollection<int> years)
         {
-            Year = year;
+            ID = id;
+            Years = years;
             Name = name;
-
-            Users = new List<User>();
-            Users = users;
         }
     }
 }

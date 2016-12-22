@@ -1,0 +1,54 @@
+{
+  Teachers: [
+    {
+      "ID": 1,
+      "Name": "Leonel Nóbrega",
+      "Mail": "lnobrega@uma.pt",
+      "TeacherRoom": 3,
+      "OfficeHours": [
+        {
+          "WeekDay": 4,
+          "StartTime": "16: 00: 00",
+          "EndTime": "18: 00: 00"
+        }
+      ]
+    },{
+      "ID": 2,
+      "Name": "Lina Brito",
+      "Mail": "lbrito@uma.pt",
+      "TeacherRoom": 2,
+      "OfficeHours": [
+        {
+          "WeekDay": 4,
+          "StartTime": "9: 00: 00",
+          "EndTime": "10: 00: 00"
+        }
+      ]
+    },{
+      "ID": 3
+      "Name": "Filipe Quintal",
+      "Mail": "filipeq@uma.pt",
+      "TeacherRoom": 1,
+      "OfficeHours": [
+        {
+          "WeekDay": 3,
+          "StartTime": "16: 00: 00",
+          "EndTime": "18: 00: 00"
+        }
+      ]
+    },
+    {
+      "ID": 4,
+      "Name": "Karolina Baras",
+      "Mail": "kbaras@uma.pt",
+      "TeacherRoom": 4,
+      "OfficeHours": [
+        {
+          "WeekDay": 1,
+          "StartTime": "16: 00: 00",
+          "EndTime": "18: 00: 00"
+        }
+      ]
+    }
+  ]
+}

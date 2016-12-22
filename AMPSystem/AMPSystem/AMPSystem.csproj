@@ -61,13 +61,14 @@
     <Compile Include="Classes\Room.cs" />
     <Compile Include="Classes\SimpleFilter.cs" />
     <Compile Include="Classes\Summary.cs" />
-    <Compile Include="Classes\TextHandler.cs" />
+    <Compile Include="Classes\FileData.cs" />
     <Compile Include="Classes\Timetable.cs" />
     <Compile Include="Classes\Type.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\WeeklyView.cs" />
     <Compile Include="Interfaces\IDecorator.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
+    <Compile Include="Interfaces\DataReader.cs" />
     <Compile Include="Interfaces\IObserver.cs" />
     <Compile Include="Interfaces\ISubject.cs" />
     <Compile Include="Interfaces\ITimeTableItem.cs" />

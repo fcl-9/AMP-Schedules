@@ -11,9 +11,10 @@ namespace AMPSystem.Classes
     {
         public string Color { get; set; }
         public ITimeTableItem Item { get; set; }
-
-        public DateTime StarTime { get; set; }
+        
+        public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public ICollection<Room> Rooms { get; set; }
         public DateTime Day { get; set; }
         public IEnumerator<IObserver> Observers { get; set; }
         public void Add(IObserver observer)

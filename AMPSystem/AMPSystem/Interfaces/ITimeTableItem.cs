@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using AMPSystem.Classes;
 
 namespace AMPSystem.Interfaces
 {
     public interface  ITimeTableItem
     {
-        DateTime StarTime { get; set; }
+        DateTime StartTime { get; set; }
         DateTime EndTime { get; set; }
-        DateTime Day { get; set; }
+        ICollection<Room> Rooms { get; set; }
     }
 }

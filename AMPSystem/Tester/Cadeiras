@@ -1,0 +1,23 @@
+{
+	"Courses": [{
+		"ID": 1,
+		"Name": "Desenho e Implementação de Software",
+		"Year": [1, 2],
+		"Teacher": [1]
+	}, {
+		"ID": 2,
+		"Name": "Sistemas Distribuídos",
+		"Year": [1, 2],
+		"Teacher": [2]
+	}, {
+		"ID": 3,
+		"Name": "Aplicações Centradas em Redes",
+		"Year": [1, 2],
+		"Teacher": [3]
+	}, {
+		"ID": 4,
+		"Name": "Gestão de Sistemas e Redes",
+		"Year": [1, 2],
+		"Teacher": [4]
+	}]
+}

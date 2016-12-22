@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class TextHandler : DataHandler
+    public class FileData : DataReader
     {
-        public override string RequestData(string filePath)
+        public string RequestData(string filePath)
         {
             //Read Data From Text File
             return System.IO.File.ReadAllText(filePath);

@@ -49,6 +49,8 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Dados" />
+    <None Include="Cadeiras" />
+    <None Include="Salas" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AMPSystem\AMPSystem.csproj">

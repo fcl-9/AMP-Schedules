@@ -6,20 +6,19 @@ namespace AMPSystem.Classes
 {
     public class Lesson : ITimeTableItem
     {
-        public DateTime StarTime { get; set; }
+        public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public DateTime Day { get; set; }
+        public ICollection<Room> Rooms { get; set; }
         public string Type { get; set; }
+
         public ICollection<Course> Courses { get; set; }
 
-        public Lesson(DateTime startTime, DateTime endTime, DateTime day, ICollection<Course> courses, string type)
+        public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type)
         {
-            StarTime = startTime;
+            StartTime = startTime;
             EndTime = endTime;
-            Day = day;
+            Rooms = rooms;
             Type = type;
-
-            Courses = new List<Course>();
             Courses = courses;
         }
     }

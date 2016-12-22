@@ -1,0 +1,26 @@
+{
+	"Penteada": {
+		"ID": 1,
+		"Name": "Campus Universitário da Penteada",
+		"Address": "Campus Universitário da Penteada 9020-105 Funchal - Portugal",
+		"Room": [{
+			"Number": "1",
+			"Floor": "-2"
+		}, {
+			"Number": "2",
+			"Floor": "-2"
+		}]
+	},
+	"Reitoria": {
+		"ID": 2,
+		"Name": "Reitoria da Universidade da Madeira",
+		"Address": "Colégio dos Jesuítas - Rua dos Ferreiros",
+		"Room": [{
+			"Number": "1",
+			"Floor": "0"
+		}, {
+			"Number": "2",
+			"Floor": "0"
+		}]
+	}
+}

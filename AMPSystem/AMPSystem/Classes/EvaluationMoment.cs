@@ -6,18 +6,16 @@ namespace AMPSystem.Classes
 {
     public class EvaluationMoment : ITimeTableItem
     {
-        public DateTime StarTime { get; set; }
+        public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public DateTime Day { get; set; }
+        public ICollection<Room> Rooms { get; set; }
         public ICollection<Course> Courses { get; set; }
 
-        public EvaluationMoment(DateTime startTime, DateTime endTime, DateTime day, ICollection<Course> courses)
+        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses )
         {
-            StarTime = startTime;
+            StartTime = startTime;
             EndTime = endTime;
-            Day = day;
-
-            Courses = new List<Course>();
+            Rooms = rooms;
             Courses = courses;
         }
     }

@@ -1,19 +1,20 @@
 {
   "Schedule": [
     {
-      "LessonName": "Retórica e Comunicação",
+      "Courses": [ 1 ],
       "StartTime": "2016 - 12 - 19 T10: 00: 00",
       "EndTime": "2016 - 12 - 19 T12: 00: 00",
       "LessonType": "T",
-      "ClassRoom": {
-        "RoomNumber": "2",
-        "Floor": "-2",
-        "Building": "Penteada"
-      },
+      "ClassRoom": [
+        {
+          "Number": 2,
+          "Building": 1
+        }
+      ],
       "Teacher": {
         "Name": "António Brito",
         "Mail": "antoniobrito@uma.pt",
-        "TeacherRoom": "3",
+        "TeacherRoom": 3,
         "OfficeHours": [
           {
             "StartTime": "2016 - 12 - 02 T12: 00: 00",

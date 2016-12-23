@@ -19,13 +19,18 @@ namespace Tester
             dataHandler.GetCourses("../../Cadeiras");
             dataHandler.GetRooms("../../Salas");
             dataHandler.GetSchedule("../../Dados");
-            //dataHandler.ParseData("../../Dados");
-            Console.WriteLine(dataHandler.Items.First().StartTime);
-            Console.WriteLine(dataHandler.Items.First().EndTime);
-            Console.WriteLine(dataHandler.Items.First().Rooms.First().Number);
-            Console.WriteLine(dataHandler.Items.First().Rooms.First().Floor);
-            Console.WriteLine(((Lesson)dataHandler.Items.First()).Courses.First().Name);
-            Console.WriteLine(((Lesson)dataHandler.Items.First()).Courses.First().Years.First());
+            dataHandler.GetTeachers("../../Teacher");
+            foreach (var dataHandlerItem in dataHandler.Items)
+            {
+                Console.WriteLine(dataHandlerItem.StartTime);
+                Console.WriteLine(dataHandlerItem.EndTime);
+            }
+            //Console.WriteLine(dataHandler.Items.First().StartTime);
+            //Console.WriteLine(dataHandler.Items.First().EndTime);
+            //Console.WriteLine(dataHandler.Items.First().Rooms.First().Number);
+            //Console.WriteLine(dataHandler.Items.First().Rooms.First().Floor);
+            //Console.WriteLine(((Lesson)dataHandler.Items.First()).Courses.First().Name);
+            //Console.WriteLine(((Lesson)dataHandler.Items.First()).Courses.First().Years.First());
             Console.ReadKey();
         }
     }

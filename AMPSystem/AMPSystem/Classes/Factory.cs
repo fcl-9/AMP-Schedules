@@ -65,7 +65,7 @@ namespace AMPSystem.Classes
             return new Building(id, name, address, rooms);
         }
 
-        public User CreateUser(string name, ICollection<string> roles)
+        public User CreateUser(string name, string email, ICollection<string> roles)
         {
             return new User();
         }

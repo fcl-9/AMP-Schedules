@@ -4,13 +4,18 @@ using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class AndCopositeFilter : IFilter
+    public class AndCompositeFilter : IFilter
     {
         public ICollection<IFilter> Filters { get; set; } //List of filters you can apply to time table items
         public TimeTableManager Manager { get; set; }//Allow you to access to all timetableitems
 
-        public AndCopositeFilter()
+        /// <summary>
+        /// Contructer Initializes the filters
+        /// </summary>
+        /// <param name="manager"></param>
+        public AndCompositeFilter(TimeTableManager manager)
         {
+            Manager = manager; 
             Filters = new List<IFilter>();
         }
 
@@ -32,36 +37,17 @@ namespace AMPSystem.Classes
             Filters.Remove(aFilter);
         }
 
-        public ICollection<ITimeTableItem> ApplyFilter()
+        /// <summary>
+        /// Applies all filters to the timetable items
+        /// </summary>
+        public void ApplyFilter()
         {
-            List< ITimeTableItem> x=new List<ITimeTableItem>();
-            if (Filters.Count() == 0)
+            foreach (var filter in Filters)
             {
-                return x;
-            }
-            else
-            {
-                foreach (var item in Manager.TimeTable.ItemList)
-                {
-                    if (Filters.ApplyFilter(item))
-                    {
-
-                    }
-                }
+               filter.ApplyFilter();
             }
 
-            //remove this
-            return ListOfItems;
-        }
 
-        bool IFilter.ApplyFilter()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool ApplyFilter()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

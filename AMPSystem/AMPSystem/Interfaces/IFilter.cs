@@ -5,6 +5,9 @@ namespace AMPSystem.Interfaces
     public interface IFilter
     {
         TimeTableManager Manager { get; set; }
-        bool ApplyFilter();
+        /// <summary>
+        /// Filter Applyer
+        /// </summary>
+        void ApplyFilter();
     }
 }

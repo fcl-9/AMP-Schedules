@@ -4,19 +4,26 @@ using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class Type : ISimpleFilter<object>
+    public class Type : ISimpleFilter<ITimeTableItem>
     {
-        public object FilterAttribute { get; set; }
+        public ITimeTableItem FilterAttribute { get; set; }
         public TimeTableManager Manager { get; set; }
 
-        public Type(object filterName)
+        public Type(ITimeTableItem filterName, TimeTableManager manager)
         {
+            Manager = manager;
             this.FilterAttribute = filterName;
         }
 
-        public bool ApplyFilter()
+        public void ApplyFilter()
         {
-            throw new NotImplementedException();
+            foreach (var item in Manager.TimeTable.ItemList)
+            {
+                if (item is ITimeTableItem && FilterAttribute is ITimeTableItem)
+                {
+                    Manager.TimeTable.ItemList.Remove(item);
+                }
+            }
         }
     }
 }

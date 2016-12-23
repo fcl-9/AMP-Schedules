@@ -8,14 +8,21 @@ namespace AMPSystem.Classes
         public string FilterAttribute { get; set; }
         public TimeTableManager Manager { get; set; }
 
-        public Name(string nameFilter)
+        public Name(string nameFilter,TimeTableManager manager)
         {
+            Manager = manager;
             FilterAttribute = nameFilter;
         }
 
-        public bool ApplyFilter()
+        public void ApplyFilter()
         {
-            throw new NotImplementedException();
+            foreach (var item in Manager.TimeTable.ItemList)
+            {
+                if (item.Name != FilterAttribute)
+                {
+                    Manager.TimeTable.ItemList.Remove(item);
+                }
+            }
         }
     }
 }

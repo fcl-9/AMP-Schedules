@@ -1,23 +1,22 @@
-﻿using AMPSystem.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class Type : SimpleFilter
+    public class Type : ISimpleFilter<object>
     {
-        public string filterName { get; set; }
+        public object FilterAttribute { get; set; }
+        public TimeTableManager Manager { get; set; }
 
-        public Type(string filterName)
+        public Type(object filterName)
         {
-            this.filterName = filterName;
+            this.FilterAttribute = filterName;
         }
 
-        public bool ApplyFilter(TimeTableManager manager)
+        public bool ApplyFilter()
         {
-            if (this.filterName == manager)
-            {
-            }
+            throw new NotImplementedException();
         }
-
-        public string FilterAttribute { get; set; }
     }
 }

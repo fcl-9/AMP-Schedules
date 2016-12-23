@@ -3,10 +3,9 @@ using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    interface SimpleFilter : IFilter
+    interface ISimpleFilter<T> : IFilter
     {
-        string FilterAttribute { get; set; }
-       
-       
+        T FilterAttribute { get; set; }
+
     }
 }

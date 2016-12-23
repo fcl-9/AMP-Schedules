@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\AlertDecorator.cs" />
+    <Compile Include="Classes\Alert.cs" />
     <Compile Include="Classes\Name.cs" />
     <Compile Include="Classes\OrCompositeFilter .cs" />
     <Compile Include="Classes\AndCompositeFilter.cs" />

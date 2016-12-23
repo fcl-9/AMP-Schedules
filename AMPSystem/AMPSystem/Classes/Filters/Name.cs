@@ -1,12 +1,28 @@
-﻿namespace AMPSystem.Classes
+﻿using System;
+using AMPSystem.Interfaces;
+
+namespace AMPSystem.Classes
 {
-    public class Name : SimpleFilter
+    public class Name: ISimpleFilter<string>
     {
-        public bool ApplyFilter()
+        public string FilterAttribute { get; set; }
+        public TimeTableManager Manager { get; set; }
+
+        public Name(string nameFilter,TimeTableManager manager)
         {
-            throw new System.NotImplementedException();
+            Manager = manager;
+            FilterAttribute = nameFilter;
         }
 
-        public string FilterAttribute { get; set; }
+        public void ApplyFilter()
+        {
+            foreach (var item in Manager.TimeTable.ItemList)
+            {
+                if (item.Name != FilterAttribute)
+                {
+                    Manager.TimeTable.ItemList.Remove(item);
+                }
+            }
+        }
     }
 }

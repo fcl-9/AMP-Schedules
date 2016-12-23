@@ -4,6 +4,10 @@ namespace AMPSystem.Interfaces
 {
     public interface IFilter
     {
-        bool ApplyFilter();
+        TimeTableManager Manager { get; set; }
+        /// <summary>
+        /// Filter Applyer
+        /// </summary>
+        void ApplyFilter();
     }
 }

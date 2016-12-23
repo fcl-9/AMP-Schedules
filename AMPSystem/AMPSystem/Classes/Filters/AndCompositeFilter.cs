@@ -1,16 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class AndCopositeFilter : IFilter
+    public class AndCompositeFilter : IFilter
     {
         public ICollection<IFilter> Filters { get; set; } //List of filters you can apply to time table items
-        public TimeTableManager Manager { get; set; }
-        //Allow you to access to all timetableitems
+        public TimeTableManager Manager { get; set; }//Allow you to access to all timetableitems
 
-        public AndCopositeFilter()
+        /// <summary>
+        /// Contructer Initializes the filters
+        /// </summary>
+        /// <param name="manager"></param>
+        public AndCompositeFilter(TimeTableManager manager)
         {
+            Manager = manager; 
             Filters = new List<IFilter>();
         }
 
@@ -32,14 +37,17 @@ namespace AMPSystem.Classes
             Filters.Remove(aFilter);
         }
 
-        public void ApplyFilter(string aName)
+        /// <summary>
+        /// Applies all filters to the timetable items
+        /// </summary>
+        public void ApplyFilter()
         {
-            //Base
-        }
+            foreach (var filter in Filters)
+            {
+               filter.ApplyFilter();
+            }
 
-        public bool ApplyFilter()
-        {
-            throw new System.NotImplementedException();
+
         }
     }
 }

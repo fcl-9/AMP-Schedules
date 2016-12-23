@@ -1,7 +1,13 @@
-﻿namespace AMPSystem.Interfaces
+﻿using System;
+
+namespace AMPSystem.Interfaces
 {
-    public interface IViewHandler:IObserver
+    public interface IViewHandler: IObserver, ISubject
     {
-        void RenderView(int viewType);
+        DateTime StartDateTime { get; set; }
+        DateTime EndDateTime { get; set; }
+        DateTime CurrentDate { get; set; }
+
+        void CalculateTimeInterval();
     }
 }

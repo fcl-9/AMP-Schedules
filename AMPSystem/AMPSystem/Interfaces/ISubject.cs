@@ -5,7 +5,8 @@ namespace AMPSystem.Interfaces
 {
     public interface ISubject
     {
-        IEnumerator<IObserver> Observers { get; set; }
+        ICollection<IObserver> Observers { get; set; }
+
         void Add(IObserver observer);
         void Remove(IObserver observer);
         void Notify();

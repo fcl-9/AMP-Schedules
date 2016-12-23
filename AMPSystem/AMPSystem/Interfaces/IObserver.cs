@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AMPSystem.Interfaces
 {
     public interface IObserver
     {
-        IEnumerator<ISubject> Existingsubjects { get; set; }
+        ICollection<ISubject> Subjects { get; set; }
 
-        /*This Method will be called when something changes in this object brothers*/
-        void Update();
+        /// <summary>
+        /// Method called when something changes in this object brothers.
+        /// </summary>
+        void Update(ISubject subject);
     }
 }

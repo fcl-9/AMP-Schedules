@@ -44,28 +44,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\AlertDecorator.cs" />
-    <Compile Include="Classes\Name.cs" />
-    <Compile Include="Classes\OrCompositeFilter .cs" />
-    <Compile Include="Classes\AndCompositeFilter.cs" />
+    <Compile Include="Classes\Filters\Name.cs" />
+    <Compile Include="Classes\Filters\AndCompositeFilter.cs" />
+    <Compile Include="Classes\Alert.cs" />
     <Compile Include="Classes\Building.cs" />
     <Compile Include="Classes\ColorDecorator.cs" />
     <Compile Include="Classes\Course.cs" />
-    <Compile Include="Classes\DailyView.cs" />
+    <Compile Include="Classes\Views\DailyView.cs" />
     <Compile Include="Classes\EvaluationMoment.cs" />
     <Compile Include="Classes\Factory.cs" />
     <Compile Include="Classes\Lesson.cs" />
-    <Compile Include="Classes\MonthlyView.cs" />
+    <Compile Include="Classes\Views\MonthlyView.cs" />
     <Compile Include="Classes\OfficeHours.cs" />
     <Compile Include="Classes\Repository.cs" />
     <Compile Include="Classes\Room.cs" />
-    <Compile Include="Classes\SimpleFilter.cs" />
+    <Compile Include="Classes\Filters\SimpleFilter.cs" />
     <Compile Include="Classes\Summary.cs" />
     <Compile Include="Classes\FileData.cs" />
     <Compile Include="Classes\Timetable.cs" />
-    <Compile Include="Classes\Type.cs" />
+    <Compile Include="Classes\Filters\Type.cs" />
     <Compile Include="Classes\User.cs" />
-    <Compile Include="Classes\WeeklyView.cs" />
+    <Compile Include="Classes\Views\WeeklyView.cs" />
     <Compile Include="Interfaces\IDecorator.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Interfaces\DataReader.cs" />
@@ -74,6 +73,7 @@
     <Compile Include="Interfaces\ITimeTableItem.cs" />
     <Compile Include="Interfaces\IViewHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Classes\TimeTableManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

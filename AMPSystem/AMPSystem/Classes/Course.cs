@@ -4,13 +4,13 @@ namespace AMPSystem.Classes
 {
     public class Course
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public ICollection<int> Years { get; set; }
         public string Name { get; set; }
 
         public Course(int id, string name, ICollection<int> years)
         {
-            ID = id;
+            Id = id;
             Years = years;
             Name = name;
         }

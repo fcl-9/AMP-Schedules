@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class TimeTableManager
+    public class TimeTableManager : ISubject, IObserver
     {
         public Timetable TimeTable { get; set; }
         public Repository Repository { get; set; }
+
+        #region Observer Pattern
+        public ICollection<IObserver> Observers { get; set; }
+        public ICollection<ISubject> Subjects { get; set; }
+        #endregion
 
         /// <summary>
         /// Constructor.
@@ -22,10 +29,12 @@ namespace AMPSystem.Classes
         /// Update time table items to display. For this, get the repository data and add to
         /// ItemList in time table.
         /// </summary>
-        /// <param name="startDateTime"></param>
-        /// <param name="endDateTime"></param>
-        public void UpdateTimeTable(DateTime startDateTime, DateTime endDateTime)
+        /// <param name="subject"></param>
+        public void Update(ISubject subject)
         {
+            var startDateTime = ((IViewHandler) subject).StartDateTime;
+            var endDateTime = ((IViewHandler)subject).EndDateTime;
+
             TimeTable.StartDateTime = startDateTime;
             TimeTable.StartDateTime = endDateTime;
 
@@ -36,12 +45,43 @@ namespace AMPSystem.Classes
             {
                 //Less than zero: t1 is earlier than t2. 
                 //Zero: t1 is the same as t2. 
-                if (DateTime.Compare(startDateTime, item.StartTime) <= 0 &&
-                    DateTime.Compare(endDateTime, item.StartTime) > 0)
+                if (startDateTime.Date.CompareTo(item.StartTime) <= 0 &&
+                    endDateTime.Date.CompareTo(item.StartTime) >= 0)
                 {
                     TimeTable.AddTimetableItem(item);
                 }
             }
         }
+        
+        #region Observer Pattern Methods
+        /// <summary>
+        /// Add observer.
+        /// </summary>
+        /// <param name="observer"></param>
+        public void Add(IObserver observer)
+        {
+            Observers.Add(observer);
+        }
+
+        /// <summary>
+        /// Remove observer.
+        /// </summary>
+        /// <param name="observer"></param>
+        public void Remove(IObserver observer)
+        {
+            Observers.Remove(observer);
+        }
+
+        /// <summary>
+        /// Notify all observers.
+        /// </summary>
+        public void Notify()
+        {
+            foreach (var observer in Observers)
+            {
+                observer.Update(this);
+            }
+        }
+        #endregion
     }
 }

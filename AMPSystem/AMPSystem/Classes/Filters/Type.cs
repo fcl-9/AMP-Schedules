@@ -11,13 +11,11 @@ namespace AMPSystem.Classes
             this.filterName = filterName;
         }
 
-        public bool ApplyFilter(TimeTableManager manager)
-        {
-            if (this.filterName == manager)
-            {
-            }
-        }
-
         public string FilterAttribute { get; set; }
+
+        public bool ApplyFilter()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

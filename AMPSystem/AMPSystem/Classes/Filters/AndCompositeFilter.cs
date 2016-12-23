@@ -36,5 +36,10 @@ namespace AMPSystem.Classes
         {
             //Base
         }
+
+        public bool ApplyFilter()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

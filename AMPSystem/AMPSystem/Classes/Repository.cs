@@ -11,9 +11,7 @@ namespace AMPSystem.Classes
         public DataReader DataReader { get; set; }
 
         public ICollection<Course> Courses { get; set; }
-
         public ICollection<Building> Buildings { get; set; }
-
         public ICollection<ITimeTableItem> Items { get; set; }
 
         public Repository()
@@ -98,7 +96,7 @@ namespace AMPSystem.Classes
                     var courses = new List<Course>();
                     foreach (var course in item["Courses"])
                     {
-                        var mCourse = ((List<Course>)Courses).Find(c => c.ID == course.Value<int>());
+                        var mCourse = ((List<Course>)Courses).Find(c => c.Id == course.Value<int>());
                         courses.Add(mCourse);
                     }
                     if (lessonType == "T" || lessonType == "TP" || lessonType == "PL")

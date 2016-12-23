@@ -44,9 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\AlertDecorator.cs" />
     <Compile Include="Classes\Filters\Name.cs" />
     <Compile Include="Classes\Filters\AndCompositeFilter.cs" />
+    <Compile Include="Classes\Alert.cs" />
+
     <Compile Include="Classes\Building.cs" />
     <Compile Include="Classes\ColorDecorator.cs" />
     <Compile Include="Classes\Course.cs" />

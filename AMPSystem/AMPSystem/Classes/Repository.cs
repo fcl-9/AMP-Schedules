@@ -54,8 +54,8 @@ namespace AMPSystem.Classes
                     }
                     foreach (var officeHour in item["OfficeHours"])
                     {
-                        var startTime = item["StartTime"].Value<DateTime>();
-                        var endTime = item["EndTime"].Value<DateTime>();
+                        var startTime = officeHour["StartTime"].Value<DateTime>();
+                        var endTime = officeHour["EndTime"].Value<DateTime>();
                         Items.Add(CreateOfficeHours(startTime, endTime,rooms));
                     }
                     CreateUser(name, email, roles);

@@ -44,10 +44,10 @@
     "Email": "kbaras@uma.pt",
     "Room": 4,
     "OfficeHours": [{
-      "StartTime": "2016 - 12 - 02 T9: 00: 00",
+      "StartTime": "2016 - 12 - 02 T09: 00: 00",
       "EndTime": "2016 - 12 - 02 T11: 00: 00"
     }, {
-      "StartTime": "2016 - 12 - 03 T9: 00: 00",
+      "StartTime": "2016 - 12 - 03 T09: 00: 00",
       "EndTime": "2016 - 12 - 03 T11: 00: 00"
     }],
     "Courses": [4]

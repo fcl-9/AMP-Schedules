@@ -47,7 +47,7 @@ namespace AMPSystem.Classes
                     var courses = new List<Course>();
                     foreach (var course in item["Courses"])
                     {
-                        var mCourse = ((List<Course>)Courses).Find(c => c.ID== course.Value<int>());
+                        var mCourse = ((List<Course>)Courses).Find(c => c.Id== course.Value<int>());
                         courses.Add(mCourse);
                     }
                     foreach (var officeHour in item["OfficeHours"])

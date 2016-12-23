@@ -15,8 +15,9 @@ namespace AMPSystem.Classes
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public ICollection<Room> Rooms { get; set; }
+        public string Name { get; set; }
         public DateTime Day { get; set; }
-        public IEnumerator<IObserver> Observers { get; set; }
+        public ICollection<IObserver> Observers { get; set; }
         public void Add(IObserver observer)
         {
             throw new NotImplementedException();

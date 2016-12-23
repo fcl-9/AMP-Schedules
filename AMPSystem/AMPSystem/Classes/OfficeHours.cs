@@ -12,6 +12,7 @@ namespace AMPSystem.Classes
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public ICollection<Room> Rooms { get; set; }
+        public string Name { get; set; }
 
         public OfficeHours(DateTime starTime, DateTime endTime, ICollection<Room> rooms)
         {

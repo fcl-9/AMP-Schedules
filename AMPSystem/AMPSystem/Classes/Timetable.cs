@@ -9,22 +9,17 @@ namespace AMPSystem.Classes
 {
     public class Timetable
     {
-        public DateTime TimeInterval { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
+
         public ICollection<ITimeTableItem> ItemList { get; set; }
 
-        #region singleton
-        private static Timetable  Schedule = new Timetable();
-
-        private Timetable()
+        public Timetable(DateTime startDateTime, DateTime endDateTime)
         {
-            ItemList = new List<ITimeTableItem>();    
+            StartDateTime = startDateTime;
+            EndDateTime = endDateTime;
+            ItemList = new List<ITimeTableItem>();
         }
-
-        public static Timetable Instance
-        {
-            get { return Schedule; }
-        }
-        #endregion
 
         public void AddTimetableItem(ITimeTableItem item)
         {

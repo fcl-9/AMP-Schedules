@@ -6,13 +6,12 @@ namespace AMPSystem.Classes
     public class AndCopositeFilter : IFilter
     {
         public ICollection<IFilter> Filters { get; set; } //List of filters you can apply to time table items
-        public Timetable TimatableInstance { get; set; }
+        public TimeTableManager Manager { get; set; }
         //Allow you to access to all timetableitems
 
         public AndCopositeFilter()
         {
             Filters = new List<IFilter>();
-            # TimatableInstance = Timetable.GetInstance();
         }
 
         /// <summary>
@@ -36,18 +35,6 @@ namespace AMPSystem.Classes
         public void ApplyFilter(string aName)
         {
             //Base
-            if (Filters.Count() == 0)
-            {
-                
-            }
-            else
-            {
-                foreach (var VARIABLE in TimatableList.I)
-                {
-                    
-                }
-
-            }
         }
     }
 }

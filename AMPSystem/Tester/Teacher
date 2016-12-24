@@ -3,7 +3,7 @@
     "ID": 1,
     "Name": "Leonel Nóbrega",
     "Email": "lnobrega@uma.pt",
-    "Room": 3,
+    "Room": 4,
     "OfficeHours": [{
       "StartTime": "2016 - 12 - 02 T12: 00: 00",
       "EndTime": "2016 - 12 - 02 T13: 00: 00"
@@ -13,7 +13,7 @@
     }],
     "Courses": [1]
   }, {
-    "ID": 2,
+    "ID": 5,
     "Name": "Lina Brito",
     "Email": "lbrito@uma.pt",
     "Room": 2,
@@ -26,7 +26,7 @@
     }],
     "Courses": [2]
   }, {
-    "ID": 3,
+    "ID": 6,
     "Name": "Filipe Quintal",
     "Email": "filipeq@uma.pt",
     "Room": 1,
@@ -39,7 +39,7 @@
     }],
     "Courses": [3]
   }, {
-    "ID": 4,
+    "ID": 7,
     "Name": "Karolina Baras",
     "Email": "kbaras@uma.pt",
     "Room": 4,

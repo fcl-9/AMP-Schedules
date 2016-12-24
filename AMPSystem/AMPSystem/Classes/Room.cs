@@ -4,12 +4,14 @@ namespace AMPSystem.Classes
 {
     public class Room
     {
-        public int Number { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public int Floor { get; set; }
 
-        public Room(int number, int floor)
+        public Room(int id, string name, int floor)
         {
-            Number = number;
+            Id = id;
+            Name = name;
             Floor = floor;
         }
     }

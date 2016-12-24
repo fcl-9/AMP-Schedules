@@ -39,7 +39,7 @@ namespace AMPSystem.Classes
                     var name = item["Name"].Value<string>();
                     var email = item["Email"].Value<string>();
                     var building = ((List<Building>)Buildings).Find(b => b.ID == 1);
-                    var room = ((List<Room>)building.Rooms).Find(r => r.Number == item["Room"].Value<int>());
+                    var room = ((List<Room>)building.Rooms).Find(r => r.Id == item["Room"].Value<int>());
                     var rooms = new List<Room>();
                     rooms.Add(room);
                     var roles = new List<string>();
@@ -103,7 +103,7 @@ namespace AMPSystem.Classes
                     var rooms = new List<Room>();
                     foreach (var room in item.Value["Room"])
                     {
-                        rooms.Add(CreateRoom(room["Number"].Value<int>(), room["Floor"].Value<int>()));
+                        rooms.Add(CreateRoom(room["ID"].Value<int>(), room["Name"].Value<string>(), room["Floor"].Value<int>()));
                     }
                     Buildings.Add(CreateBuilding(buildingID, buildingName, buildingAddress, rooms));
                 }
@@ -130,7 +130,7 @@ namespace AMPSystem.Classes
                     foreach (var room in item["ClassRoom"])
                     {
                         var building = ((List<Building>)Buildings).Find(b => b.ID == room["Building"].Value<int>());
-                        var mRoom = ((List<Room>) building.Rooms).Find(r => r.Number == room["Number"].Value<int>());
+                        var mRoom = ((List<Room>) building.Rooms).Find(r => r.Id == room["Id"].Value<int>());
                         rooms.Add(mRoom);
                     }
                     var courses = new List<Course>();
@@ -162,9 +162,9 @@ namespace AMPSystem.Classes
             return Factory.Instance.CreateBuilding(id, name, address, rooms);
         }
 
-        private Room CreateRoom(int number, int floor)
+        private Room CreateRoom(int number, string name, int floor)
         {
-            return Factory.Instance.CreateRoom(number, floor);
+            return Factory.Instance.CreateRoom(number, name, floor);
         }
 
         private User CreateUser (string name, string email, ICollection<string> roles)

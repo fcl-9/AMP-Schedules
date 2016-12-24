@@ -24,6 +24,18 @@ namespace Tester
             {
                 Console.WriteLine(dataHandlerItem.StartTime);
                 Console.WriteLine(dataHandlerItem.EndTime);
+                foreach (var room in dataHandlerItem.Rooms)
+                {
+                    Console.WriteLine(room.Name);
+                    Console.WriteLine(room.Floor);
+                }
+                if (dataHandlerItem is Lesson)
+                {
+                    foreach (var course in ((Lesson)dataHandlerItem).Courses)
+                    {
+                        Console.WriteLine(course.Name);
+                    }
+                }
             }
             //Console.WriteLine(dataHandler.Items.First().StartTime);
             //Console.WriteLine(dataHandler.Items.First().EndTime);

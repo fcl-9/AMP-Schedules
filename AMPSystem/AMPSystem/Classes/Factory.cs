@@ -50,9 +50,9 @@ namespace AMPSystem.Classes
             return new ColorDecorator();
         }
 
-        public Room CreateRoom(int number, int floor)
+        public Room CreateRoom(int number, string name, int floor)
         {
-            return new Room(number, floor);
+            return new Room(number, name, floor);
         }
 
         public Course CreateCourse(int id, string name, ICollection<int> years)

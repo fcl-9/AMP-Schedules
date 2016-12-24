@@ -8,3 +8,9 @@
 <h2>@ViewBag.Title</h2>
 
 <p>@Resource.About_Description</p>
+<ul>
+    @foreach (var item in ViewBag.TimeTableItemsList)
+    {
+        <li>@item</li>
+    }
+</ul>

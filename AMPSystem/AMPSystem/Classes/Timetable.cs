@@ -14,6 +14,7 @@ namespace AMPSystem.Classes
 
         public ICollection<ITimeTableItem> ItemList { get; set; }
 
+        
         public Timetable(DateTime startDateTime, DateTime endDateTime)
         {
             StartDateTime = startDateTime;

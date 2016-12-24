@@ -23,7 +23,15 @@ namespace AMPSystem.Classes
         {
             TimeTable = timetable;
             Repository = repository;
+            //Adds Value to our data class whcih is TimeTable
+            foreach (var item in Repository.Items)
+            {
+                TimeTable.AddTimetableItem(item);
+            }
+
         }
+
+        
 
         /// <summary>
         /// Update time table items to display. For this, get the repository data and add to
@@ -53,6 +61,7 @@ namespace AMPSystem.Classes
             }
         }
         
+
         #region Observer Pattern Methods
         /// <summary>
         /// Add observer.

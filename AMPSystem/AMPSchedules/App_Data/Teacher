@@ -1,0 +1,55 @@
+{
+  "Teachers": [{
+    "ID": 1,
+    "Name": "Leonel Nóbrega",
+    "Email": "lnobrega@uma.pt",
+    "Room": 3,
+    "OfficeHours": [{
+      "StartTime": "2016 - 12 - 02 T12: 00: 00",
+      "EndTime": "2016 - 12 - 02 T13: 00: 00"
+    }, {
+      "StartTime": "2016 - 12 - 03 T12: 00: 00",
+      "EndTime": "2016 - 12 - 03 T13: 00: 00"
+    }],
+    "Courses": [1]
+  }, {
+    "ID": 2,
+    "Name": "Lina Brito",
+    "Email": "lbrito@uma.pt",
+    "Room": 2,
+    "OfficeHours": [{
+      "StartTime": "2016 - 12 - 02 T10: 00: 00",
+      "EndTime": "2016 - 12 - 02 T12: 00: 00"
+    }, {
+      "StartTime": "2016 - 12 - 03 T10: 00: 00",
+      "EndTime": "2016 - 12 - 03 T12: 00: 00"
+    }],
+    "Courses": [2]
+  }, {
+    "ID": 3,
+    "Name": "Filipe Quintal",
+    "Email": "filipeq@uma.pt",
+    "Room": 1,
+    "OfficeHours": [{
+      "StartTime": "2016 - 12 - 02 T17: 00: 00",
+      "EndTime": "2016 - 12 - 02 T19: 00: 00"
+    }, {
+      "StartTime": "2016 - 12 - 03 T15: 00: 00",
+      "EndTime": "2016 - 12 - 03 T17: 00: 00"
+    }],
+    "Courses": [3]
+  }, {
+    "ID": 4,
+    "Name": "Karolina Baras",
+    "Email": "kbaras@uma.pt",
+    "Room": 4,
+    "OfficeHours": [{
+      "StartTime": "2016 - 12 - 02 T09: 00: 00",
+      "EndTime": "2016 - 12 - 02 T11: 00: 00"
+    }, {
+      "StartTime": "2016 - 12 - 03 T09: 00: 00",
+      "EndTime": "2016 - 12 - 03 T11: 00: 00"
+    }],
+    "Courses": [4]
+  }]
+}

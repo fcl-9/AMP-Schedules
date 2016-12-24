@@ -170,7 +170,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\DataLoaderController.cs" />
     <Compile Include="Helpers\IAuthProvider.cs" />
     <Compile Include="Helpers\SampleAuthProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -325,7 +324,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Graph.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\DataLoader\ShowLoadData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

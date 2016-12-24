@@ -1,0 +1,26 @@
+﻿@using System.Collections
+
+@{
+    ViewBag.Title = "ShowLoadData";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width = device-width" />
+    <title>MyView</title>
+</head>
+
+<body>
+<div>
+    <ul>
+        @foreach (var course in @ViewBag.Courses)
+        {
+            <li>@course.Name</li>
+        }
+    </ul>
+</div>
+</body>
+
+</html>

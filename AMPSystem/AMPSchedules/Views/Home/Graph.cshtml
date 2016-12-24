@@ -9,7 +9,7 @@
 {
     @Styles.Render("~/Content/fullcalendar.min.css")
 }
-
+<!--
 <h1>@ViewBag.Title</h1>
 <h2>@Resource.Graph_GetEmailAddress_Heading</h2>
 <p>@Html.Raw(Resource.Graph_GetEmailAddress_Instruction)</p>
@@ -22,7 +22,7 @@
     </div>
 }
     
-<!--
+
 <div class="col-sm-12">
     <label for="user-email-address">@Resource.Graph_GetEmailAddress_Results_Label</label>
     <pre name="user-email-address">@ViewBag.Email</pre>
@@ -50,31 +50,57 @@
 <div class="col-sm-12">
     <p class="@(ViewBag.Message == null ? "hidden" : null)">@Html.Raw(ViewBag.Message)</p>
 </div>
-    -->
-<div id='calendar'></div>
+-->
+<!--if (Request.IsAuthenticated)
+{-->
+    <h1 style="text-align: center">Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value)</h1>
 
-@section scripts
+    <br/>
+    <br/>
+    <div class="">
+        <div class="col-sm-3">
+            <p>Filters By Name:</p>
+            <input type="checkbox" name="class" value="calc">Calculos I<br>
+            <input type="checkbox" name="class" value="dis">Design and Software Implementation<br>
+            <br>
+            <p>Filter by Type: </p>
+            <input type="checkbox" name="Type" value="Lesson">Lesson<br/>
+            <input type="checkbox" name="Type" value="Exam">Exam<br>
+            <input type="checkbox" name="Type" value="OfficeHour">Office Hour<br>
+            <br/>
+        </div>
+        <div class="col-sm-9" id='calendar'></div>
+    </div>
+    @section scripts
+    {
+        @Scripts.Render("~/Scripts/moment-with-locales.min.js")
+        @Scripts.Render("~/Scripts/fullcalendar.min.js")
+        <script>
+            $(document)
+                .ready(function() {
+
+                    // page is now ready, initialize the calendar...
+
+                    $('#calendar')
+                        .fullCalendar({
+                            // put your options and callbacks here
+                            header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,basicWeek,basicDay'
+                            },
+                            defaultDate: '2016-12-12',
+                            navLinks: true, // can click day/week names to navigate views
+                            editable: true,
+                            eventLimit: true, // allow "more" link when too many events
+                            events: '/Home/About'
+                        });
+                });
+        </script>
+    }
+<!--}
+else
 {
-    @Scripts.Render("~/Scripts/moment-with-locales.min.js")
-    @Scripts.Render("~/Scripts/fullcalendar.min.js")
-    <script>
-        $(document).ready(function () {
+    <h1>Please Sign Up to be able to see the content.</h1>
+}-->
 
-            // page is now ready, initialize the calendar...
-
-            $('#calendar').fullCalendar({
-                // put your options and callbacks here
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,basicWeek,basicDay'
-                },
-                defaultDate: '2016-12-12',
-                navLinks: true, // can click day/week names to navigate views
-                editable: true,
-                eventLimit: true, // allow "more" link when too many events
-                events: '/Home/About'
-            });
-        });
-    </script>
-}

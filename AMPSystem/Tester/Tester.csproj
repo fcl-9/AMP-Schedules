@@ -51,6 +51,7 @@
     <None Include="Dados" />
     <None Include="Cadeiras" />
     <None Include="Salas" />
+    <None Include="Teacher" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AMPSystem\AMPSystem.csproj">

@@ -130,7 +130,7 @@
     <comment>Full app name for title and copyright</comment>
   </data>
   <data name="App_Name_Short" xml:space="preserve">
-    <value>Microsoft Graph Connect sample</value>
+    <value>Academic Management Platform</value>
     <comment>Short app name for navigation bar and browser tab</comment>
   </data>
   <data name="Error_AuthChallengeNeeded" xml:space="preserve">

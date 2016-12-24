@@ -10,6 +10,8 @@
 
 namespace Resources {
     using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -86,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Graph Connect sample.
+        ///   Looks up a localized string similar to Academic Management Platform.
         /// </summary>
         internal static string App_Name_Short {
             get {

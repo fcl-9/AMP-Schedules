@@ -4,11 +4,33 @@
 		"Name": "Campus Universitário da Penteada",
 		"Address": "Campus Universitário da Penteada 9020-105 Funchal - Portugal",
 		"Room": [{
-			"Number": "1",
+			"ID": 1,
+			"Name": "Sala 1",
 			"Floor": "-2"
 		}, {
-			"Number": "2",
+			"ID": 2,
+			"Name": "Sala 2",
 			"Floor": "-2"
+		}, {
+			"ID": 3,
+			"Name": "Anfiteatro 2",
+			"Floor": "-2"
+		}, {
+			"ID": 4,
+			"Name": "Gabinete 2.01",
+			"Floor": "2"
+		}, {
+			"ID": 5,
+			"Name": "Gabinete 2.02",
+			"Floor": "2"
+		}, {
+			"ID": 6,
+			"Name": "Gabinete 2.03",
+			"Floor": "2"
+		}, {
+			"ID": 7,
+			"Name": "Gabinete 2.04",
+			"Floor": "2"
 		}]
 	},
 	"Reitoria": {
@@ -16,10 +38,12 @@
 		"Name": "Reitoria da Universidade da Madeira",
 		"Address": "Colégio dos Jesuítas - Rua dos Ferreiros",
 		"Room": [{
-			"Number": "1",
+			"ID": 1,
+			"Name": "Sala 1",
 			"Floor": "0"
 		}, {
-			"Number": "2",
+			"ID": 2,
+			"Name": "Sala 2",
 			"Floor": "0"
 		}]
 	}

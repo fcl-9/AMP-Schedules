@@ -45,12 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CalendarItem.cs" />
     <Compile Include="Classes\Filters\Name.cs" />
     <Compile Include="Classes\Filters\AndCompositeFilter.cs" />
     <Compile Include="Classes\Alert.cs" />
     <Compile Include="Classes\Building.cs" />
     <Compile Include="Classes\ColorDecorator.cs" />
     <Compile Include="Classes\Course.cs" />
+    <Compile Include="Classes\ItemAdapter.cs" />
     <Compile Include="Classes\Views\DailyView.cs" />
     <Compile Include="Classes\EvaluationMoment.cs" />
     <Compile Include="Classes\Factory.cs" />

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -46,17 +47,16 @@ namespace AMPSchedules.Controllers
             //The manager will start the timetableitem list with the data read from the repo
             TimeTableManager Manager = new TimeTableManager(timetable,loadData);
 
-            IList<string> parsedItems = new List<string>(); 
+            IList<CalendarItem> parsedItems = new List<CalendarItem>(); 
 
             foreach (var item in Manager.TimeTable.ItemList)
             {
-
-                parsedItems.Add(JsonConvert.SerializeObject(item)); 
+                CalendarItem adapter = new ItemAdapter(item);
+                parsedItems.Add(adapter); 
             }
             //This flag , "JsonRequestBehavior.AllowGet" removes protection from gets 
             //return Json( TimeTableItemsList , JsonRequestBehavior.AllowGet);
-            Response.Write(parsedItems);
-            return Json(parsedItems, JsonRequestBehavior.AllowGet);
+            return Content(JsonConvert.SerializeObject(parsedItems.ToArray()),"application/json");
         }
 
         

@@ -220,7 +220,10 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Content Include="App_Data\Cadeiras" />
+    <None Include="App_Data\Cadeiras" />
+    <Content Include="App_Data\Dados" />
+    <Content Include="App_Data\Salas" />
+    <Content Include="App_Data\Teacher" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\fullcalendar.js" />
     <Content Include="Scripts\fullcalendar.min.js" />

@@ -14,11 +14,12 @@ namespace AMPSystem.Classes
         public ICollection<Room> Rooms { get; set; }
         public string Name { get; set; }
 
-        public OfficeHours(DateTime starTime, DateTime endTime, ICollection<Room> rooms)
+        public OfficeHours(DateTime starTime, DateTime endTime, ICollection<Room> rooms, string name)
         {
             StartTime = starTime;
             EndTime = endTime;
             Rooms = rooms;
+            Name = name;
         }
     }
 }

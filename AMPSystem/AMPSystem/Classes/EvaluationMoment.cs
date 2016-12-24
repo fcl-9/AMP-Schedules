@@ -12,12 +12,13 @@ namespace AMPSystem.Classes
         public ICollection<Room> Rooms { get; set; }
         public ICollection<Course> Courses { get; set; }
 
-        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses )
+        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name)
         {
             StartTime = startTime;
             EndTime = endTime;
             Rooms = rooms;
             Courses = courses;
+            Name = name;
         }
     }
 }

@@ -14,13 +14,14 @@ namespace AMPSystem.Classes
 
         public ICollection<Course> Courses { get; set; }
 
-        public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type)
+        public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, string name)
         {
             StartTime = startTime;
             EndTime = endTime;
             Rooms = rooms;
             Type = type;
             Courses = courses;
+            Name = name;
         }
     }
 }

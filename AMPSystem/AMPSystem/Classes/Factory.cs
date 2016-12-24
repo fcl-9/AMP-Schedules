@@ -32,17 +32,35 @@ namespace AMPSystem.Classes
 
         public ITimeTableItem Create (DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type)
         {
-           return new Lesson(startTime,endTime,rooms,courses,type);
+            var name = "";
+            var i = 0;
+            foreach (var course in courses)
+            {
+                name += course.Name;
+                if (courses.Count > 1 && i != courses.Count)
+                    name += "/";
+                i++;
+            }
+           return new Lesson(startTime,endTime,rooms,courses,type,name);
         }
 
         public ITimeTableItem Create(DateTime startTime , DateTime endTime , ICollection<Room> rooms)
         {
-            return new OfficeHours(startTime,endTime,rooms);
+            return new OfficeHours(startTime,endTime,rooms, "Horário de Atendimento de ");
         }
 
         public ITimeTableItem Create(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
         {
-            return new EvaluationMoment(startTime, endTime, rooms, courses);
+            var name = "Avaliação de ";
+            var i = 0;
+            foreach (var course in courses)
+            {
+                name += course.Name;
+                if (courses.Count > 1 && i != courses.Count)
+                    name += "/";
+                i++;
+            }
+            return new EvaluationMoment(startTime, endTime, rooms, courses,name);
         }
 
         public ITimeTableItem Create(ITimeTableItem aItem)

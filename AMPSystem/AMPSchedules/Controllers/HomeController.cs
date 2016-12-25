@@ -29,8 +29,8 @@ namespace AMPSchedules.Controllers
             return View("Graph");
         }
 
-        // Controller actions
-        public ActionResult About()
+        // API Controller
+        public ActionResult CalendarDefaulData()
         {
             DataReader dataReader = new FileData();
             Repository loadData = new Repository();
@@ -59,7 +59,21 @@ namespace AMPSchedules.Controllers
             return Content(JsonConvert.SerializeObject(parsedItems.ToArray()),"application/json");
         }
 
-        
+        //Handles every request that was made by a user to filter it's activities
+        [HttpGet]
+        public ActionResult AddFilter()
+        {
+            List<string> receivedFilters = new List<string>();
+            foreach (string value in Request.QueryString.AllKeys)
+            {
+                receivedFilters.Add(value);
+            }
+            return Content(JsonConvert.SerializeObject(Request.QueryString.GetValues("filters")), "application/json");
+        }
+
+
+
+
 
 
         [Authorize]

@@ -76,27 +76,97 @@
         @Scripts.Render("~/Scripts/moment-with-locales.min.js")
         @Scripts.Render("~/Scripts/fullcalendar.min.js")
         <script>
-            $(document)
+            function calendar(urlToRequestData) {
+                // page is now ready, initialize the calendar...
+
+                $('#calendar')
+                    .fullCalendar({
+                        // put your options and callbacks here
+                        header: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'month,basicWeek,basicDay'
+                        },
+                        defaultDate: '2016-12-12',
+                        navLinks: true, // can click day/week names to navigate views
+                        editable: true,
+                        eventLimit: true, // allow "more" link when too many events
+                        events: '' + urlToRequestData + ''
+                    });
+            }
+
+            $()
                 .ready(function() {
-
-                    // page is now ready, initialize the calendar...
-
-                    $('#calendar')
-                        .fullCalendar({
-                            // put your options and callbacks here
-                            header: {
-                                left: 'prev,next today',
-                                center: 'title',
-                                right: 'month,basicWeek,basicDay'
-                            },
-                            defaultDate: '2016-12-12',
-                            navLinks: true, // can click day/week names to navigate views
-                            editable: true,
-                            eventLimit: true, // allow "more" link when too many events
-                            events: '/Home/About'
-                        });
+                    calendar('/Home/CalendarDefaulData');
                 });
+            $()
+                .ready(function() {
+                    var selectedFilter = $("input[type=checkbox]");
+                    var selectedElement = undefined;
+                    var FilterToApply = {};
+
+                    selectedFilter.change(function() {
+                        selectedElement = $(this);
+                        if ($(this).is(':checked')) {
+                            FilterToApply[$(this).val()] = $(this).attr('name');
+
+                            //All filters from the same type will be bocked
+                            selectedFilter.each(function() {
+                                if ($(this).attr('name') == selectedElement.attr('name') &&
+                                    $(this).val() != selectedElement.val()) {
+                                    $(this).attr("disabled", true);
+                                }
+                            });
+                            //Ajax Request
+                            requestGetType(FilterToApply);
+                        } else {
+                            var valueToRemove = $(this).val();
+                            delete FilterToApply[valueToRemove];
+
+
+                            //Remove Filters to Apply
+                            //FilterToApply = $.grep(FilterToApply,
+                            //    function(val, index) {
+                            //        return val != valueToRemove;
+                            //    });
+
+
+                            selectedFilter.each(function() {
+                                if ($(this).attr('name') == selectedElement.attr('name') &&
+                                    $(this).val() != selectedElement.val()) {
+                                    $(this).removeAttr('disabled');
+                                }
+                            });
+
+                            //Ajax Request -- Update the data 
+                            requestGetType(FilterToApply);
+                        }
+                    });
+                });
+
+            function OnSuccess(response) {
+                alert(response);
+            }
+
+            function requestGetType(data) {
+                console.log(data);
+                console.log(JSON.stringify(data));
+                $.ajax({
+                    type: "GET",
+                    url: "/Home/AddFilter?filters="+JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    sucess: OnSuccess,
+                    failure: function(response) {
+                        alert(response.d);
+                    }
+                });
+            }
+
         </script>
+
+
+
     }
 <!--}
 else

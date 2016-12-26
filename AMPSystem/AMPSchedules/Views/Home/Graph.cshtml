@@ -95,10 +95,14 @@
                     });
             }
 
-            $()
-                .ready(function() {
+
+            //Load The Calendar with it's default events.
+            $().ready(function() {
                     calendar('/Home/CalendarDefaulData');
                 });
+
+
+            //Apply Filters
             $()
                 .ready(function() {
                     var selectedFilter = $("input[type=checkbox]");
@@ -145,9 +149,14 @@
                 });
 
             function OnSuccess(response) {
+                console.log("Got Success");
+              
                 //$.fullCalendar('refetchEventSources', sources);
                 console.log(response);
             }
+
+
+
 
             function requestGetType(data) {
                 console.log(data);
@@ -157,8 +166,13 @@
                     url: "/Home/AddFilter",data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    sucess: OnSuccess,
-                    failure: function(response) {
+                    success: function (events) {
+                        $('#calendar').fullCalendar('removeEvents');                //Removes Everything
+                        $('#calendar').fullCalendar('addEventSource', events);      //Gets The Event
+                        $('#calendar').fullCalendar('rerenderEvents');
+                    },
+                    failure: function (response) {
+                        console.log("Fail");
                         alert(response.d);
                     }
                 });

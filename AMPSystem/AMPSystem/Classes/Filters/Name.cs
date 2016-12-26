@@ -24,16 +24,6 @@ namespace AMPSystem.Classes
                     Manager.TimeTable.RemoveTimeTableItem(i);
                 }
             }
-
-
-            //    foreach (var item in Manager.TimeTable.ItemList)
-            //{
-            //    Debug.Write(item);
-            //    if (item.Name )
-            //    {
-            //        Manager.TimeTable.RemoveTimetableItem(item);
-            //    }
-            //}
         }
     }
 }

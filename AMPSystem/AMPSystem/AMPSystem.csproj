@@ -52,6 +52,7 @@
     <Compile Include="Classes\Building.cs" />
     <Compile Include="Classes\ColorDecorator.cs" />
     <Compile Include="Classes\Course.cs" />
+    <Compile Include="Classes\Filters\TypeCreator.cs" />
     <Compile Include="Classes\ItemAdapter.cs" />
     <Compile Include="Classes\Views\DailyView.cs" />
     <Compile Include="Classes\TimeTableItems\EvaluationMoment.cs" />
@@ -65,7 +66,7 @@
     <Compile Include="Classes\Summary.cs" />
     <Compile Include="Classes\LoadData\FileData.cs" />
     <Compile Include="Classes\Timetable.cs" />
-    <Compile Include="Classes\Filters\Type.cs" />
+    <Compile Include="Classes\Filters\TypeF.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\Views\WeeklyView.cs" />
     <Compile Include="Interfaces\IDecorator.cs" />

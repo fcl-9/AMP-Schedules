@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
@@ -16,11 +17,11 @@ namespace AMPSystem.Classes
 
         public void ApplyFilter()
         {
-            foreach (var item in Manager.TimeTable.ItemList)
+            for (int i = Manager.TimeTable.CounTimeTableItems() - 1; i>= 0; i-- )
             {
-                if (item.Name != FilterAttribute)
+                if (Manager.TimeTable.ItemList[i].Name != FilterAttribute)
                 {
-                    Manager.TimeTable.ItemList.Remove(item);
+                    Manager.TimeTable.RemoveTimeTableItem(i);
                 }
             }
         }

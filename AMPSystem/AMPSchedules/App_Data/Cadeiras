@@ -19,5 +19,10 @@
 		"Name": "Gestão de Sistemas e Redes",
 		"Year": [1, 2],
 		"Teacher": [4]
+	}, {
+		"ID": 5,
+		"Name": "Game Design",
+		"Year": [1, 2],
+		"Teacher": [5]
 	}]
 }

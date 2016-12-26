@@ -24,6 +24,17 @@ namespace AMPSchedules.Models
             return me.Mail ?? me.UserPrincipalName;
         }
 
+        // Get the current user's email address from their profile.
+        public async Task<string> GetUserName(GraphServiceClient graphClient)
+        {
+
+            // Get the current user. 
+            // This sample only needs the user's email address, so select the mail and userPrincipalName properties.
+            // If the mail property isn't defined, userPrincipalName should map to the email for all account types. 
+            User me = await graphClient.Me.Request().Select("userPrincipalName").GetAsync();
+            return me.UserPrincipalName;
+        }
+
         // Send an email message from the current user.
         public async Task SendEmail(GraphServiceClient graphClient, Message message)
         {

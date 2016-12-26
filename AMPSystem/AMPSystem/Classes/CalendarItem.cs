@@ -4,6 +4,7 @@ namespace AMPSystem.Classes
 {
     public class CalendarItem
     {
+        // The properties are in lowercase because of the Javascript calendar we're using
         public int id { get; set; }
         public virtual string title { get; set; }
         public bool allDay { get; set; }
@@ -20,5 +21,6 @@ namespace AMPSystem.Classes
         public string backgroundColor { get; set; }
         public string borderColor { get; set; }
         public string textColor { get; set; }
+        public string description { get; set; }
         }
     }

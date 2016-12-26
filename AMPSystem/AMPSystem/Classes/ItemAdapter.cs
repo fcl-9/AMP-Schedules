@@ -15,6 +15,12 @@ namespace AMPSystem.Classes
         public ItemAdapter(ITimeTableItem item)
         {
             Item = item;
+            description = "Room(s): <br><ul>";
+            foreach (var room in Item.Rooms)
+            {
+                description += "<li>" + room.Name + "<ul><li> Floor: " + room.Floor + "</li></ul>";
+            }
+            description += "</ul>";
         }
     }
 }

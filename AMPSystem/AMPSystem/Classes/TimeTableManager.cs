@@ -26,7 +26,42 @@ namespace AMPSystem.Classes
             //Adds Value to our data class whcih is TimeTable
             foreach (var item in Repository.Items)
             {
-                TimeTable.AddTimetableItem(item);
+                if (item is Lesson)
+                {
+                    // If the lesson belongs to one of the courses that the student assists
+                    // then add it to the timetable
+                    foreach (var course in ((Lesson)item).Courses)
+                    {
+                        if (repository.UserCourses.Contains(course))
+                        {
+                            TimeTable.AddTimetableItem(item);
+                        }
+                    }
+                }
+                else if (item is EvaluationMoment)
+                {
+                    // If the evaluation belongs to one of the courses that the student assists
+                    // then add it to the timetable
+                    foreach (var course in ((EvaluationMoment)item).Courses)
+                    {
+                        if (repository.UserCourses.Contains(course))
+                        {
+                            TimeTable.AddTimetableItem(item);
+                        }
+                    }
+                }
+                else if (item is OfficeHours)
+                {
+                    // If the office hours belongs to one of the teaches that teach one of 
+                    // courses that the student assists then add it to the timetable
+                    foreach (var course in ((OfficeHours)item).Teacher.Courses)
+                    {
+                        if (repository.UserCourses.Contains(course))
+                        {
+                            TimeTable.AddTimetableItem(item);
+                        }
+                    }
+                }
             }
 
         }

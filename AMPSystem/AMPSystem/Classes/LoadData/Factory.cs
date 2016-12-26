@@ -44,9 +44,9 @@ namespace AMPSystem.Classes
            return new Lesson(startTime,endTime,rooms,courses,type,name);
         }
 
-        public ITimeTableItem Create(DateTime startTime , DateTime endTime , ICollection<Room> rooms)
+        public ITimeTableItem Create(DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher)
         {
-            return new OfficeHours(startTime,endTime,rooms, "Horário de Atendimento de ");
+            return new OfficeHours(startTime,endTime,rooms, teacher);
         }
 
         public ITimeTableItem Create(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
@@ -83,9 +83,9 @@ namespace AMPSystem.Classes
             return new Building(id, name, address, rooms);
         }
 
-        public User CreateUser(string name, string email, ICollection<string> roles)
+        public User CreateUser(string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
-            return new User();
+            return new User(name,email,roles,courses);
         }
     }
 }

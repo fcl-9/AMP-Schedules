@@ -224,6 +224,10 @@
     <Content Include="App_Data\Dados" />
     <Content Include="App_Data\Salas" />
     <Content Include="App_Data\Teacher" />
+    <Content Include="App_Data\Schedule\2054313" />
+    <Content Include="App_Data\Course\2054313" />
+    <Content Include="App_Data\Course\2053913" />
+    <Content Include="App_Data\Schedule\2053913" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\fullcalendar.js" />
     <Content Include="Scripts\fullcalendar.min.js" />

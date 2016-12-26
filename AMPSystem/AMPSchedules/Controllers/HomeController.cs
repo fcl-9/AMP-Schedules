@@ -23,41 +23,48 @@ using Newtonsoft.Json;
 
 namespace AMPSchedules.Controllers
 {
-
+    //Commented for tests only!!!!!!!!!!!!!![Authorize]
     public class HomeController : Controller
     {
         GraphService graphService = new GraphService();
 
-        [Authorize]
         public ActionResult Index()
         {
             return View("Graph");
         }
 
+        private async Task<Repository> getData()
+        {
+            /* !!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
+            // Initialize the GraphServiceClient.
+            GraphServiceClient graphClient = SDKHelper.GetAuthenticatedClient();
+
+            // Get the current user's email address. 
+            var email = await graphService.GetMyEmailAddress(graphClient);
+            var mail = new MailAddress(email);
+            var user = mail.User;*/
+            DataReader dataReader = new FileData();
+            Repository loadData = new Repository();
+            loadData.DataReader = dataReader;
+            loadData.GetCourses(Server.MapPath(@"~/App_Data/Cadeiras"));
+            loadData.GetRooms(Server.MapPath(@"~/App_Data/Salas"));
+            //!!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
+            //loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/" + user));
+            //loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/" + user));
+            loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/2054313"));
+            loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/2054313"));
+            loadData.GetTeachers(Server.MapPath(@"~/App_Data/Teacher"));
+            return loadData;
+        }
+
         // API Controller
-        [Authorize]
-        public ActionResult CalendarDefaulData()
+        public async Task<ActionResult> CalendarDefaultData()
         {
             try
             {
-
-                // Initialize the GraphServiceClient.
-                GraphServiceClient graphClient = SDKHelper.GetAuthenticatedClient();
-
-                // Get the current user's email address. 
-                var email =  await graphService.GetMyEmailAddress(graphClient);
-                var mail = new MailAddress(email);
-                var user = mail.User;
-                DataReader dataReader = new FileData();
-                Repository loadData = new Repository();
-                loadData.DataReader = dataReader;
-                loadData.GetCourses(Server.MapPath(@"~/App_Data/Cadeiras"));
-                loadData.GetRooms(Server.MapPath(@"~/App_Data/Salas"));
-                loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/" + user));
-                loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/"+user));
-                loadData.GetTeachers(Server.MapPath(@"~/App_Data/Teacher"));
+                var loadData = await getData();
                 //Default interval of the view
-                DateTime date = DateTime.Now;
+                var date = DateTime.Now;
                 var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
                 var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
                 Timetable timetable = new Timetable(firstDayOfMonth, lastDayOfMonth);
@@ -84,61 +91,59 @@ namespace AMPSchedules.Controllers
 
         //Handles every request that was made by a user to filter it's activities
         [HttpGet]
-        public ActionResult AddFilter()
+        public async Task<ActionResult> AddFilter()
         {
-            DataReader dataReader = new FileData();
-            Repository loadData = new Repository();
-            loadData.DataReader = dataReader;
-            loadData.GetCourses(Server.MapPath(@"~/App_Data/Cadeiras"));
-            loadData.GetRooms(Server.MapPath(@"~/App_Data/Salas"));
-            loadData.GetSchedule(Server.MapPath(@"~/App_Data/Dados"));
-            loadData.GetTeachers(Server.MapPath(@"~/App_Data/Teacher"));
-            
-            //Default interval of the view
-            DateTime date = DateTime.Now;
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            Timetable timetable = new Timetable(firstDayOfMonth, lastDayOfMonth);
-            
-            //The manager will start the timetableitem list with the data read from the repo
-            TimeTableManager Manager = new TimeTableManager(timetable, loadData);
-
-  //TODO: Is this a hook ??? --> Templte Method ??
-            AndCompositeFilter Filters = new AndCompositeFilter(Manager);
-            foreach (var filter in Request.QueryString)
+            try
             {
-                if (Request.QueryString[(string)filter] == "ClassName")
+                var loadData = await getData();
+                //Default interval of the view
+                DateTime date = DateTime.Now;
+                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                Timetable timetable = new Timetable(firstDayOfMonth, lastDayOfMonth);
+
+                //The manager will start the timetableitem list with the data read from the repo
+                TimeTableManager Manager = new TimeTableManager(timetable, loadData);
+
+                //TODO: Is this a hook ??? --> Templte Method ??
+                AndCompositeFilter Filters = new AndCompositeFilter(Manager);
+                foreach (var filter in Request.QueryString)
                 {
-                    IFilter nameFilter = new Name((string)filter,Manager);
-                    Filters.Add(nameFilter);
+                    if (Request.QueryString[(string)filter] == "ClassName")
+                    {
+                        IFilter nameFilter = new Name((string)filter, Manager);
+                        Filters.Add(nameFilter);
+                    }
+                    else if (Request.QueryString[(string)filter] == "Type")
+                    {
+                        IFilter typeFilter = new TypeF((string)filter, Manager);
+                        Filters.Add(typeFilter);
+                    }
                 }
-                else if(Request.QueryString[(string)filter] == "Type")
+
+                Filters.ApplyFilter();
+                //TODO: HOOK END
+
+                IList<CalendarItem> parsedItems = new List<CalendarItem>();
+
+                foreach (var item in Manager.TimeTable.ItemList)
                 {
-                    IFilter typeFilter = new TypeF((string)filter, Manager);
-                    Filters.Add(typeFilter);
-                }    
+                    CalendarItem adapter = new ItemAdapter(item);
+                    parsedItems.Add(adapter);
+                }
+
+                return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
             }
-
-            Filters.ApplyFilter();
- //TODO: HOOK END
-
-            IList<CalendarItem> parsedItems = new List<CalendarItem>();
-
-            foreach (var item in Manager.TimeTable.ItemList)
+            catch (ServiceException se)
             {
-                CalendarItem adapter = new ItemAdapter(item);
-                parsedItems.Add(adapter);
+                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
-
-            return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
         }
-
-
-
-
-
-
-        [Authorize]
+        
+        
+        
+        
         // Get the current user's email address from their profile.
         public async Task<ActionResult> GetMyEmailAddress()
         {
@@ -159,7 +164,6 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        [Authorize]
         // Send mail on behalf of the current user.
         public async Task<ActionResult> SendEmail()
         {
@@ -191,7 +195,6 @@ namespace AMPSchedules.Controllers
                 return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
         }
-        
+
+    }
 }
-}
- 

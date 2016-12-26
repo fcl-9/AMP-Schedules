@@ -60,13 +60,13 @@
     <div class="">
         <div class="col-sm-3">
             <p>Filters By Name:</p>
-            <input type="checkbox" name="class" value="calc">Calculos I<br>
-            <input type="checkbox" name="class" value="dis">Design and Software Implementation<br>
+            <input type="checkbox" name="ClassName" value="Calculos I">Calculos I<br>
+            <input type="checkbox" name="ClassName" value="Desenho e Implementação de Software">Desenho e Implementação de Software<br>
             <br>
             <p>Filter by Type: </p>
             <input type="checkbox" name="Type" value="Lesson">Lesson<br/>
-            <input type="checkbox" name="Type" value="Exam">Exam<br>
-            <input type="checkbox" name="Type" value="OfficeHour">Office Hour<br>
+            <input type="checkbox" name="Type" value="EvaluationMoment">EvaluationMoment<br>
+            <input type="checkbox" name="Type" value="OfficeHours">OfficeHours<br>
             <br/>
         </div>
         <div class="col-sm-9" id='calendar'></div>
@@ -145,7 +145,8 @@
                 });
 
             function OnSuccess(response) {
-                alert(response);
+                //$.fullCalendar('refetchEventSources', sources);
+                console.log(response);
             }
 
             function requestGetType(data) {
@@ -153,7 +154,7 @@
                 console.log(JSON.stringify(data));
                 $.ajax({
                     type: "GET",
-                    url: "/Home/AddFilter?filters="+JSON.stringify(data),
+                    url: "/Home/AddFilter",data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     sucess: OnSuccess,

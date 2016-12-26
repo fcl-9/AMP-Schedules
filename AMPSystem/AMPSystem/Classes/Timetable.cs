@@ -12,7 +12,7 @@ namespace AMPSystem.Classes
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
 
-        public ICollection<ITimeTableItem> ItemList { get; set; }
+        public IList<ITimeTableItem> ItemList { get; set; }
 
         
         public Timetable(DateTime startDateTime, DateTime endDateTime)
@@ -27,9 +27,20 @@ namespace AMPSystem.Classes
             ItemList.Add(item);
         }
 
+        //TODO: rpbably this needs to be removed. The method in bottom will remove the items by index
         public void RemoveTimetableItem(ITimeTableItem item)
         {
             ItemList.Remove(item);
+        }
+
+        public void RemoveTimeTableItem(int position)
+        {
+            ItemList.RemoveAt(position);
+        }
+
+        public int CounTimeTableItems()
+        {
+            return ItemList.Count();
         }
     }
 }

@@ -4,15 +4,16 @@ using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class Type : ISimpleFilter<ITimeTableItem>
+    public class TypeF : ISimpleFilter<ITimeTableItem>
     {
         public ITimeTableItem FilterAttribute { get; set; }
         public TimeTableManager Manager { get; set; }
 
-        public Type(ITimeTableItem filterName, TimeTableManager manager)
+        public TypeF(string filterName, TimeTableManager manager)
         {
+            //TODO: Create an ITimeTableItem Object woth the string received
             Manager = manager;
-            this.FilterAttribute = filterName;
+            //this.FilterAttribute = filterName;
         }
 
         public void ApplyFilter()

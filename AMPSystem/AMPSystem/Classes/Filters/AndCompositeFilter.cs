@@ -46,8 +46,7 @@ namespace AMPSystem.Classes
             {
                filter.ApplyFilter();
             }
-
-
+            
         }
     }
 }

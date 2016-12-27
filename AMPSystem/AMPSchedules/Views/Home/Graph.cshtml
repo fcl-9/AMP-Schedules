@@ -276,7 +276,7 @@
                             }
                         });
                         //Ajax Request
-                        requestGetType("/Home/AddFilter",FilterToApply);
+                        requestGetType("/Filter/AddFilter",FilterToApply);
                     } else {
                         var valueToRemove = $(this).val();
                         delete FilterToApply[valueToRemove];
@@ -290,7 +290,7 @@
                         });
 
                         //Ajax Request -- Update the data 
-                        requestGetType("/Home/AddFilter",FilterToApply);
+                        requestGetType("/Filter/AddFilter",FilterToApply);
                     }
                 });
             });

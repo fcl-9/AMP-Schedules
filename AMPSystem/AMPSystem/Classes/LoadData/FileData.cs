@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +11,31 @@ namespace AMPSystem.Classes
 {
     public class FileData : DataReader
     {
-        public string RequestData(string filePath)
+        // This class is used to fetch data from sample text files
+
+        public string RequestTeachers()
         {
-            //Read Data From Text File
-            return System.IO.File.ReadAllText(filePath);
+            return System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"App_Data/Teacher");
+        }
+
+        public string RequestUserCourses(string username)
+        {
+            return System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"App_Data/Course/" + username);
+        }
+
+        public string RequestCourses()
+        {
+            return System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"App_Data/Cadeiras");
+        }
+
+        public string RequestRooms()
+        {
+            return System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"App_Data/Salas");
+        }
+
+        public string RequestSchedule(string username)
+        {
+            return System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"App_Data/Schedule/" + username);
         }
     }
 }

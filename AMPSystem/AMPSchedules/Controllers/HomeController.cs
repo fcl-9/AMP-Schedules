@@ -33,10 +33,7 @@ namespace AMPSchedules.Controllers
             return View("Graph");
         }
 
-        public override void hook(TimeTableManager manager)
-        {
-            
-        }
+        public override void hook(TimeTableManager manager){}
      
     
         // API Controller
@@ -54,11 +51,6 @@ namespace AMPSchedules.Controllers
                 return RedirectToAction("Index", "Error",
                     new {message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message});
             }
-
-           
-        }
-
-        
 
         // Get the current user's email address from their profile.
         public async Task<ActionResult> GetMyEmailAddress()
@@ -79,6 +71,11 @@ namespace AMPSchedules.Controllers
                 return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
         }
+
+
+
+
+
 
         // Send mail on behalf of the current user.
         public async Task<ActionResult> SendEmail()

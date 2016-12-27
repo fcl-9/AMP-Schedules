@@ -21,7 +21,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
     {
 
 
-        public override void hook(TimeTableManager manager)
+        public override ActionResult hook(TimeTableManager manager)
         {
             AndCompositeFilter Filters = new AndCompositeFilter(manager);
             foreach (var filter in Request.QueryString)
@@ -38,6 +38,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 }
             }
             Filters.ApplyFilter();
+            return base.hook(manager);
         }
 
         //Handles every request that was made by a user to filter it's activities

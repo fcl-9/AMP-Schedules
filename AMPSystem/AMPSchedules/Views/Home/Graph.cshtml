@@ -63,8 +63,7 @@
 <div class="">
     <div class="col-sm-3">
         <p>Filters By Name:</p>
-        <input type="checkbox" name="ClassName" value="Calculos I">Calculos I<br>
-        <input type="checkbox" name="ClassName" value="Desenho e Implementação de Software">Desenho e Implementação de Software<br>
+        <div id="nameFilters"></div>
         <br>
         <p>Filter by Type: </p>
         <input type="checkbox" name="Type" value="Lesson">Lesson<br/>
@@ -236,20 +235,39 @@
                         });
 
                 $("#submit").click(function() {
-                    if ($("#1").hasClass('active'))
-                    {
+                    if ($("#1").hasClass('active')) {
                         console.log("Do Stuff 1");
-                    }
-                    else if ($("#2").hasClass('active'))
-                    {
+                    } else if ($("#2").hasClass('active')) {
                         var colorApplyer = {};
                         //                  Event Name                  Color Picked for the event Selected.
                         colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
                         requestGetType("/Home/EventColor", colorApplyer);
-                    }
-                    else if ($("#3").hasClass('active'))
-                    {
+                    } else if ($("#3").hasClass('active')) {
                         console.log("Do Stuff 3");
+                    }
+                });
+
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Courses",
+                    success: function(courses) {
+                        $("#nameFilters").html(function() {
+                            var mCourses = "";
+                            $.each(courses,
+                                function(property, value) {
+                                    mCourses += "<input type='checkbox' name='ClassName' value='" +
+                                        value.Name +
+                                        "'>" +
+                                        value.Name +
+                                        "<br>"
+                                });
+                            return mCourses;
+                        });
+                    },
+                    failure: function(response) {
+                        console.log("Fail");
+                        alert(response.d);
                     }
                 });
             });
@@ -275,7 +293,7 @@
                             }
                         });
                         //Ajax Request
-                        requestGetType("/Filter/AddFilter",FilterToApply);
+                        requestGetType("/Filter/AddFilter", FilterToApply);
                     } else {
                         var valueToRemove = $(this).val();
                         delete FilterToApply[valueToRemove];
@@ -289,13 +307,13 @@
                         });
 
                         //Ajax Request -- Update the data 
-                        requestGetType("/Filter/AddFilter",FilterToApply);
+                        requestGetType("/Filter/AddFilter", FilterToApply);
                     }
                 });
             });
 
         //Makes Request to the server
-        function requestGetType(requesturl,data) {
+        function requestGetType(requesturl, data) {
             data["start"] = $('#calendar').fullCalendar('getView').start.format();
             data["end"] = $('#calendar').fullCalendar('getView').end.format();
             $.ajax({

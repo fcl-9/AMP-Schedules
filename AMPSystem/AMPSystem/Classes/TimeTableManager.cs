@@ -19,46 +19,50 @@ namespace AMPSystem.Classes
         /// </summary>
         /// <param name="timetable"></param>
         /// <param name="repository"></param>
-        public TimeTableManager(Timetable timetable, Repository repository)
+        public TimeTableManager(Repository repository, DateTime startDateTime, DateTime endDateTime)
         {
-            TimeTable = timetable;
+            TimeTable = new Timetable(startDateTime, endDateTime);
             Repository = repository;
             //Adds Value to our data class whcih is TimeTable
             foreach (var item in Repository.Items)
             {
-                if (item is Lesson)
+                if (startDateTime.Date.CompareTo(item.StartTime) <= 0 &&
+                    endDateTime.Date.CompareTo(item.StartTime) >= 0)
                 {
-                    // If the lesson belongs to one of the courses that the student assists
-                    // then add it to the timetable
-                    foreach (var course in ((Lesson)item).Courses)
+                    if (item is Lesson)
                     {
-                        if (repository.UserCourses.Contains(course))
+                        // If the lesson belongs to one of the courses that the student assists
+                        // then add it to the timetable
+                        foreach (var course in ((Lesson) item).Courses)
                         {
-                            TimeTable.AddTimetableItem(item);
+                            if (repository.UserCourses.Contains(course))
+                            {
+                                TimeTable.AddTimetableItem(item);
+                            }
                         }
                     }
-                }
-                else if (item is EvaluationMoment)
-                {
-                    // If the evaluation belongs to one of the courses that the student assists
-                    // then add it to the timetable
-                    foreach (var course in ((EvaluationMoment)item).Courses)
+                    else if (item is EvaluationMoment)
                     {
-                        if (repository.UserCourses.Contains(course))
+                        // If the evaluation belongs to one of the courses that the student assists
+                        // then add it to the timetable
+                        foreach (var course in ((EvaluationMoment) item).Courses)
                         {
-                            TimeTable.AddTimetableItem(item);
+                            if (repository.UserCourses.Contains(course))
+                            {
+                                TimeTable.AddTimetableItem(item);
+                            }
                         }
                     }
-                }
-                else if (item is OfficeHours)
-                {
-                    // If the office hours belongs to one of the teaches that teach one of 
-                    // courses that the student assists then add it to the timetable
-                    foreach (var course in ((OfficeHours)item).Teacher.Courses)
+                    else if (item is OfficeHours)
                     {
-                        if (repository.UserCourses.Contains(course))
+                        // If the office hours belongs to one of the teaches that teach one of 
+                        // courses that the student assists then add it to the timetable
+                        foreach (var course in ((OfficeHours) item).Teacher.Courses)
                         {
-                            TimeTable.AddTimetableItem(item);
+                            if (repository.UserCourses.Contains(course))
+                            {
+                                TimeTable.AddTimetableItem(item);
+                            }
                         }
                     }
                 }

@@ -38,13 +38,10 @@ namespace AMPSystem.Classes
             loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/2054313"));
             loadData.GetTeachers(Server.MapPath(@"~/App_Data/Teacher"));
             //acaba
-            //Default interval of the view
-            var date = DateTime.Now;
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            Timetable timetable = new Timetable(firstDayOfMonth, lastDayOfMonth);
+            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
+            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
             //The manager will start the timetableitem list with the data read from the repo
-            TimeTableManager Manager = new TimeTableManager(timetable, loadData);
+            TimeTableManager Manager = new TimeTableManager(loadData, startDateTime, endDateTime);
             return Manager;
         }
 

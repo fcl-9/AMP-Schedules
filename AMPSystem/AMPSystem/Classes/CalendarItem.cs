@@ -5,6 +5,9 @@ namespace AMPSystem.Classes
     public class CalendarItem
     {
         // The properties are in lowercase because of the Javascript calendar we're using
+        // For more information about this properties check FullCalendar Docs at: 
+        // https://fullcalendar.io/docs/event_data/Event_Object/
+
         public int id { get; set; }
         public virtual string title { get; set; }
         public bool allDay { get; set; }

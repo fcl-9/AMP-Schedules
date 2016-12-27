@@ -13,6 +13,7 @@ namespace AMPSystem.Classes
         public override DateTime end { get { return Item.EndTime; } }
         public override DateTime start { get { return Item.StartTime; } }
         public override string title { get { return Item.Name; } }
+        public override string color { get { return Item.Color; }}
 
         public ItemAdapter(ITimeTableItem item)
         {
@@ -23,6 +24,7 @@ namespace AMPSystem.Classes
                 description += "<li>" + room.Name + "<ul><li> Floor: " + room.Floor + "</li></ul>";
             }
             description += "</ul>";
+
         }
     }
 }

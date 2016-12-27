@@ -200,7 +200,7 @@
         }
 
 
-        //Load The Calendar with it's default events.
+        //Load The Calendar with it's default events, the color picker and the datetime pickers
         $()
             .ready(function() {
                 calendar('/Home/CalendarDefaultData');
@@ -250,13 +250,17 @@
                 $("#submit").click(function() {
                     if ($("#1").hasClass('active')) {
                         console.log("Do Stuff 1");
+                        $('#fullCalModal').modal('hide');
                     } else if ($("#2").hasClass('active')) {
                         var colorApplyer = {};
                         //                  Event Name                  Color Picked for the event Selected.
                         colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
+                        //Request Data
                         requestGetType("/Home/EventColor", colorApplyer);
+                        $('#fullCalModal').modal('hide');
                     } else if ($("#3").hasClass('active')) {
                         console.log("Do Stuff 3");
+                        $('#fullCalModal').modal('hide');
                     }
                 });
             });
@@ -373,6 +377,8 @@
                         newEvent['description'] = description;
                         //Add To Calendar
                         $('#calendar').fullCalendar('renderEvent', newEvent);
+                        $('#addEventModal').modal('hide');
+
                         //Sanitize Fields
                         $("#new_event_name").val('');
                         $("#datetimepicker_starttime").val('');

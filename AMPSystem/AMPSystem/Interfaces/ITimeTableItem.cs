@@ -10,5 +10,7 @@ namespace AMPSystem.Interfaces
         DateTime EndTime { get; set; }
         ICollection<Room> Rooms { get; set; }
         string Name { get; set; }
+        string Color { get; set; }
+
     }
 }

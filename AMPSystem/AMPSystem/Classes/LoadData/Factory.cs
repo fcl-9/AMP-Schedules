@@ -63,10 +63,7 @@ namespace AMPSystem.Classes
             return new EvaluationMoment(startTime, endTime, rooms, courses,name);
         }
 
-        public ITimeTableItem Create(ITimeTableItem aItem)
-        {
-            return new ColorDecorator();
-        }
+  
 
         public Room CreateRoom(int number, string name, int floor)
         {

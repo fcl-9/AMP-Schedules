@@ -142,6 +142,11 @@ namespace AMPSchedules.Controllers
         }
 
 
+
+
+
+
+        //Change Color of an Event Group Based on the Selected Event
         [HttpGet]
         public async Task<ActionResult> EventColor()
         {
@@ -157,29 +162,39 @@ namespace AMPSchedules.Controllers
                 //The manager will start the timetableitem list with the data read from the repo
                 TimeTableManager Manager = new TimeTableManager(timetable, loadData);
 
-                //TODO: Is this a hook ??? --> Templte Method ??
-                AndCompositeFilter Filters = new AndCompositeFilter(Manager);
-                foreach (var filter in Request.QueryString)
+                //Read The Color that was sent
+                string color = null;
+                string itemName = null;
+                foreach (var eventName in Request.QueryString)
                 {
-                    if (Request.QueryString[(string)filter] == "ClassName")
+                    itemName = (string)eventName;
+                    color = Request.QueryString[itemName];
+                }
+
+                //Change the color on the items 
+                foreach (var item in Manager.TimeTable.ItemList)
+                {
+                    if (item.Name == itemName)
                     {
-                        IFilter nameFilter = new Name((string)filter, Manager);
-                        Filters.Add(nameFilter);
-                    }
-                    else if (Request.QueryString[(string)filter] == "Type")
-                    {
-                        IFilter typeFilter = new TypeF((string)filter, Manager);
-                        Filters.Add(typeFilter);
+                        if (color != null)
+                        {
+
+                            item.Color = color;
+                            //Debug.Write(item.Color);
+                        }
+                        else
+                        {
+                            Debug.Write("No Color was Defined");
+                            break;
+                        }
                     }
                 }
 
-                Filters.ApplyFilter();
-                //TODO: HOOK END
+
+
 
                 IList<CalendarItem> parsedItems = new List<CalendarItem>();
-
-                foreach (var item in Manager.TimeTable.ItemList)
-                {
+                foreach (var item in Manager.TimeTable.ItemList) { 
                     CalendarItem adapter = new ItemAdapter(item);
                     parsedItems.Add(adapter);
                 }
@@ -212,6 +227,11 @@ namespace AMPSchedules.Controllers
                 return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
         }
+
+
+
+
+
 
         // Send mail on behalf of the current user.
         public async Task<ActionResult> SendEmail()

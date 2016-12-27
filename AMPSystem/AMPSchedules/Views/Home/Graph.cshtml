@@ -255,7 +255,7 @@
                         //                  Event Name                  Color Picked for the event Selected.
                         colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
                         //Request Data
-                        requestGetType("/Home/EventColor", colorApplyer);
+                        requestGetType("/Color/EventColor", colorApplyer);
                         $('#fullCalModal').modal('hide');
                     } else if ($("#3").hasClass('active')) {
                         console.log("Do Stuff 3");
@@ -285,7 +285,7 @@
                             }
                         });
                         //Ajax Request
-                        requestGetType("/Home/AddFilter", FilterToApply);
+                        requestGetType("/Filter/AddFilter", FilterToApply);
                     } else {
                         var valueToRemove = $(this).val();
                         delete FilterToApply[valueToRemove];
@@ -299,7 +299,7 @@
                         });
 
                         //Ajax Request -- Update the data 
-                        requestGetType("/Home/AddFilter", FilterToApply);
+                        requestGetType("/Filter/AddFilter", FilterToApply);
                     }
                 });
             });

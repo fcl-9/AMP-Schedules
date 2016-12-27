@@ -140,10 +140,59 @@ namespace AMPSchedules.Controllers
                 return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
         }
-        
-        
-        
-        
+
+
+        [HttpGet]
+        public async Task<ActionResult> EventColor()
+        {
+            try
+            {
+                var loadData = await getData();
+                //Default interval of the view
+                DateTime date = DateTime.Now;
+                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                Timetable timetable = new Timetable(firstDayOfMonth, lastDayOfMonth);
+
+                //The manager will start the timetableitem list with the data read from the repo
+                TimeTableManager Manager = new TimeTableManager(timetable, loadData);
+
+                //TODO: Is this a hook ??? --> Templte Method ??
+                AndCompositeFilter Filters = new AndCompositeFilter(Manager);
+                foreach (var filter in Request.QueryString)
+                {
+                    if (Request.QueryString[(string)filter] == "ClassName")
+                    {
+                        IFilter nameFilter = new Name((string)filter, Manager);
+                        Filters.Add(nameFilter);
+                    }
+                    else if (Request.QueryString[(string)filter] == "Type")
+                    {
+                        IFilter typeFilter = new TypeF((string)filter, Manager);
+                        Filters.Add(typeFilter);
+                    }
+                }
+
+                Filters.ApplyFilter();
+                //TODO: HOOK END
+
+                IList<CalendarItem> parsedItems = new List<CalendarItem>();
+
+                foreach (var item in Manager.TimeTable.ItemList)
+                {
+                    CalendarItem adapter = new ItemAdapter(item);
+                    parsedItems.Add(adapter);
+                }
+
+                return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
+            }
+            catch (ServiceException se)
+            {
+                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
+            }
+        }
+
         // Get the current user's email address from their profile.
         public async Task<ActionResult> GetMyEmailAddress()
         {

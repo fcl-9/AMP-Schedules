@@ -74,6 +74,7 @@
     </div>
     <div class="col-sm-9" id='calendar'></div>
 </div>
+
 <div id="fullCalModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -105,7 +106,22 @@
                         <p id="description"></p>
                     </div>
                     <div class="tab-pane" id="2">
-                        <h3>Notice the gap between the content and tab after applying a background color</h3>
+                        <p>You can change the color of each occurence of the item you selected.</p>
+                        <select name="colorpicker">
+                            <option value="#337ab7">Default Blue</option>
+                            <option value="#7bd148">Green</option>
+                            <option value="#5484ed">Bold blue</option>
+                            <option value="#a4bdfc">Blue</option>
+                            <option value="#46d6db">Turquoise</option>
+                            <option value="#7ae7bf">Light green</option>
+                            <option value="#51b749">Bold green</option>
+                            <option value="#fbd75b">Yellow</option>
+                            <option value="#ffb878">Orange</option>
+                            <option value="#ff887c">Red</option>
+                            <option value="#dc2127">Bold red</option>
+                            <option value="#dbadff">Purple</option>
+                            <option value="#e1e1e1">Gray</option>
+                        </select>
                     </div>
                     <div class="tab-pane" id="3">
                         <form id="alertForm">
@@ -134,192 +150,178 @@
                   
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button class="btn btn-primary">Save</button>
+                <button class="btn btn-primary" id="submit">Save</button>
             </div>
         </div>
     </div>
 </div>
-    <div class="">
-        <div class="col-sm-3">
-            <p>Filters By Name:</p>
-            <input type="checkbox" name="ClassName" value="Calculos I">Calculos I<br>
-            <input type="checkbox" name="ClassName" value="Desenho e Implementação de Software">Desenho e Implementação de Software<br>
-            <br>
-            <p>Filter by Type: </p>
-            <input type="checkbox" name="Type" value="Lesson">Lesson<br/>
-            <input type="checkbox" name="Type" value="EvaluationMoment">EvaluationMoment<br>
-            <input type="checkbox" name="Type" value="OfficeHours">OfficeHours<br>
-            <br/>
-            <select name="colorpicker">
-                <option value="#3a87ad">Default Blue</option>
-                <option value="#7bd148">Green</option>
-                <option value="#5484ed">Bold blue</option>
-                <option value="#a4bdfc">Blue</option>
-                <option value="#46d6db">Turquoise</option>
-                <option value="#7ae7bf">Light green</option>
-                <option value="#51b749">Bold green</option>
-                <option value="#fbd75b">Yellow</option>
-                <option value="#ffb878">Orange</option>
-                <option value="#ff887c">Red</option>
-                <option value="#dc2127">Bold red</option>
-                <option value="#dbadff">Purple</option>
-                <option value="#e1e1e1">Gray</option>
-            </select>
 
-        </div>
-        <div class="col-sm-9" id='calendar'></div>
-    </div>
-    @section scripts
-    {
-        @Scripts.Render("~/Scripts/moment-with-locales.min.js")
-        @Scripts.Render("~/Scripts/fullcalendar.min.js")
-        @Scripts.Render("~/Scripts/ColorPicker/jquery.simplecolorpicker.js")
+           
+@section scripts
+{
+    @Scripts.Render("~/Scripts/moment-with-locales.min.js")
+    @Scripts.Render("~/Scripts/fullcalendar.min.js")
+    @Scripts.Render("~/Scripts/ColorPicker/jquery.simplecolorpicker.js")
 
-        <script>
-            function calendar(urlToRequestData) {
-                // page is now ready, initialize the calendar...
+    <script>
+        function calendar(urlToRequestData) {
+            // page is now ready, initialize the calendar...
 
-                $('#calendar')
-                    .fullCalendar({
-                        // put your options and callbacks here
-                        header: {
-                            left: 'prev,next today',
-                            center: 'title',
-                            right: 'month,agendaWeek,agendaDay'
-                        },
-                        defaultDate: '2016-12-12',
-                        navLinks: true, // can click day/week names to navigate views
-                        editable: true,
-                        eventLimit: true, // allow "more" link when too many events
-                        events: '' + urlToRequestData + '',
-                        eventClick: function (event, jsEvent, view) {
-                            console.log(event);
-                            console.log(moment(event.start).format("MMM Do H:mm"));
-                            $('#modalTitle').html(event.title);
-                            $('#startTime').html(moment(event.start).format("MMM Do H:mm"));
-                            $('#endTime').html(moment(event.end).format("MMM Do H:mm"));
-                            $('#description').html(event.description);
-                            $('#eventUrl').attr('href', event.url);
-                            $('#fullCalModal').modal();
-                        }
-                    });
-            }
-
-
-            //Load The Calendar with it's default events.
-            $().ready(function() {
-                calendar('/Home/CalendarDefaulData');
-                $('select[name="colorpicker"]').simplecolorpicker();
+            $('#calendar')
+                .fullCalendar({
+                    // put your options and callbacks here
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay'
+                    },
+                    defaultDate: '2016-12-12',
+                    navLinks: true, // can click day/week names to navigate views
+                    editable: true,
+                    eventLimit: true, // allow "more" link when too many events
+                    events: '' + urlToRequestData + '',
+                    eventClick: function(event, jsEvent, view) {
+                        console.log(event);
+                        console.log(moment(event.start).format("MMM Do H:mm"));
+                        $('#modalTitle').html(event.title);
+                        $('#startTime').html(moment(event.start).format("MMM Do H:mm"));
+                        $('#endTime').html(moment(event.end).format("MMM Do H:mm"));
+                        $('#description').html(event.description);
+                        $('#eventUrl').attr('href', event.url);
+                        $('#fullCalModal').modal();
+                    }
                 });
+        }
 
 
-            //Apply Filters
-            $()
-                .ready(function () {
-                    $("#addAlert").click(function() {
-                        $("#alertForm").append('' +
-                            '<div class="col-sm-12 form-group">' +
-                            '<div class="col-sm-5">' +
+        //Load The Calendar with it's default events.
+        $()
+            .ready(function() {
+                calendar('/Home/CalendarDefaultData');
+                $('select[name="colorpicker"]').simplecolorpicker();
+            });
+
+
+        $()
+            .ready(function() {
+                $("#addAlert")
+                    .click(function() {
+                        $("#alertForm")
+                            .append('' +
+                                '<div class="col-sm-12 form-group">' +
+                                '<div class="col-sm-5">' +
                                 '<input class="form-control" />' +
-                            '</div>' +
-                            '<div class="col-sm-5">' +
+                                '</div>' +
+                                '<div class="col-sm-5">' +
                                 '<select class="form-control">' +
                                 '<option>Minutes</option>' +
                                 '<option>Hours</option>' +
                                 '<option>Days</option>' +
                                 '<option>Weeks</option>' +
                                 '</select>' +
-                            '</div>' +
-                            '<div class="col-sm-2">' +
-                            '<button class="rm-alert btn btn-danger">Remove</button>' +
-                            '</div>' +
-                            '</div>'
+                                '</div>' +
+                                '<div class="col-sm-2">' +
+                                '<button class="rm-alert btn btn-danger">Remove</button>' +
+                                '</div>' +
+                                '</div>'
                             );
                     });
 
-                    $("#alertForm").on("click",".rm-alert",function (e) {
-                        alert("asd");
-                        e.preventDefault();
-                        $(this).parent().parent().remove();
-                    });
+                $("#alertForm")
+                    .on("click",
+                        ".rm-alert",
+                        function(e) {
+                            alert("asd");
+                            e.preventDefault();
+                            $(this).parent().parent().remove();
+                        });
 
-                    var selectedFilter = $("input[type=checkbox]");
-                    var selectedElement = undefined;
-                    var FilterToApply = {};
-
-                    selectedFilter.change(function() {
-                        selectedElement = $(this);
-                        if ($(this).is(':checked')) {
-                            FilterToApply[$(this).val()] = $(this).attr('name');
-
-                            //All filters from the same type will be bocked
-                            selectedFilter.each(function() {
-                                if ($(this).attr('name') == selectedElement.attr('name') &&
-                                    $(this).val() != selectedElement.val()) {
-                                    $(this).attr("disabled", true);
-                                }
-                            });
-                            //Ajax Request
-                            requestGetType(FilterToApply);
-                        } else {
-                            var valueToRemove = $(this).val();
-                            delete FilterToApply[valueToRemove];
-
-
-                            //Remove Filters to Apply
-                            //FilterToApply = $.grep(FilterToApply,
-                            //    function(val, index) {
-                            //        return val != valueToRemove;
-                            //    });
-
-
-                            selectedFilter.each(function() {
-                                if ($(this).attr('name') == selectedElement.attr('name') &&
-                                    $(this).val() != selectedElement.val()) {
-                                    $(this).removeAttr('disabled');
-                                }
-                            });
-
-                            //Ajax Request -- Update the data 
-                            requestGetType(FilterToApply);
-                        }
-                    });
-                });
-
-            function OnSuccess(response) {
-                console.log("Got Success");
-
-                //$.fullCalendar('refetchEventSources', sources);
-                console.log(response);
-            }
-
-
-            function requestGetType(data) {
-                console.log(data);
-                console.log(JSON.stringify(data));
-                $.ajax({
-                    type: "GET",
-                    url: "/Home/AddFilter",
-                    data,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(events) {
-                        $('#calendar').fullCalendar('removeEvents'); //Removes Everything
-                        $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
-                        $('#calendar').fullCalendar('rerenderEvents');
-                    },
-                    failure: function(response) {
-                        console.log("Fail");
-                        alert(response.d);
+                $("#submit").click(function() {
+                    if ($("#1").hasClass('active'))
+                    {
+                        console.log("Do Stuff 1");
+                    }
+                    else if ($("#2").hasClass('active'))
+                    {
+                        var colorApplyer = {};
+                        //                  Event Name                  Color Picked for the event Selected.
+                        colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
+                        requestGetType("/Home/EventColor", colorApplyer);
+                    }
+                    else if ($("#3").hasClass('active'))
+                    {
+                        console.log("Do Stuff 3");
                     }
                 });
-            }
+            });
 
-        </script>
+        //Apply Filters
+
+        $()
+            .ready(function() {
+                var selectedFilter = $("input[type=checkbox]");
+                var selectedElement = undefined;
+                var FilterToApply = {};
+
+                selectedFilter.change(function() {
+                    selectedElement = $(this);
+                    if ($(this).is(':checked')) {
+                        FilterToApply[$(this).val()] = $(this).attr('name');
+
+                        //All filters from the same type will be bocked
+                        selectedFilter.each(function() {
+                            if ($(this).attr('name') == selectedElement.attr('name') &&
+                                $(this).val() != selectedElement.val()) {
+                                $(this).attr("disabled", true);
+                            }
+                        });
+                        //Ajax Request
+                        requestGetType("/Home/AddFilter",FilterToApply);
+                    } else {
+                        var valueToRemove = $(this).val();
+                        delete FilterToApply[valueToRemove];
+
+
+                        selectedFilter.each(function() {
+                            if ($(this).attr('name') == selectedElement.attr('name') &&
+                                $(this).val() != selectedElement.val()) {
+                                $(this).removeAttr('disabled');
+                            }
+                        });
+
+                        //Ajax Request -- Update the data 
+                        requestGetType("/Home/AddFilter",FilterToApply);
+                    }
+                });
+            });
+
+        //Makes Request to the server
+        function requestGetType(requesturl,data) {
+            console.log(data);
+            console.log(JSON.stringify(data));
+            $.ajax({
+                type: "GET",
+                url: requesturl,
+                data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(events) {
+                    $('#calendar').fullCalendar('removeEvents'); //Removes Everything
+                    $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
+                    $('#calendar').fullCalendar('rerenderEvents');
+                },
+                failure: function(response) {
+                    console.log("Fail");
+                    alert(response.d);
+                }
+            });
+        }
+
+    </script>
 
 
 
-    }
+}
 <!--}
 else
 {

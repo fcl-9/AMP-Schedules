@@ -2,6 +2,10 @@
 {
     public interface DataReader
     {
-        string RequestData(string path);
+        string RequestTeachers();
+        string RequestUserCourses(string username);
+        string RequestCourses();
+        string RequestRooms();
+        string RequestSchedule(string username);
     }
 }

@@ -46,14 +46,14 @@ namespace AMPSchedules.Controllers
             DataReader dataReader = new FileData();
             Repository loadData = new Repository();
             loadData.DataReader = dataReader;
-            loadData.GetCourses(Server.MapPath(@"~/App_Data/Cadeiras"));
-            loadData.GetRooms(Server.MapPath(@"~/App_Data/Salas"));
+            loadData.GetCourses();
+            loadData.GetRooms();
             //!!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
-            //loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/" + user));
-            //loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/" + user));
-            loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/2054313"));
-            loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/2054313"));
-            loadData.GetTeachers(Server.MapPath(@"~/App_Data/Teacher"));
+            //loadData.GetUserCourses(user);
+            //loadData.GetSchedule(user);
+            loadData.GetUserCourses("2054313");
+            loadData.GetSchedule("2054313");
+            loadData.GetTeachers();
             return loadData;
         }
 

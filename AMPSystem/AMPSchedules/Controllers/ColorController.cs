@@ -26,8 +26,14 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             string itemName = null;
             foreach (var eventName in Request.QueryString)
             {
-                itemName = (string)eventName;
-                color = Request.QueryString[itemName];
+               
+                if ((string)eventName != "start" && (string)eventName != "end")
+                {
+                    //Debug.Write("My key is " + itemName + " ");
+                    itemName = (string)eventName;
+                    color = Request.QueryString[itemName];
+                    //Debug.Write("You're adding color " + color + " \n ");
+                }
             }
 
             //Change the color on the items 
@@ -39,7 +45,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                     {
 
                         item.Color = color;
-                        //Debug.Write(item.Color);
+                        //Debug.Write("Changing Color of items");
                     }
                     else
                     {

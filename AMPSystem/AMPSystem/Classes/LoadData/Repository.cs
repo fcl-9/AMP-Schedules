@@ -9,12 +9,10 @@ namespace AMPSystem.Classes
     public class Repository
     {
         public DataReader DataReader { get; set; }
-
         public ICollection<Course> Courses { get; set; }
         public ICollection<Course> UserCourses { get; set; }
         public ICollection<Building> Buildings { get; set; }
         public ICollection<ITimeTableItem> Items { get; set; }
-
         public ICollection<User> Teachers { get; set; }
 
         public Repository()
@@ -26,12 +24,11 @@ namespace AMPSystem.Classes
         }
 
         /// <summary>
-        /// Get's all the courses from the dataReader and updates the List of courses
+        /// Gets all the teachers from the dataReader and updates the List of teacher
         /// </summary>
-        /// <param name="path">The path of file that needs to be read to create the list</param>
-        public void GetTeachers(string path)
+        public void GetTeachers()
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestTeachers();
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -64,9 +61,13 @@ namespace AMPSystem.Classes
             }
         }
 
-        public void GetUserCourses(string path)
+        /// <summary>
+        /// Gets all the courses of a user and updates the correspondent list
+        /// </summary>
+        /// <param name="username">The username of the user</param>
+        public void GetUserCourses(string username)
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestUserCourses(username);
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -79,12 +80,11 @@ namespace AMPSystem.Classes
         }
 
         /// <summary>
-        /// Get's all the courses from the dataReader and updates the List of courses
+        /// Gets all the courses from the dataReader and updates the List of courses
         /// </summary>
-        /// <param name="path">The path of file that needs to be read to create the list</param>
-        public void GetCourses(string path)
+        public void GetCourses()
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestCourses();
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -103,12 +103,11 @@ namespace AMPSystem.Classes
         }
 
         /// <summary>
-        /// Get's all the courses from the dataReader and updates the List of Rooms and Buildings
+        /// Get's all the rooms and buildings from the dataReader and updates the List of Rooms and Buildings
         /// </summary>
-        /// <param name="path">The path of file that needs to be read to create the lists</param>
-        public void GetRooms(string path)
+        public void GetRooms()
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestRooms();
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -131,10 +130,10 @@ namespace AMPSystem.Classes
         /// Get's all the lessons/evaluations/officehours from the dataReader and updates the List of items
         /// that compose the schedule.
         /// </summary>
-        /// <param name="path">The path of file that needs to be read to create the list</param>
-        public void GetSchedule(string path)
+        /// <param name="path">The username of the user</param>
+        public void GetSchedule(string username)
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestSchedule(username);
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -169,6 +168,7 @@ namespace AMPSystem.Classes
             }
         }
 
+        // Methods that invoke the factory to create objects
         private Course CreateCourse(int id, string name, ICollection<int> years)
         {
             return Factory.Instance.CreateCourse(id, name, years);

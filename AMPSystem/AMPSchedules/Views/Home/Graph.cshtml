@@ -175,7 +175,6 @@
                         center: 'title',
                         right: 'month,agendaWeek,agendaDay'
                     },
-                    defaultDate: '2016-12-12',
                     navLinks: true, // can click day/week names to navigate views
                     editable: true,
                     eventLimit: true, // allow "more" link when too many events
@@ -297,8 +296,8 @@
 
         //Makes Request to the server
         function requestGetType(requesturl,data) {
-            console.log(data);
-            console.log(JSON.stringify(data));
+            data["start"] = $('#calendar').fullCalendar('getView').start.format();
+            data["end"] = $('#calendar').fullCalendar('getView').end.format();
             $.ajax({
                 type: "GET",
                 url: requesturl,

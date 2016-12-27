@@ -14,7 +14,6 @@ namespace AMPSystem.Classes
         public ICollection<Room> Rooms { get; set; }
         public int ItemId { get; set; }
         public string Name { get; set; }
-        public string Color { get; set; }
         public User Teacher { get; set; }
         public string Color { get; set; }
 

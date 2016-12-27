@@ -11,5 +11,6 @@ namespace AMPSystem.Interfaces
         ICollection<Room> Rooms { get; set; }
         int ItemId { get; set; }
         string Name { get; set; }
+        string Color { get; set; }
     }
 }

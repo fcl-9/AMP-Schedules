@@ -9,7 +9,7 @@ using Microsoft.Win32;
 
 namespace AMPSystem.Classes
 {
-    class Factory
+    public class Factory
     {
         #region Singleton
     

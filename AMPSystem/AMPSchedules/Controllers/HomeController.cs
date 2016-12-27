@@ -42,8 +42,8 @@ namespace AMPSchedules.Controllers
             try
             {
 
-               return await TemplateMethod();
-          
+                return await TemplateMethod();
+
             }
             catch (ServiceException se)
             {
@@ -51,6 +51,7 @@ namespace AMPSchedules.Controllers
                 return RedirectToAction("Index", "Error",
                     new {message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message});
             }
+        }
 
         // Get the current user's email address from their profile.
         public async Task<ActionResult> GetMyEmailAddress()

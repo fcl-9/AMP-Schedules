@@ -11,6 +11,8 @@ namespace AMPSystem.Classes
 {
     public class FileData : DataReader
     {
+        // This class is used to fetch data from sample text files
+
         public string RequestTeachers()
         {
             return System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"App_Data/Teacher");

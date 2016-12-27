@@ -181,7 +181,6 @@
                         center: 'title',
                         right: 'month,agendaWeek,agendaDay'
                     },
-                    defaultDate: '2016-12-12',
                     navLinks: true, // can click day/week names to navigate views
                     editable: true,
                     eventLimit: true, // allow "more" link when too many events
@@ -266,6 +265,7 @@
             });
 
         //Apply Filters
+
         $()
             .ready(function() {
                 var selectedFilter = $("input[type=checkbox]");
@@ -304,10 +304,10 @@
                 });
             });
 
-        //Makes Request to the server -> Updates Stuff on Calendar
-        function requestGetType(requesturl, data) {
-            console.log(data);
-            console.log(JSON.stringify(data));
+        //Makes Request to the server
+        function requestGetType(requesturl,data) {
+            data["start"] = $('#calendar').fullCalendar('getView').start.format();
+            data["end"] = $('#calendar').fullCalendar('getView').end.format();
             $.ajax({
                 type: "GET",
                 url: requesturl,

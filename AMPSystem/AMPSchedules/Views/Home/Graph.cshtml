@@ -9,54 +9,12 @@
 {
     @Styles.Render("~/Content/fullcalendar.min.css")
     @Styles.Render("~/Content/ColorPicker/jquery.simplecolorpicker.css")
+    @Styles.Render("~/Content/button.css")
+    @Styles.Render("~/Content/jquery.datetimepicker.min.css")
 
 
 }
-<!--
-<h1>@ViewBag.Title</h1>
-<h2>@Resource.Graph_GetEmailAddress_Heading</h2>
-<p>@Html.Raw(Resource.Graph_GetEmailAddress_Instruction)</p>
-@using (Html.BeginForm("GetMyEmailAddress", "Home"))
-{
-    <div class="col-sm-12">
-        <div class="form-group">
-            <button class="btn btn-default" id="get-my-email-address">@Resource.Graph_GetEmailAddress_Button</button>
-        </div>
-    </div>
-}
-    
-
-<div class="col-sm-12">
-    <label for="user-email-address">@Resource.Graph_GetEmailAddress_Results_Label</label>
-    <pre name="user-email-address">@ViewBag.Email</pre>
-</div>
-
-<h2>@Resource.Graph_SendMail_Heading</h2>
-<p>@Html.Raw(Resource.Graph_SendMail_Instruction)</p>
-@using (Html.BeginForm("SendEmail", "Home"))
-{
-    <div class="col-sm-12">
-            <div class="form-group">
-                <label for="recipients">@Resource.Graph_SendMail_Recipients_Label</label>
-                <input name="recipients" type="text" class="form-control" value="@ViewBag.Email" @(ViewBag.Email == null ? "disabled" : null) />
-            </div>
-            <div class="form-group">
-                <label for="subject">@Resource.Graph_SendMail_Subject_Label</label>
-                <input name="subject" type="text" class="form-control" value="@Resource.Graph_SendMail_Subject_Text @Resource.App_Name_Short" @(ViewBag.Email == null ? "disabled" : null) />
-            </div>
-            <div class="form-group">
-                <button class="btn btn-default @(ViewBag.Email == null ? "disabled" : null)">@Resource.Graph_SendMail_Button</button>
-                <input name="email-address" value=@ViewBag.Email type="hidden" />
-            </div>
-        </div>
-}
-<div class="col-sm-12">
-    <p class="@(ViewBag.Message == null ? "hidden" : null)">@Html.Raw(ViewBag.Message)</p>
-</div>
--->
-<!--if (Request.IsAuthenticated)
-{-->
-    <h1 style="text-align: center">Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value)</h1>
+<h1 style="text-align: center">Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value)</h1>
 
     <br/>
     <br/>
@@ -67,12 +25,17 @@
         <input type="checkbox" name="ClassName" value="Desenho e Implementação de Software">Desenho e Implementação de Software<br>
         <br>
         <p>Filter by Type: </p>
-        <input type="checkbox" name="Type" value="Lesson">Lesson<br/>
+        <input type="checkbox" name="Type" value="Lesson">Lesson<br />
         <input type="checkbox" name="Type" value="EvaluationMoment">EvaluationMoment<br>
         <input type="checkbox" name="Type" value="OfficeHours">OfficeHours<br>
-        <br/>
+        <br />
     </div>
     <div class="col-sm-9" id='calendar'></div>
+    <div class="addEventButton">
+        <button type="button" class="btn-circle btn-lg" id="addEvent">
+            <i class="glyphicon glyphicon-plus iconPlus"></i>
+        </button>
+    </div>
 </div>
 
 <div id="fullCalModal" class="modal fade">
@@ -157,16 +120,59 @@
 </div>
 
            
+
+<div id="addEventModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title-addEvent"></h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <label for="new_event_name">Event Name: </label>
+                <input id="new_event_name">
+                <br/>
+                <label for="new_event_startTime">Start Time: </label>
+                <input id="datetimepicker_starttime" type="text">
+
+                <br />
+                <label for="new_event_endTime">End Time: </label>
+                <input id="datetimepicker_endtime" type="text">
+
+                <br />
+                <label for="new_event_room">Room: </label>
+                <input id="new_event_room">
+                <br />
+                <label for="new_event_room">Course: </label>
+                <input id="new_event_course">
+                <br />
+                <label for="new_event_room">Description: </label>
+                <input id="new_event_description">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" id="saveNewEvent">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section scripts
 {
     @Scripts.Render("~/Scripts/moment-with-locales.min.js")
     @Scripts.Render("~/Scripts/fullcalendar.min.js")
     @Scripts.Render("~/Scripts/ColorPicker/jquery.simplecolorpicker.js")
 
+    @Scripts.Render("~/Scripts/jquery.datetimepicker.full.js")
+
+
     <script>
+        //Renders the calendar.
         function calendar(urlToRequestData) {
             // page is now ready, initialize the calendar...
-
             $('#calendar')
                 .fullCalendar({
                     // put your options and callbacks here
@@ -199,9 +205,14 @@
             .ready(function() {
                 calendar('/Home/CalendarDefaultData');
                 $('select[name="colorpicker"]').simplecolorpicker();
+
+                $("#datetimepicker_starttime").datetimepicker({
+                    minDate: 0,
+                    minTime: 0
+                });
             });
 
-
+        //Allow to modify colors and add alerts.
         $()
             .ready(function() {
                 $("#addAlert")
@@ -237,26 +248,20 @@
                         });
 
                 $("#submit").click(function() {
-                    if ($("#1").hasClass('active'))
-                    {
+                    if ($("#1").hasClass('active')) {
                         console.log("Do Stuff 1");
-                    }
-                    else if ($("#2").hasClass('active'))
-                    {
+                    } else if ($("#2").hasClass('active')) {
                         var colorApplyer = {};
                         //                  Event Name                  Color Picked for the event Selected.
                         colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
                         requestGetType("/Home/EventColor", colorApplyer);
-                    }
-                    else if ($("#3").hasClass('active'))
-                    {
+                    } else if ($("#3").hasClass('active')) {
                         console.log("Do Stuff 3");
                     }
                 });
             });
 
         //Apply Filters
-
         $()
             .ready(function() {
                 var selectedFilter = $("input[type=checkbox]");
@@ -276,7 +281,7 @@
                             }
                         });
                         //Ajax Request
-                        requestGetType("/Home/AddFilter",FilterToApply);
+                        requestGetType("/Home/AddFilter", FilterToApply);
                     } else {
                         var valueToRemove = $(this).val();
                         delete FilterToApply[valueToRemove];
@@ -290,13 +295,13 @@
                         });
 
                         //Ajax Request -- Update the data 
-                        requestGetType("/Home/AddFilter",FilterToApply);
+                        requestGetType("/Home/AddFilter", FilterToApply);
                     }
                 });
             });
 
-        //Makes Request to the server
-        function requestGetType(requesturl,data) {
+        //Makes Request to the server -> Updates Stuff on Calendar
+        function requestGetType(requesturl, data) {
             console.log(data);
             console.log(JSON.stringify(data));
             $.ajax({
@@ -317,6 +322,79 @@
             });
         }
 
+        //Show the model for a new event addtion
+        $().ready(function() {
+            //When Button is Clicked open modal to add Event
+            $("#addEvent").click(function() {
+                $(".modal-title-addEvent").html("Add a New Event");
+                $("#addEventModal").modal();
+            });
+
+            //If the first value is changed after it's assigned remove the datepicker bellow
+            $("#datetimepicker_starttime").change(function() {
+                var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
+                if (startTime == null) {
+                    $("#datetimepicker_endtime").datetimepicker('destroy');
+                    if ($("#datetimepicker_endtime").text !== "") {
+                        $("#datetimepicker_endtime").val('');
+                        console.log("Cleaning");
+                    }
+                } else {
+                    //TODO: Get the time from the previous datepciker and make this one start from that time.
+                    $("#datetimepicker_endtime").datetimepicker({
+                        minDate: 0,
+                        minTime: 0
+                    });
+                }
+            });
+
+
+            //Submit the Data of a new event
+            $("#saveNewEvent").click(function() {
+                var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
+                var endtime = $("#datetimepicker_endtime").datetimepicker('getValue');
+                var today = new Date();
+                //Checking if the choosen time are greater than now and end time is greater than start time.
+                if (startTime > today && endtime > today && endtime > startTime) {
+                    var newEvent = {}; //Generates the json to send to the server and store it in the database.
+                    var name = $("#new_event_name").val();
+                    var beginsAt = $("#datetimepicker_starttime").datetimepicker('getValue');
+                    var endsAt = $("#datetimepicker_endtime").datetimepicker('getValue');
+                    var room = $("#new_event_room").val();
+                    var course = $("#new_event_course").val();
+                    var description = $("#new_event_description").val();
+                    //Check if there is any empty field
+                    if (name !== "" && beginsAt !== "" && endsAt !== "" && room !== "" && $.isNumeric(room) && course !== "" && description !== "") {
+                        newEvent['title'] = name;
+                        newEvent['start'] = beginsAt;
+                        newEvent['end'] = endsAt;
+                        newEvent['room'] = room;
+                        newEvent['course'] = course;
+                        newEvent['description'] = description;
+                        //Add To Calendar
+                        $('#calendar').fullCalendar('renderEvent', newEvent);
+                        //Sanitize Fields
+                        $("#new_event_name").val('');
+                        $("#datetimepicker_starttime").val('');
+                        $("#datetimepicker_endtime").val('');
+                        $("#new_event_room").val('');
+                        $("#new_event_course").val('');
+                        $("#new_event_description").val('');
+                        //Request Ajax Send to Database.
+
+
+                    } else {
+                        console.log("Verify if it's everything ok with your input");
+                    }
+
+                } else {
+                    console.log("ERROR: Can't Store an event for a previous date");
+                    console.log("This Should be block no problem.");
+                }
+            });
+
+
+        });
     </script>
 
 

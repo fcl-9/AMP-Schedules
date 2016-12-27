@@ -1,13 +1,13 @@
 {
   "Schedule": [
     {
-      "Courses": [ 2 ],
-      "StartTime": "2017 - 01 - 02 T18: 00: 00",
-      "EndTime": "2017 - 01 - 02 T19: 59: 59",
+      "Courses": [ 5 ],
+      "StartTime": "2017 - 01 - 02 T11: 00: 00",
+      "EndTime": "2017 - 01 - 02 T12: 59: 59",
       "LessonType": "T",
       "ClassRoom": [
         {
-          "Id": 18,
+          "Id": 10,
           "Building": 1
         }
       ],
@@ -26,13 +26,13 @@
       ],
       "Teacher": 1
     },{
-      "Courses": [ 4 ],
-      "StartTime": "2017 - 01 - 02 T16: 00: 00",
-      "EndTime": "2017 - 01 - 02 T17: 59: 59",
+      "Courses": [ 6 ],
+      "StartTime": "2017 - 01 - 03 T11: 00: 00",
+      "EndTime": "2017 - 01 - 02 T12: 59: 59",
       "LessonType": "T",
       "ClassRoom": [{
-          "Id": 12,
-          "Building": 1
+          "Id": 2,
+          "Building": 3
         }
       ],
       "Teacher": 2
@@ -46,29 +46,29 @@
           "Building": 1
         }
       ],
-      "Teacher": 2
+      "Teacher": 6
     },{
-      "Courses": [ 3 ],
-      "StartTime": "2017 - 01 - 03 T18: 00: 00",
-      "EndTime": "2017 - 01 - 03 T19: 59: 59",
-      "LessonType": "T",
+      "Courses": [ 7 ],
+      "StartTime": "2017 - 01 - 04 T9: 00: 00",
+      "EndTime": "2017 - 01 - 04 T10: 59: 59",
+      "LessonType": "TP",
       "ClassRoom": [{
-          "Id": 14,
-          "Building": 1
+          "Id": 2,
+          "Building": 3
         }
       ],
       "Teacher": 3
     },{
-      "Courses": [ 2 ],
-      "StartTime": "2017 - 01 - 06 T14: 00: 00",
-      "EndTime": "2017 - 01 - 06 T15: 59: 59",
+      "Courses": [ 6 ],
+      "StartTime": "2017 - 01 - 05 T11: 00: 00",
+      "EndTime": "2017 - 01 - 05 T12: 59: 59",
       "LessonType": "TP",
       "ClassRoom": [{
-          "Id": 19,
-          "Building": 1
+          "Id": 2,
+          "Building": 3
         }
       ],
-      "Teacher": 5
+      "Teacher": 6
     },{
       "Courses": [ 1 ],
       "StartTime": "2017 - 01 - 05 T14: 00: 00",
@@ -81,16 +81,16 @@
       ],
       "Teacher": 1
     },{
-      "Courses": [ 3 ],
-      "StartTime": "2017 - 01 - 05 T18: 00: 00",
-      "EndTime": "2017 - 01 - 05 T19: 59: 59",
-      "LessonType": "TP",
+      "Courses": [ 7 ],
+      "StartTime": "2017 - 01 - 06 T9: 00: 00",
+      "EndTime": "2017 - 01 - 06 T10: 59: 59",
+      "LessonType": "PL",
       "ClassRoom": [{
-          "Id": 14,
-          "Building": 1
+          "Id": 2,
+          "Building": 3
         }
       ],
-      "Teacher": 3
+      "Teacher": 6
     }
   ]
 }

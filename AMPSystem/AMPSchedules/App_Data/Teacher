@@ -1,68 +1,123 @@
 {
-  "Teachers": [{
-    "ID": 1,
-    "Name": "Leonel Nóbrega",
-    "Email": "lnobrega@uma.pt",
-    "Room": 4,
-    "OfficeHours": [{
-      "StartTime": "2016 - 12 - 02 T12: 00: 00",
-      "EndTime": "2016 - 12 - 02 T13: 00: 00"
-    }, {
-      "StartTime": "2016 - 12 - 03 T12: 00: 00",
-      "EndTime": "2016 - 12 - 03 T13: 00: 00"
-    }],
-    "Courses": [1]
-  }, {
-    "ID": 2,
-    "Name": "Lina Brito",
-    "Email": "lbrito@uma.pt",
-    "Room": 2,
-    "OfficeHours": [{
-      "StartTime": "2016 - 12 - 02 T10: 00: 00",
-      "EndTime": "2016 - 12 - 02 T12: 00: 00"
-    }, {
-      "StartTime": "2016 - 12 - 03 T10: 00: 00",
-      "EndTime": "2016 - 12 - 03 T12: 00: 00"
-    }],
-    "Courses": [2]
-  }, {
-    "ID": 3,
-    "Name": "Filipe Quintal",
-    "Email": "filipeq@uma.pt",
-    "Room": 1,
-    "OfficeHours": [{
-      "StartTime": "2016 - 12 - 02 T17: 00: 00",
-      "EndTime": "2016 - 12 - 02 T19: 00: 00"
-    }, {
-      "StartTime": "2016 - 12 - 03 T15: 00: 00",
-      "EndTime": "2016 - 12 - 03 T17: 00: 00"
-    }],
-    "Courses": [3]
-  }, {
-    "ID": 4,
-    "Name": "Karolina Baras",
-    "Email": "kbaras@uma.pt",
-    "Room": 4,
-    "OfficeHours": [{
-      "StartTime": "2016 - 12 - 02 T09: 00: 00",
-      "EndTime": "2016 - 12 - 02 T11: 00: 00"
-    }, {
-      "StartTime": "2016 - 12 - 03 T09: 00: 00",
-      "EndTime": "2016 - 12 - 03 T11: 00: 00"
-    }],
-    "Courses": [4]
-  }, {
-    "ID": 5,
-    "Name": "Karolina Baras",
-    "Email": "kbaras@uma.pt",
-    "Room": 4,
-    "OfficeHours": [{
-      "StartTime": "2016 - 12 - 06 T09: 00: 00",
-      "EndTime": "2016 - 12 - 06 T11: 00: 00"
-    }, {
-      "StartTime": "2016 - 12 - 07 T09: 00: 00",
-      "EndTime": "2016 - 12 - 07 T11: 00: 00"
-    }],
-    "Courses": [5]
-  }]
+  "Teachers": [
+    {
+      "ID": 1,
+      "Name": "Leonel Nóbrega",
+      "Email": "lnobrega@uma.pt",
+      "Room": 4,
+      "OfficeHours": [
+        {
+          "StartTime": "2016 - 12 - 02 T12: 00: 00",
+          "EndTime": "2016 - 12 - 02 T13: 00: 00"
+        },
+        {
+          "StartTime": "2016 - 12 - 03 T12: 00: 00",
+          "EndTime": "2016 - 12 - 03 T13: 00: 00"
+        }
+      ],
+      "Courses": [ 1 ]
+    },
+    {
+      "ID": 2,
+      "Name": "Lina Brito",
+      "Email": "lbrito@uma.pt",
+      "Room": 2,
+      "OfficeHours": [
+        {
+          "StartTime": "2016 - 12 - 02 T10: 00: 00",
+          "EndTime": "2016 - 12 - 02 T12: 00: 00"
+        },
+        {
+          "StartTime": "2016 - 12 - 03 T10: 00: 00",
+          "EndTime": "2016 - 12 - 03 T12: 00: 00"
+        }
+      ],
+      "Courses": [ 2 ]
+    },
+    {
+      "ID": 3,
+      "Name": "Filipe Quintal",
+      "Email": "filipeq@uma.pt",
+      "Room": 1,
+      "OfficeHours": [
+        {
+          "StartTime": "2016 - 12 - 02 T17: 00: 00",
+          "EndTime": "2016 - 12 - 02 T19: 00: 00"
+        },
+        {
+          "StartTime": "2016 - 12 - 03 T15: 00: 00",
+          "EndTime": "2016 - 12 - 03 T17: 00: 00"
+        }
+      ],
+      "Courses": [ 3 ]
+    },
+    {
+      "ID": 4,
+      "Name": "Karolina Baras",
+      "Email": "kbaras@uma.pt",
+      "Room": 4,
+      "OfficeHours": [
+        {
+          "StartTime": "2016 - 12 - 02 T09: 00: 00",
+          "EndTime": "2016 - 12 - 02 T11: 00: 00"
+        },
+        {
+          "StartTime": "2016 - 12 - 03 T09: 00: 00",
+          "EndTime": "2016 - 12 - 03 T11: 00: 00"
+        }
+      ],
+      "Courses": [ 4 ]
+    },
+    {
+      "ID": 5,
+      "Name": "Sergi bermudez",
+      "Email": "sergi.bermudez@m-iti.org",
+      "Room": 11,
+      "OfficeHours": [
+        {
+          "StartTime": "2016 - 12 - 02 T09: 00: 00",
+          "EndTime": "2016 - 12 - 02 T11: 00: 00"
+        },
+        {
+          "StartTime": "2016 - 12 - 03 T09: 00: 00",
+          "EndTime": "2016 - 12 - 03 T11: 00: 00"
+        }
+      ],
+      "Courses": [ 4 ]
+    },
+    {
+      "ID": 6,
+      "Name": "Duarte Nunes",
+      "Email": "njn@uma.pt",
+      "Room": 8,
+      "OfficeHours": [
+        {
+          "StartTime": "2016 - 12 - 06 T09: 00: 00",
+          "EndTime": "2016 - 12 - 06 T11: 00: 00"
+        },
+        {
+          "StartTime": "2016 - 12 - 07 T09: 00: 00",
+          "EndTime": "2016 - 12 - 07 T11: 00: 00"
+        }
+      ],
+      "Courses": [ 6 ]
+    },
+    {
+      "ID": 7,
+      "Name": "Diogo Cabral",
+      "Email": "diogo.cabral@m-iti.org",
+      "Room": 9,
+      "OfficeHours": [
+        {
+          "StartTime": "2016 - 12 - 06 T09: 00: 00",
+          "EndTime": "2016 - 12 - 06 T11: 00: 00"
+        },
+        {
+          "StartTime": "2016 - 12 - 07 T09: 00: 00",
+          "EndTime": "2016 - 12 - 07 T11: 00: 00"
+        }
+      ],
+      "Courses": [ 7 ]
+    }
+  ]
 }

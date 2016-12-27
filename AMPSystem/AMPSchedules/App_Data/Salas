@@ -3,48 +3,129 @@
 		"ID": 1,
 		"Name": "Campus Universitário da Penteada",
 		"Address": "Campus Universitário da Penteada 9020-105 Funchal - Portugal",
-		"Room": [{
-			"ID": 1,
-			"Name": "Sala 1",
-			"Floor": "-2"
-		}, {
-			"ID": 2,
-			"Name": "Sala 2",
-			"Floor": "-2"
-		}, {
-			"ID": 3,
-			"Name": "Anfiteatro 2",
-			"Floor": "-2"
-		}, {
-			"ID": 4,
-			"Name": "Gabinete 2.01",
-			"Floor": "2"
-		}, {
-			"ID": 5,
-			"Name": "Gabinete 2.02",
-			"Floor": "2"
-		}, {
-			"ID": 6,
-			"Name": "Gabinete 2.03",
-			"Floor": "2"
-		}, {
-			"ID": 7,
-			"Name": "Gabinete 2.04",
-			"Floor": "2"
-		}]
+    "Room": [
+      {
+        "ID": 1,
+        "Name": "Sala 1",
+        "Floor": "-2"
+      },
+      {
+        "ID": 2,
+        "Name": "Sala 2",
+        "Floor": "-2"
+      },
+      {
+        "ID": 3,
+        "Name": "Anfiteatro 2",
+        "Floor": "-2"
+      },
+      {
+        "ID": 4,
+        "Name": "Gabinete 2.01",
+        "Floor": "2"
+      },
+      {
+        "ID": 5,
+        "Name": "Gabinete 2.02",
+        "Floor": "2"
+      },
+      {
+        "ID": 6,
+        "Name": "Gabinete 2.03",
+        "Floor": "2"
+      },
+      {
+        "ID": 7,
+        "Name": "Gabinete 2.04",
+        "Floor": "2"
+      },
+      {
+        "ID": 8,
+        "Name": "Gabinete 2.05",
+        "Floor": "2"
+      },
+      {
+        "ID": 9,
+        "Name": "Gabinete 2.06",
+        "Floor": "2"
+      },
+      {
+        "ID": 10,
+        "Name": "Sala 13",
+        "Floor": "2"
+      },
+      {
+        "ID": 11,
+        "Name": "Gabinete 2.07",
+        "Floor": "2"
+      },
+      {
+        "ID": 12,
+        "Name": "Sala 21",
+        "Floor": "2"
+      },
+      {
+        "ID": 13,
+        "Name": "Sala 9",
+        "Floor": "2"
+      },
+      {
+        "ID": 14,
+        "Name": "Sala 22",
+        "Floor": "2"
+      },
+      {
+        "ID": 15,
+        "Name": "Lab nº2",
+        "Floor": "-2"
+      },
+      {
+        "ID": 16,
+        "Name": "Sala 25",
+        "Floor": "2"
+      },
+      {
+        "ID": 17,
+        "Name": "Anf 5",
+        "Floor": "3"
+      },
+      {
+        "ID": 18,
+        "Name": "Sala 13",
+        "Floor": "1"
+      },
+      {
+        "ID": 19,
+        "Name": "Sala 28",
+        "Floor": "2"
+      }
+    ]
 	},
-	"Reitoria": {
-		"ID": 2,
-		"Name": "Reitoria da Universidade da Madeira",
-		"Address": "Colégio dos Jesuítas - Rua dos Ferreiros",
+  "Reitoria":{
+    "ID": 2,
+    "Name": "Reitoria da Universidade da Madeira",
+    "Address": "Colégio dos Jesuítas - Rua dos Ferreiros",
+    "Room": [
+      {
+        "ID": 1,
+        "Name": "Sala 1",
+        "Floor": "0"
+      },
+      {
+        "ID": 2,
+        "Name": "Sala 2",
+        "Floor": "0"
+      }
+    ]
+  },
+  "M-ITI": {
+		"ID": 3,
+		"Name": "Madeira Interactive Technologies Institute",
+		"Address": "Campus Universitário da Penteada 9020-105 Funchal - Portugal",
 		"Room": [{
-			"ID": 1,
-			"Name": "Sala 1",
-			"Floor": "0"
-		}, {
 			"ID": 2,
-			"Name": "Sala 2",
-			"Floor": "0"
+			"Name": "Classroom",
+			"Floor": "-2"
 		}]
 	}
 }

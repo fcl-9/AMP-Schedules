@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 namespace AMPSchedules.Controllers
 {
     //Commented for tests only!!!!!!!!!!!!!![Authorize]
-    public class HomeController : Controller
+    public class HomeController : TemplateController
     {
         GraphService graphService = new GraphService();
 
@@ -33,165 +33,32 @@ namespace AMPSchedules.Controllers
             return View("Graph");
         }
 
-        private async Task<Repository> getData()
+        public override void hook(TimeTableManager manager)
         {
-            /* !!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
-            // Initialize the GraphServiceClient.
-            GraphServiceClient graphClient = SDKHelper.GetAuthenticatedClient();
-
-            // Get the current user's email address. 
-            var email = await graphService.GetMyEmailAddress(graphClient);
-            var mail = new MailAddress(email);
-            var user = mail.User;*/
-            DataReader dataReader = new FileData();
-            Repository loadData = new Repository();
-            loadData.DataReader = dataReader;
-            loadData.GetCourses(Server.MapPath(@"~/App_Data/Cadeiras"));
-            loadData.GetRooms(Server.MapPath(@"~/App_Data/Salas"));
-            //!!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
-            //loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/" + user));
-            //loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/" + user));
-            loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/2054313"));
-            loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/2054313"));
-            loadData.GetTeachers(Server.MapPath(@"~/App_Data/Teacher"));
-            return loadData;
+            
         }
-
+     
+    
         // API Controller
         public async Task<ActionResult> CalendarDefaultData()
         {
             try
             {
-                var loadData = await getData();
-                //Default interval of the view
-                var date = DateTime.Now;
-                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-                Timetable timetable = new Timetable(firstDayOfMonth, lastDayOfMonth);
-                //The manager will start the timetableitem list with the data read from the repo
-                TimeTableManager Manager = new TimeTableManager(timetable, loadData);
 
-                IList<CalendarItem> parsedItems = new List<CalendarItem>();
-
-                foreach (var item in Manager.TimeTable.ItemList)
-                {
-                    CalendarItem adapter = new ItemAdapter(item);
-                    parsedItems.Add(adapter);
-                }
-                //This flag , "JsonRequestBehavior.AllowGet" removes protection from gets 
-                //return Json( TimeTableItemsList , JsonRequestBehavior.AllowGet);
-                return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
+               return await TemplateMethod();
+          
             }
             catch (ServiceException se)
             {
                 if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
+                return RedirectToAction("Index", "Error",
+                    new {message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message});
             }
+
+           
         }
 
-        //Handles every request that was made by a user to filter it's activities
-        [HttpGet]
-        public async Task<ActionResult> AddFilter()
-        {
-            try
-            {
-                var loadData = await getData();
-                //Default interval of the view
-                DateTime date = DateTime.Now;
-                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-                Timetable timetable = new Timetable(firstDayOfMonth, lastDayOfMonth);
-
-                //The manager will start the timetableitem list with the data read from the repo
-                TimeTableManager Manager = new TimeTableManager(timetable, loadData);
-
-                //TODO: Is this a hook ??? --> Templte Method ??
-                AndCompositeFilter Filters = new AndCompositeFilter(Manager);
-                foreach (var filter in Request.QueryString)
-                {
-                    if (Request.QueryString[(string)filter] == "ClassName")
-                    {
-                        IFilter nameFilter = new Name((string)filter, Manager);
-                        Filters.Add(nameFilter);
-                    }
-                    else if (Request.QueryString[(string)filter] == "Type")
-                    {
-                        IFilter typeFilter = new TypeF((string)filter, Manager);
-                        Filters.Add(typeFilter);
-                    }
-                }
-
-                Filters.ApplyFilter();
-                //TODO: HOOK END
-
-                IList<CalendarItem> parsedItems = new List<CalendarItem>();
-
-                foreach (var item in Manager.TimeTable.ItemList)
-                {
-                    CalendarItem adapter = new ItemAdapter(item);
-                    parsedItems.Add(adapter);
-                }
-
-                return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
-            }
-            catch (ServiceException se)
-            {
-                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
-            }
-        }
-
-
-        [HttpGet]
-        public async Task<ActionResult> EventColor()
-        {
-            try
-            {
-                var loadData = await getData();
-                //Default interval of the view
-                DateTime date = DateTime.Now;
-                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-                Timetable timetable = new Timetable(firstDayOfMonth, lastDayOfMonth);
-
-                //The manager will start the timetableitem list with the data read from the repo
-                TimeTableManager Manager = new TimeTableManager(timetable, loadData);
-
-                //TODO: Is this a hook ??? --> Templte Method ??
-                AndCompositeFilter Filters = new AndCompositeFilter(Manager);
-                foreach (var filter in Request.QueryString)
-                {
-                    if (Request.QueryString[(string)filter] == "ClassName")
-                    {
-                        IFilter nameFilter = new Name((string)filter, Manager);
-                        Filters.Add(nameFilter);
-                    }
-                    else if (Request.QueryString[(string)filter] == "Type")
-                    {
-                        IFilter typeFilter = new TypeF((string)filter, Manager);
-                        Filters.Add(typeFilter);
-                    }
-                }
-
-                Filters.ApplyFilter();
-                //TODO: HOOK END
-
-                IList<CalendarItem> parsedItems = new List<CalendarItem>();
-
-                foreach (var item in Manager.TimeTable.ItemList)
-                {
-                    CalendarItem adapter = new ItemAdapter(item);
-                    parsedItems.Add(adapter);
-                }
-
-                return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
-            }
-            catch (ServiceException se)
-            {
-                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
-            }
-        }
+        
 
         // Get the current user's email address from their profile.
         public async Task<ActionResult> GetMyEmailAddress()
@@ -245,5 +112,6 @@ namespace AMPSchedules.Controllers
             }
         }
 
+        
     }
 }

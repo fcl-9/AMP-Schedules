@@ -50,15 +50,12 @@
     <Compile Include="Classes\Filters\AndCompositeFilter.cs" />
     <Compile Include="Classes\Alert.cs" />
     <Compile Include="Classes\Building.cs" />
-    <Compile Include="Classes\ColorDecorator.cs" />
     <Compile Include="Classes\Course.cs" />
     <Compile Include="Classes\Filters\TypeCreator.cs" />
     <Compile Include="Classes\ItemAdapter.cs" />
-    <Compile Include="Classes\Views\DailyView.cs" />
     <Compile Include="Classes\TimeTableItems\EvaluationMoment.cs" />
     <Compile Include="Classes\LoadData\Factory.cs" />
     <Compile Include="Classes\TimeTableItems\Lesson.cs" />
-    <Compile Include="Classes\Views\MonthlyView.cs" />
     <Compile Include="Classes\TimeTableItems\OfficeHours.cs" />
     <Compile Include="Classes\LoadData\Repository.cs" />
     <Compile Include="Classes\Room.cs" />
@@ -68,8 +65,6 @@
     <Compile Include="Classes\Timetable.cs" />
     <Compile Include="Classes\Filters\TypeF.cs" />
     <Compile Include="Classes\User.cs" />
-    <Compile Include="Classes\Views\WeeklyView.cs" />
-    <Compile Include="Interfaces\IDecorator.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Interfaces\DataReader.cs" />
     <Compile Include="Interfaces\IObserver.cs" />

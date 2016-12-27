@@ -13,6 +13,7 @@ namespace AMPSystem.Classes
         public string Color { get; set; }
         public ICollection<Room> Rooms { get; set; }
         public ICollection<Course> Courses { get; set; }
+        public string Color { get; set; }
 
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name)
         {
@@ -22,5 +23,6 @@ namespace AMPSystem.Classes
             Courses = courses;
             Name = name;
         }
+
     }
 }

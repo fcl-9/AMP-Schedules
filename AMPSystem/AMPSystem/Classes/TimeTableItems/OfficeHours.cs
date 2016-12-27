@@ -16,6 +16,7 @@ namespace AMPSystem.Classes
         public string Name { get; set; }
         public string Color { get; set; }
         public User Teacher { get; set; }
+        public string Color { get; set; }
 
         public OfficeHours(DateTime starTime, DateTime endTime, ICollection<Room> rooms, User teacher)
         {

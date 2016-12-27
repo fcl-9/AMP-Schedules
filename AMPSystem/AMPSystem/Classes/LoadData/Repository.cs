@@ -29,9 +29,9 @@ namespace AMPSystem.Classes
         /// Get's all the courses from the dataReader and updates the List of courses
         /// </summary>
         /// <param name="path">The path of file that needs to be read to create the list</param>
-        public void GetTeachers(string path)
+        public void GetTeachers()
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestTeachers();
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -64,9 +64,9 @@ namespace AMPSystem.Classes
             }
         }
 
-        public void GetUserCourses(string path)
+        public void GetUserCourses(string username)
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestUserCourses(username);
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -82,9 +82,9 @@ namespace AMPSystem.Classes
         /// Get's all the courses from the dataReader and updates the List of courses
         /// </summary>
         /// <param name="path">The path of file that needs to be read to create the list</param>
-        public void GetCourses(string path)
+        public void GetCourses()
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestCourses();
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -106,9 +106,9 @@ namespace AMPSystem.Classes
         /// Get's all the courses from the dataReader and updates the List of Rooms and Buildings
         /// </summary>
         /// <param name="path">The path of file that needs to be read to create the lists</param>
-        public void GetRooms(string path)
+        public void GetRooms()
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestRooms();
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);
@@ -132,9 +132,9 @@ namespace AMPSystem.Classes
         /// that compose the schedule.
         /// </summary>
         /// <param name="path">The path of file that needs to be read to create the list</param>
-        public void GetSchedule(string path)
+        public void GetSchedule(string username)
         {
-            string data = DataReader.RequestData(path);
+            string data = DataReader.RequestSchedule(username);
             if (!string.IsNullOrEmpty(data))
             {
                 var dataParsed = JObject.Parse(data);

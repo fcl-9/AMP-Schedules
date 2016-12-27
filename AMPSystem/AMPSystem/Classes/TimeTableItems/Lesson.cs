@@ -13,6 +13,7 @@ namespace AMPSystem.Classes
         public string Name { get; set; }
         public string Color { get; set; }
         public string Type { get; set; }
+        public string Color { get; set; }
 
         public ICollection<Course> Courses { get; set; }
 

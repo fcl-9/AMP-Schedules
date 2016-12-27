@@ -18,25 +18,45 @@ namespace AMPSystem.Classes
 
         public async Task<ActionResult> TemplateMethod()
         {
-            TimeTableManager manager = LoadData();
+            TimeTableManager manager = await LoadData();
             hook(manager);
             IList<CalendarItem> parsedItems = ParseData(manager);
             return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
         }
 
-        public TimeTableManager LoadData()
+        public async Task<TimeTableManager> LoadData()
         {
+            //var x = User;
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Commented for testes only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //GraphServiceClient graphClient = SDKHelper.GetAuthenticatedClient();
+            //var user = await graphService.GetUsername(graphClient);
             DataReader dataReader = new FileData();
             Repository loadData = new Repository();
             loadData.DataReader = dataReader;
-            loadData.GetCourses(Server.MapPath(@"~/App_Data/Cadeiras"));
-            loadData.GetRooms(Server.MapPath(@"~/App_Data/Salas"));
+            loadData.GetCourses();
+            loadData.GetRooms();
             //!!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
-            //loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/" + user));
-            //loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/" + user));
-            loadData.GetUserCourses(Server.MapPath(@"~/App_Data/Course/2054313"));
-            loadData.GetSchedule(Server.MapPath(@"~/App_Data/Schedule/2054313"));
-            loadData.GetTeachers(Server.MapPath(@"~/App_Data/Teacher"));
+            //loadData.GetUserCourses(user);
+            //loadData.GetSchedule(user);
+            loadData.GetUserCourses("2054313");
+            loadData.GetSchedule("2054313");
+            loadData.GetTeachers();
+            var roles = new List<string>();
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Comented only for tests!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            /*var mail = new MailAddress(await graphService.GetMyEmailAddress(graphClient));
+            var domain = mail.Host;
+            if (domain == "student.uma.pt")
+            {
+                roles.Add("Student");
+            }
+            else
+            {
+                roles.Add("Teacher");
+            }
+            Factory.Instance.CreateUser(await graphService.GetUserName(graphClient),
+                await graphService.GetMyEmailAddress(graphClient), roles, loadData.UserCourses);*/
+            roles.Add("Student");
+            Factory.Instance.CreateUser("Vítor Baptista", "2054313@student.uma.pt", roles, loadData.UserCourses);
             //acaba
             var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
             var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);

@@ -9,7 +9,9 @@ namespace AMPSystem.Classes
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public ICollection<Room> Rooms { get; set; }
+        public int ItemId { get; set; }
         public string Name { get; set; }
+        public string Color { get; set; }
         public string Type { get; set; }
 
         public ICollection<Course> Courses { get; set; }

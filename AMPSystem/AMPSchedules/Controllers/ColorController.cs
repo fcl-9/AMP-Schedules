@@ -21,22 +21,33 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
     {
         public override void hook(TimeTableManager manager)
         {
-            AndCompositeFilter Filters = new AndCompositeFilter(manager);
-            foreach (var filter in Request.QueryString)
+            //Read The Color that was sent
+            string color = null;
+            string itemName = null;
+            foreach (var eventName in Request.QueryString)
             {
-                if (Request.QueryString[(string)filter] == "ClassName")
-                {
-                    IFilter nameFilter = new Name((string)filter, manager);
-                    Filters.Add(nameFilter);
-                }
-                else if (Request.QueryString[(string)filter] == "Type")
-                {
-                    IFilter typeFilter = new TypeF((string)filter, manager);
-                    Filters.Add(typeFilter);
-                }
+                itemName = (string)eventName;
+                color = Request.QueryString[itemName];
             }
 
-            Filters.ApplyFilter();
+            //Change the color on the items 
+            foreach (var item in manager.TimeTable.ItemList)
+            {
+                if (item.Name == itemName)
+                {
+                    if (color != null)
+                    {
+
+                        item.Color = color;
+                        //Debug.Write(item.Color);
+                    }
+                    else
+                    {
+                        Debug.Write("No Color was Defined");
+                        break;
+                    }
+                }
+            }
         }
         [HttpGet]
         public async Task<ActionResult> EventColor()

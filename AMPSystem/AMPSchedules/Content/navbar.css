@@ -1,0 +1,12 @@
+﻿.navbar {
+    background-color: #337ab7;
+}
+
+.navbar a {
+    color: white;
+}
+
+.navbar-toggle .icon-bar{
+    background-color: white;
+}
+

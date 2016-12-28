@@ -19,16 +19,18 @@
     <br/>
     <br/>
 <div class="">
-    <div class="col-sm-3">
-        <p>Filters By Name:</p>
-        <div id="nameFilters"></div>
+    <div class="col-sm-3 form-group">
+        <label class="form-check-label">Filters By Name:</label>
+        <div class="form-check-input" id="nameFilters"></div>
         <br>
-        <p>Filter by Type: </p>
-        <input type="checkbox" name="Type" value="Lesson">Lesson<br />
-        <input type="checkbox" name="Type" value="EvaluationMoment">EvaluationMoment<br>
-        <input type="checkbox" name="Type" value="OfficeHours">OfficeHours<br>
+        <label class="form-check-label">Filter by Type: </label>
+        <br />
+        <input class="form-check-input" type="checkbox" name="Type" value="Lesson">Lesson<br />
+        <input class="form-check-input" type="checkbox" name="Type" value="EvaluationMoment">Evaluation Moment<br>
+        <input class="form-check-input" type="checkbox" name="Type" value="OfficeHours">OfficeHours<br>
         <br />
     </div>
+
     <div class="col-sm-9" id='calendar'></div>
     <div class="addEventButton">
         <button type="button" class="btn-circle btn-lg" id="addEvent">

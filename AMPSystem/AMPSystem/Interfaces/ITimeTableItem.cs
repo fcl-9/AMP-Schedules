@@ -6,7 +6,7 @@ namespace AMPSystem.Interfaces
 {
     public interface  ITimeTableItem
     {
-        int ItemID { get; set; }
+        int ID { get; set; }
         string Name { get; set; }
         string Color { get; set; }
         DateTime StartTime { get; set; }

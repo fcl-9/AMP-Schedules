@@ -70,7 +70,13 @@ namespace AMPSystem.Classes
             }
 
         }
-        
+
+        //This will only be used to get teachers information don't course data to be added to timetable.
+        public TimeTableManager(Repository repository)
+        {
+            Repository = repository;
+        }
+
         /// <summary>
         /// Update time table items to display. For this, get the repository data and add to
         /// ItemList in time table.

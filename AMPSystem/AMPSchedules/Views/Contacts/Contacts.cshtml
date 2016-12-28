@@ -26,11 +26,37 @@
     </div>
 </div>
 
-<script>
-    
+@section scripts
+{
+    <script>
+        $().ready(function() {
+            requestTeachers(printInformation);
+        });
+
+        //Ajax Request for teachers
+        function requestTeachers(returnFunction) {
+            $.ajax({
+                type: "GET",
+                url: '/Contacts/Teachers',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: returnFunction,
+                failure: function(response) {
+                    console.log("Fail");
+                    alert(response.d);
+                }
+            });
+        }
+
+        //Adds Information to the page
+        function printInformation(teachers) {
+            $.each(teachers,
+                function(key, value) {
+                    console.log(key);
+                    console.log(value);
+                });
+        }
 
 
-
-
-
-</script>
+    </script>
+}

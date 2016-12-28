@@ -31,42 +31,45 @@ namespace AMPSchedules.Controllers
 
         }
 
-        public override void hook(TimeTableManager manager)
+        public override ActionResult hook(TimeTableManager manager)
         {
-            //Convert to icolliction
+            //Get the room
             ICollection<Room> rooms = new List<Room>();
-            rooms.Add(Request.QueryString["room"]);
+            foreach (var building in manager.Repository.Buildings)
+            {
+                try
+                {
+                    var room =
+                        ((List<Room>) (building.Rooms)).Find(r => r.Id == Int32.Parse(Request.QueryString["room"]));
+                    rooms.Add(room);
+                }
+                catch (ArgumentNullException e)
+                {
+                    Debug.Write(e);
+                }
+            }
+            
+            //Get The course
+            ICollection<Course> courses = new List<Course>();
+            foreach (var course in manager.Repository.Courses)
+            {
+                if (course.Name == Request.QueryString["course"])
+                {
+                    courses.Add(course);
+                }
+            }
 
-
-
-            ICollection<Course> course = new List<Course>();
-            course.Add(Request.QueryString["course"]);
-
+            //Get the course
             ITimeTableItem newEvent = new EvaluationMoment(
                 Convert.ToDateTime(Request.QueryString["beginsAt"]),
                 Convert.ToDateTime(Request.QueryString["endsAt"]),
                 rooms,
-                course,
+                courses,
                 Request.QueryString["title"], Request.QueryString["description"]);
-
-
-
-           
-           
-
-
-            //Request.QueryString["start"] = beginsAt;
-            //Request.QueryString["end"] = endsAt;
+            
+            //Add new Event
+            manager.TimeTable.AddTimetableItem(newEvent);
+            return base.hook(manager);
         }
-            //Add Event
-
-
-
-                //Return The List Of Events
-
-            }
-
-
-
     }
 }

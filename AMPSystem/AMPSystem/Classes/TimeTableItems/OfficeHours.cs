@@ -11,7 +11,7 @@ namespace AMPSystem.Classes
     {
         // By default, the Entity Framework interprets a property that's named ID or 
         // classnameID as the primary key.
-        public int ItemID { get; set; }
+        public int ID { get; set; }
 
         public string Name { get; set; }
         public string Color { get; set; }

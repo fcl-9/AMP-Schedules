@@ -26,7 +26,5 @@ namespace AMPSystem.Classes
             Roles = roles;
             Courses = courses;
         }
-
-        
     }
 }

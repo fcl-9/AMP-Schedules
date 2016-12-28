@@ -25,9 +25,21 @@
         <br>
         <label class="form-check-label">Filter by Type: </label>
         <br />
-        <input class="form-check-input" type="checkbox" name="Type" value="Lesson">Lesson<br />
-        <input class="form-check-input" type="checkbox" name="Type" value="EvaluationMoment">Evaluation Moment<br>
-        <input class="form-check-input" type="checkbox" name="Type" value="OfficeHours">OfficeHours<br>
+        <div class="checkbox">
+            <label>
+                <input class="form-check-input" type="checkbox" name="Type" value="Lesson">Lesson
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input class="form-check-input" type="checkbox" name="Type" value="EvaluationMoment">Evaluation Moment
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input class="form-check-input" type="checkbox" name="Type" value="OfficeHours">Office Hours
+            </label>
+        </div>
         <br />
     </div>
 
@@ -67,7 +79,10 @@
                         <p>
                             End: <span id="endTime"></span>
                         </p>
-                        <p id="description"></p>
+                        <div id="rooms"></div>
+                        <div id="lessonType"></div>
+                        <div id="teacher"></div>
+                        <div id="description"></div>
                     </div>
                     <div class="tab-pane" id="2">
                         <p>You can change the color of each occurence of the item you selected.</p>
@@ -218,6 +233,19 @@
                         $('#modalTitle').html(event.title);
                         $('#startTime').html(moment(event.start).format("MMM Do H:mm"));
                         $('#endTime').html(moment(event.end).format("MMM Do H:mm"));
+                        $("#rooms").html(function() {
+                            var rooms = "Room(s): <br><ul>";
+                            $.each(event.rooms, function(key, room) {
+                                rooms += "<li>" + room.Name + "<ul><li> Floor: " + room.Floor + "</li><li>Building: "+ room.Building.Name +"</li></ul>";
+                            })
+                            rooms += "</ul>";
+                            return rooms;
+                        });
+                        if (event.teacher != null) {
+
+                            $("#teacher").html("Teacher: " + event.teacher.Name);
+                            $("#lessonType").html("Lesson: " + event.lessonType);
+                        }
                         $('#description').html(event.description);
                         $('#eventUrl').attr('href', event.url);
                         $('#fullCalModal').modal();
@@ -236,11 +264,15 @@
                 var mCourses = "";
                 $.each(courses,
                     function(property, value) {
-                        mCourses += "<input type='checkbox' name='ClassName' value='" +
+                        mCourses += "" +
+                            "<div class='checkbox'>" +
+                            "<label>" +
+                            "<input type='checkbox' name='ClassName' value='" +
                             value.Name +
                             "'>" +
                             value.Name +
-                            "<br>";
+                            "</label>" +
+                            "</div>";
                     });
                 return mCourses;
             });
@@ -274,13 +306,15 @@
                                 room += "<option value='" +
                                     val.Id +
                                     "'>" +
-                                    value.Name + " - " + val.Name +
+                                    value.Name +
+                                    " - " +
+                                    val.Name +
                                     "</option>";
                             });
                     });
-            return room;
-        });
-    }
+                return room;
+            });
+        }
 
 
         //Get my courses

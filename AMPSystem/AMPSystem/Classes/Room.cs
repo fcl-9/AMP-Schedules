@@ -8,6 +8,8 @@ namespace AMPSystem.Classes
         public string Name { get; set; }
         public int Floor { get; set; }
 
+        public Building Building { get; set; }
+
         public Room(int id, string name, int floor)
         {
             Id = id;

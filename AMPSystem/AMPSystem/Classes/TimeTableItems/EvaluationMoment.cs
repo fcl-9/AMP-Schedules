@@ -24,14 +24,13 @@ namespace AMPSystem.Classes
         public EvaluationMoment() { }
 
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string description)
+            ICollection<Course> courses, string name)
         {
             StartTime = startTime;
             EndTime = endTime;
             Rooms = rooms;
             Courses = courses;
             Name = name;
-            Description = description;
         }
     }
 }

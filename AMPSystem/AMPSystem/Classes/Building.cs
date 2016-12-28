@@ -15,6 +15,15 @@ namespace AMPSystem.Classes
             Name = name;
             Address = address;
             Rooms = rooms;
+            InformRooms();
+        }
+
+        private void InformRooms()
+        {
+            foreach (var room in Rooms)
+            {
+                room.Building = this;
+            }
         }
     }
 }

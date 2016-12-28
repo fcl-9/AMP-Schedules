@@ -61,9 +61,10 @@ namespace AMPSchedules.Controllers
                 Convert.ToDateTime(Request.QueryString["beginsAt"]),
                 Convert.ToDateTime(Request.QueryString["endsAt"]),
                 rooms,
-                courses,
-                Request.QueryString["title"], Request.QueryString["description"]);
-            
+                courses, 
+                Request.QueryString["title"]
+                );
+            newEvent.Description= Request.QueryString["description"];
             //Add new Event
             manager.TimeTable.AddTimetableItem(newEvent);
             return base.hook(manager);

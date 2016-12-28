@@ -103,7 +103,6 @@
     <Compile Include="Classes\Filters\TypeF.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="DAL\AmpContext.cs" />
-    <Compile Include="DAL\AmpInitializer.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Interfaces\DataReader.cs" />
     <Compile Include="Interfaces\IObserver.cs" />

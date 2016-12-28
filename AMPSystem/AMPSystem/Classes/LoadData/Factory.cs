@@ -41,12 +41,12 @@ namespace AMPSystem.Classes
                     name += "/";
                 i++;
             }
-           return new Lesson(startTime,endTime,rooms,courses,type,name);
+           return new Lesson(startTime,endTime,rooms,courses,type,name,"");
         }
 
         public ITimeTableItem Create(DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher)
         {
-            return new OfficeHours(startTime,endTime,rooms, teacher);
+            return new OfficeHours(startTime,endTime,rooms, teacher,"");
         }
 
         public ITimeTableItem Create(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
@@ -60,7 +60,7 @@ namespace AMPSystem.Classes
                     name += "/";
                 i++;
             }
-            return new EvaluationMoment(startTime, endTime, rooms, courses,name);
+            return new EvaluationMoment(startTime, endTime, rooms, courses,name,"");
         }
 
   

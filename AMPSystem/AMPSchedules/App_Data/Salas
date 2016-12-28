@@ -107,12 +107,12 @@
     "Address": "Colégio dos Jesuítas - Rua dos Ferreiros",
     "Room": [
       {
-        "ID": 1,
+        "ID": 20,
         "Name": "Sala 1",
         "Floor": "0"
       },
       {
-        "ID": 2,
+        "ID": 21,
         "Name": "Sala 2",
         "Floor": "0"
       }
@@ -123,7 +123,7 @@
 		"Name": "Madeira Interactive Technologies Institute",
 		"Address": "Campus Universitário da Penteada 9020-105 Funchal - Portugal",
 		"Room": [{
-			"ID": 2,
+			"ID": 22,
 			"Name": "Classroom",
 			"Floor": "-2"
 		}]

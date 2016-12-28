@@ -186,6 +186,7 @@
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\FilterController.cs" />
+    <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Helpers\IAuthProvider.cs" />
     <Compile Include="Helpers\SampleAuthProvider.cs" />
@@ -203,12 +204,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\button.css" />
-    <Content Include="Content\Calendar.css" />
     <Content Include="Content\ColorPicker\jquery.simplecolorpicker.css" />
     <Content Include="Content\fullcalendar.css" />
     <Content Include="Content\fullcalendar.min.css" />
     <Content Include="Content\fullcalendar.print.css" />
     <Content Include="Content\jquery.datetimepicker.min.css" />
+    <Content Include="Content\navbar.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -360,6 +361,7 @@
     <Content Include="Views\Home\Graph.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Teacher" />
+    <Content Include="Views\Contacts\Contacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -372,6 +374,7 @@
     <Content Include="App_GlobalResources\Resource.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

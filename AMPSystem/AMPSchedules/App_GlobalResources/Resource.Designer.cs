@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contacts.
+        /// </summary>
+        internal static string Contacts {
+            get {
+                return ResourceManager.GetString("Contacts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Caller needs to authenticate..
         /// </summary>
         internal static string Error_AuthChallengeNeeded {

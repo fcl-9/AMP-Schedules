@@ -10,6 +10,7 @@ namespace AMPSystem.DAL
         //is passed in to the constructor.
         public AmpContext() : base("AmpContext")
         {
+            //Database.SetInitializer(new AmpInitializer());
         }
 
         public DbSet<User> Users { get; set; }

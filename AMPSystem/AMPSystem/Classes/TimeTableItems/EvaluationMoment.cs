@@ -19,16 +19,19 @@ namespace AMPSystem.Classes
         public ICollection<Room> Rooms { get; set; }
         public ICollection<Course> Courses { get; set; }
 
+        public string Description { get; set; }
+
         public EvaluationMoment() { }
 
-        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name)
+        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
+            ICollection<Course> courses, string name, string description)
         {
             StartTime = startTime;
             EndTime = endTime;
             Rooms = rooms;
             Courses = courses;
             Name = name;
+            Description = description;
         }
-
     }
 }

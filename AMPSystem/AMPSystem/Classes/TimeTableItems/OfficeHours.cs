@@ -21,16 +21,19 @@ namespace AMPSystem.Classes
         public DateTime EndTime { get; set; }
 
         public ICollection<Room> Rooms { get; set; }
-        
+
+        public string Description { get; set; }
+
         public OfficeHours() { }
 
-        public OfficeHours(DateTime starTime, DateTime endTime, ICollection<Room> rooms, User teacher)
+        public OfficeHours(DateTime starTime, DateTime endTime, ICollection<Room> rooms, User teacher, string description)
         {
             StartTime = starTime;
             EndTime = endTime;
             Rooms = rooms;
             Teacher = teacher;
             Name = "Horário de Atendimento de " + teacher.Name;
+            Description = description;
         }
     }
 }

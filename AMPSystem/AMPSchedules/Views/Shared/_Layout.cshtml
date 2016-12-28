@@ -7,15 +7,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title</title>
+    <title>Academic Management Plataform</title>
     @Styles.Render("~/Content/css")    
     @Styles.Render("https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css")
     @Styles.Render("https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap-theme.min.css")
     @Scripts.Render("https://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.6.2.js")
     @RenderSection("style", required:false)
+    @Styles.Render("~/Content/navbar.css")
+    
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -29,6 +31,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink(Resource.Home, "Index", "Home")</li>
                     <li>@Html.ActionLink(Resource.About, "About", "Home")</li>
+                    <li>@Html.ActionLink(Resource.Contacts, "Index", "Contacts")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

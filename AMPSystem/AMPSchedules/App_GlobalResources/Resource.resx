@@ -242,4 +242,8 @@ log an issue&lt;/a&gt; on our repository. &lt;/p&gt;&lt;p&gt;For general questio
     <value>Sign out</value>
     <comment>Link to Account.SignOut</comment>
   </data>
+  <data name="Contacts" xml:space="preserve">
+    <value>Contacts</value>
+    <comment>Link to Contacts</comment>
+  </data>
 </root>

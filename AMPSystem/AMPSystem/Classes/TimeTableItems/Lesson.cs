@@ -21,9 +21,12 @@ namespace AMPSystem.Classes
         public ICollection<Room> Rooms { get; set; }
         public ICollection<Course> Courses { get; set; }
 
+        public string Description { get; set; }
+
         public Lesson() { }
 
-        public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, string name)
+        public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
+            string type, string name, string description)
         {
             StartTime = startTime;
             EndTime = endTime;
@@ -31,6 +34,7 @@ namespace AMPSystem.Classes
             Type = type;
             Courses = courses;
             Name = name;
+            Description = description;
         }
     }
 }

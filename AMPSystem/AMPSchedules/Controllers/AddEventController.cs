@@ -37,15 +37,12 @@ namespace AMPSchedules.Controllers
             ICollection<Room> rooms = new List<Room>();
             foreach (var building in manager.Repository.Buildings)
             {
-                try
+                foreach (var room in building.Rooms)
                 {
-                    var room =
-                        ((List<Room>) (building.Rooms)).Find(r => r.Id == Int32.Parse(Request.QueryString["room"]));
-                    rooms.Add(room);
-                }
-                catch (ArgumentNullException e)
-                {
-                    Debug.Write(e);
+                    if (room.Id == Int32.Parse(Request.QueryString["room"]))
+                    {
+                        rooms.Add(room);
+                    }
                 }
             }
             

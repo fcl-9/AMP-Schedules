@@ -13,7 +13,7 @@ namespace AMPSystem.DAL
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Alert> Alerts { get; set; }«
+        public DbSet<Alert> Alerts { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<EvaluationMoment> EvalMoments { get; set; }
         public DbSet<OfficeHours> OfficeHours { get; set; }

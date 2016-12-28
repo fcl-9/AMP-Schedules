@@ -89,7 +89,7 @@
     <Compile Include="Classes\Building.cs" />
     <Compile Include="Classes\Course.cs" />
     <Compile Include="Classes\Filters\TypeCreator.cs" />
-    <Compile Include="Classes\ItemAdapter.cs" />
+    <Compile Include="Classes\TTItemAdapter.cs" />
     <Compile Include="Classes\TimeTableItems\EvaluationMoment.cs" />
     <Compile Include="Classes\LoadData\Factory.cs" />
     <Compile Include="Classes\TimeTableItems\Lesson.cs" />

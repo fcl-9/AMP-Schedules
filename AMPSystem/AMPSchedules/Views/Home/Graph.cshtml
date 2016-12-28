@@ -197,6 +197,30 @@
                 });
         }
 
+        $.ajax({
+            type: "GET",
+            url: "/Courses",
+            success: function (courses) {
+                $("#nameFilters").html(function () {
+                    var mCourses = "";
+                    $.each(courses,
+                        function (property, value) {
+                            mCourses += "<input type='checkbox' name='ClassName' value='" +
+                                value.Name +
+                                "'>" +
+                                value.Name +
+                                "<br>";
+                        });
+                    return mCourses;
+                });
+                applyFilters();
+            },
+            failure: function (response) {
+                console.log("Fail");
+                alert(response.d);
+            }
+        });
+
 
         //Load The Calendar with it's default events, the color picker and the datetime pickers
         $()
@@ -261,35 +285,11 @@
                         $('#fullCalModal').modal('hide');
                     }
                 });
-        $.ajax({
-                    type: "GET",
-                    url: "/Courses",
-                    success: function(courses) {
-                        $("#nameFilters").html(function() {
-                            var mCourses = "";
-                            $.each(courses,
-                                function(property, value) {
-                                    mCourses += "<input type='checkbox' name='ClassName' value='" +
-                                        value.Name +
-                                        "'>" +
-                                        value.Name +
-                                        "<br>"
-                                });
-                            return mCourses;
-                        });
-                    },
-                    failure: function(response) {
-                        console.log("Fail");
-                        alert(response.d);
-                    }
-                });
             });
 
         //Apply Filters
-
-        $()
-            .ready(function() {
-                var selectedFilter = $("input[type=checkbox]");
+        function applyFilters() {
+            var selectedFilter = $("input[type=checkbox]");
                 var selectedElement = undefined;
                 var FilterToApply = {};
 
@@ -323,7 +323,9 @@
                         requestGetType("/Filter/AddFilter", FilterToApply);
                     }
                 });
-            });
+        }
+        $()
+            .ready(applyFilters());
 
         //Makes Request to the server
         function requestGetType(requesturl, data) {

@@ -12,21 +12,25 @@ using Newtonsoft.Json;
 
 namespace AMPSystem.Classes
 {
-    abstract public class TemplateController: Controller
+    public abstract class TemplateController: Controller
     {
-        public abstract void hook(TimeTableManager manager);
+        public User CurrentUser { get; private set; }
 
-        public async Task<ActionResult> TemplateMethod()
+        public virtual ActionResult hook(TimeTableManager manager)
         {
-            TimeTableManager manager = await LoadData();
-            hook(manager);
             IList<CalendarItem> parsedItems = ParseData(manager);
             return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
         }
 
+        public async Task<ActionResult> TemplateMethod()
+        {
+            TimeTableManager manager = await LoadData();
+            return hook(manager);
+        }
+
         public async Task<TimeTableManager> LoadData()
         {
-            //var x = User;
+            var x = System.Security.Claims.ClaimsPrincipal.Current;
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Commented for testes only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //GraphServiceClient graphClient = SDKHelper.GetAuthenticatedClient();
             //var user = await graphService.GetUsername(graphClient);
@@ -56,7 +60,7 @@ namespace AMPSystem.Classes
             Factory.Instance.CreateUser(await graphService.GetUserName(graphClient),
                 await graphService.GetMyEmailAddress(graphClient), roles, loadData.UserCourses);*/
             roles.Add("Student");
-            Factory.Instance.CreateUser("Vítor Baptista", "2054313@student.uma.pt", roles, loadData.UserCourses);
+            CurrentUser = Factory.Instance.CreateUser("Vítor Baptista", "2054313@student.uma.pt", roles, loadData.UserCourses);
             //acaba
             var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
             var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
@@ -64,8 +68,6 @@ namespace AMPSystem.Classes
             TimeTableManager Manager = new TimeTableManager(loadData, startDateTime, endDateTime);
             return Manager;
         }
-
-        
 
         public IList<CalendarItem> ParseData(TimeTableManager Manager)
         {

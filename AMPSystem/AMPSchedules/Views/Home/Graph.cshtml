@@ -21,8 +21,7 @@
 <div class="">
     <div class="col-sm-3">
         <p>Filters By Name:</p>
-        <input type="checkbox" name="ClassName" value="Calculos I">Calculos I<br>
-        <input type="checkbox" name="ClassName" value="Desenho e Implementação de Software">Desenho e Implementação de Software<br>
+        <div id="nameFilters"></div>
         <br>
         <p>Filter by Type: </p>
         <input type="checkbox" name="Type" value="Lesson">Lesson<br />
@@ -198,6 +197,30 @@
                 });
         }
 
+        $.ajax({
+            type: "GET",
+            url: "/Courses",
+            success: function (courses) {
+                $("#nameFilters").html(function () {
+                    var mCourses = "";
+                    $.each(courses,
+                        function (property, value) {
+                            mCourses += "<input type='checkbox' name='ClassName' value='" +
+                                value.Name +
+                                "'>" +
+                                value.Name +
+                                "<br>";
+                        });
+                    return mCourses;
+                });
+                applyFilters();
+            },
+            failure: function (response) {
+                console.log("Fail");
+                alert(response.d);
+            }
+        });
+
 
         //Load The Calendar with it's default events, the color picker and the datetime pickers
         $()
@@ -265,10 +288,8 @@
             });
 
         //Apply Filters
-
-        $()
-            .ready(function() {
-                var selectedFilter = $("input[type=checkbox]");
+        function applyFilters() {
+            var selectedFilter = $("input[type=checkbox]");
                 var selectedElement = undefined;
                 var FilterToApply = {};
 
@@ -298,14 +319,16 @@
                             }
                         });
 
-                        //Ajax Request -- Update the data 
+                        //Ajax Request -- Update the data
                         requestGetType("/Filter/AddFilter", FilterToApply);
                     }
                 });
-            });
+        }
+        $()
+            .ready(applyFilters());
 
         //Makes Request to the server
-        function requestGetType(requesturl,data) {
+        function requestGetType(requesturl, data) {
             data["start"] = $('#calendar').fullCalendar('getView').start.format();
             data["end"] = $('#calendar').fullCalendar('getView').end.format();
             $.ajax({

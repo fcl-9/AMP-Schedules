@@ -9,13 +9,20 @@ namespace AMPSystem.Classes
 {
     public class OfficeHours : ITimeTableItem
     {
+        // By default, the Entity Framework interprets a property that's named ID or 
+        // classnameID as the primary key.
+        public int ItemID { get; set; }
+
+        public string Name { get; set; }
+        public string Color { get; set; }
+
+        public User Teacher { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+
         public ICollection<Room> Rooms { get; set; }
-        public int ItemId { get; set; }
-        public string Name { get; set; }
-        public User Teacher { get; set; }
-        public string Color { get; set; }
+        
+        public OfficeHours() { }
 
         public OfficeHours(DateTime starTime, DateTime endTime, ICollection<Room> rooms, User teacher)
         {

@@ -32,8 +32,6 @@ namespace AMPSchedules.Controllers
         {
             return View("Graph");
         }
-
-        public override void hook(TimeTableManager manager){}
      
     
         // API Controller

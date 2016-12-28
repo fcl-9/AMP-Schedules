@@ -4,10 +4,14 @@ using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    class Alert
+    public class Alert
     {
-        public DateTime Hour { get; set; }
-        public string Type { get; set; }
+        // By default, the Entity Framework interprets a property that's named ID or 
+        // classnameID as the primary key.
+        public int AlertID { get; set;  }
+        public TimeSpan Time { get; set; }
         public ITimeTableItem Item { get; set; }
+
+        public Alert() { }
     }
 }

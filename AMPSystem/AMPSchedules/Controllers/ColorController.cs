@@ -19,7 +19,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
     public class ColorController: TemplateController
     {
-        public override void hook(TimeTableManager manager)
+        public override ActionResult hook(TimeTableManager manager)
         {
             //Read The Color that was sent
             string color = null;
@@ -54,6 +54,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                     }
                 }
             }
+            return base.hook(manager);
         }
         [HttpGet]
         public async Task<ActionResult> EventColor()

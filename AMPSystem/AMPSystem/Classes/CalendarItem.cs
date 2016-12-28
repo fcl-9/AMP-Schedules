@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AMPSystem.Classes
 {
@@ -25,5 +26,6 @@ namespace AMPSystem.Classes
         public virtual string borderColor { get; set; }
         public virtual string textColor { get; set; }
         public virtual string description { get; set; }
-        }
+        public virtual ICollection<Room> rooms { get; set; }
+    }
     }

@@ -25,9 +25,21 @@
         <br>
         <label class="form-check-label">Filter by Type: </label>
         <br />
-        <input class="form-check-input" type="checkbox" name="Type" value="Lesson">Lesson<br />
-        <input class="form-check-input" type="checkbox" name="Type" value="EvaluationMoment">Evaluation Moment<br>
-        <input class="form-check-input" type="checkbox" name="Type" value="OfficeHours">OfficeHours<br>
+        <div class="checkbox">
+            <label>
+                <input class="form-check-input" type="checkbox" name="Type" value="Lesson">Lesson
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input class="form-check-input" type="checkbox" name="Type" value="EvaluationMoment">Evaluation Moment
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input class="form-check-input" type="checkbox" name="Type" value="OfficeHours">Office Hours
+            </label>
+        </div>
         <br />
     </div>
 
@@ -252,11 +264,15 @@
                 var mCourses = "";
                 $.each(courses,
                     function(property, value) {
-                        mCourses += "<input type='checkbox' name='ClassName' value='" +
+                        mCourses += "" +
+                            "<div class='checkbox'>" +
+                            "<label>" +
+                            "<input type='checkbox' name='ClassName' value='" +
                             value.Name +
                             "'>" +
                             value.Name +
-                            "<br>";
+                            "</label>" +
+                            "</div>";
                     });
                 return mCourses;
             });

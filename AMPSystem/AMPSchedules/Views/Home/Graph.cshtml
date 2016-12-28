@@ -392,14 +392,19 @@
                     var description = $("#new_event_description").val();
                     //Check if there is any empty field
                     if (name !== "" && beginsAt !== "" && endsAt !== "" && room !== "" && $.isNumeric(room) && course !== "" && description !== "") {
-                        newEvent['title'] = name;
-                        newEvent['start'] = beginsAt;
-                        newEvent['end'] = endsAt;
+                        //Parses Data
+                        beginsAt = beginsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
+                        endsAt = endsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
+                        beginsAt = moment(beginsAt, "ddd MMM DD YYYY HH:mm:ss");
+                        endsAt = moment(endsAt, "ddd MMM DD YYYY HH:mm:ss");
+                        //Add Values to Json
+                        newEvent['title'] = name;                      
+                        newEvent['beginsAt'] = beginsAt.format();
+                        newEvent['endsAt'] = endsAt.format();
                         newEvent['room'] = room;
                         newEvent['course'] = course;
                         newEvent['description'] = description;
-                        //Add To Calendar
-                        $('#calendar').fullCalendar('renderEvent', newEvent);
+
                         $('#addEventModal').modal('hide');
 
                         //Sanitize Fields
@@ -410,7 +415,7 @@
                         $("#new_event_course").val('');
                         $("#new_event_description").val('');
                         //Request Ajax Send to Database.
-
+                        requestGetType("/AddEvent/AddEvent", newEvent);
 
                     } else {
                         console.log("Verify if it's everything ok with your input");

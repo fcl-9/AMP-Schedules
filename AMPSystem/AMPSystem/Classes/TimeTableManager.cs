@@ -17,8 +17,9 @@ namespace AMPSystem.Classes
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="timetable"></param>
         /// <param name="repository"></param>
+        /// <param name="startDateTime"></param>
+        /// <param name="endDateTime"></param>
         public TimeTableManager(Repository repository, DateTime startDateTime, DateTime endDateTime)
         {
             TimeTable = new Timetable(startDateTime, endDateTime);
@@ -69,9 +70,7 @@ namespace AMPSystem.Classes
             }
 
         }
-
         
-
         /// <summary>
         /// Update time table items to display. For this, get the repository data and add to
         /// ItemList in time table.
@@ -100,7 +99,6 @@ namespace AMPSystem.Classes
             }
         }
         
-
         #region Observer Pattern Methods
         /// <summary>
         /// Add observer.

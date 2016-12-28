@@ -37,7 +37,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 
         public override ActionResult hook(TimeTableManager manager)
         {
-            return Content(JsonConvert.SerializeObject(manager.Repository.Buildings), "application/json");
+            return Content(JsonConvert.SerializeObject(manager.Repository.Buildings,new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
             
         }
     }

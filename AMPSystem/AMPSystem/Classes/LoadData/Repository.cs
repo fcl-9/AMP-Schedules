@@ -21,6 +21,7 @@ namespace AMPSystem.Classes
             Items = new List<ITimeTableItem>();
             Buildings = new List<Building>();
             UserCourses = new List<Course>();
+            Teachers = new List<User>();
         }
 
         /// <summary>
@@ -49,14 +50,14 @@ namespace AMPSystem.Classes
                         var mCourse = ((List<Course>)Courses).Find(c => c.Id== course.Value<int>());
                         courses.Add(mCourse);
                     }
-                    var teacher = CreateUser(name, email, roles, courses);
+                    var teacher = CreateUser(id, name, email, roles, courses);
                     foreach (var officeHour in item["OfficeHours"])
                     {
                         var startTime = officeHour["StartTime"].Value<DateTime>();
                         var endTime = officeHour["EndTime"].Value<DateTime>();
                         Items.Add(CreateOfficeHours(startTime, endTime,rooms,teacher));
                     }
-                    
+                    Teachers.Add(teacher);
                 }
             }
         }
@@ -157,7 +158,8 @@ namespace AMPSystem.Classes
                     }
                     if (lessonType == "T" || lessonType == "TP" || lessonType == "PL")
                     {
-                        Items.Add(CreateLesson(startTime, endTime, rooms, courses, lessonType));
+                        var teacher = ((List<User>)Teachers).Find(t => t.UserID == item["Teacher"].Value<int>());
+                        Items.Add(CreateLesson(startTime, endTime, rooms, courses, lessonType, teacher));
                     }
                     else
                     {
@@ -184,14 +186,14 @@ namespace AMPSystem.Classes
             return Factory.Instance.CreateRoom(number, name, floor);
         }
 
-        private User CreateUser (string name, string email, ICollection<string> roles, ICollection<Course> courses)
+        private User CreateUser (int id, string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
-            return Factory.Instance.CreateUser(name, email, roles, courses);
+            return Factory.Instance.CreateUser(id, name, email, roles, courses);
         }
 
-        private ITimeTableItem CreateLesson (DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type)
+        private ITimeTableItem CreateLesson (DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
-            return Factory.Instance.Create(startTime,endTime,rooms,courses,type);
+            return Factory.Instance.Create(startTime, endTime, rooms, courses, type, teacher);
         }
 
         private ITimeTableItem CreateOfficeHours(DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher)

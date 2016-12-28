@@ -18,8 +18,9 @@ namespace AMPSystem.Classes
             //
         }
 
-        public User(string name, string email, ICollection<string> roles, ICollection<Course> courses)
+        public User(int id, string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
+            UserID = id;
             Name = name;
             Email = email;
             //Roles = new List<string>();

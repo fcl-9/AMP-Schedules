@@ -19,7 +19,7 @@ namespace AMPSystem.Classes
         public virtual ActionResult hook(TimeTableManager manager)
         {
             IList<CalendarItem> parsedItems = ParseData(manager);
-            return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
+            return Content(JsonConvert.SerializeObject(parsedItems.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore}), "application/json");
         }
 
         public async Task<ActionResult> TemplateMethod()
@@ -39,12 +39,12 @@ namespace AMPSystem.Classes
             loadData.DataReader = dataReader;
             loadData.GetCourses();
             loadData.GetRooms();
+            loadData.GetTeachers();
             //!!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
             //loadData.GetUserCourses(user);
             //loadData.GetSchedule(user);
             loadData.GetUserCourses("2054313");
             loadData.GetSchedule("2054313");
-            loadData.GetTeachers();
             var roles = new List<string>();
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Comented only for tests!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             /*var mail = new MailAddress(await graphService.GetMyEmailAddress(graphClient));
@@ -60,7 +60,7 @@ namespace AMPSystem.Classes
             Factory.Instance.CreateUser(await graphService.GetUserName(graphClient),
                 await graphService.GetMyEmailAddress(graphClient), roles, loadData.UserCourses);*/
             roles.Add("Student");
-            CurrentUser = Factory.Instance.CreateUser("Vítor Baptista", "2054313@student.uma.pt", roles, loadData.UserCourses);
+            CurrentUser = Factory.Instance.CreateUser(100,"Vítor Baptista", "2054313@student.uma.pt", roles, loadData.UserCourses);
             //acaba
             var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
             var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);

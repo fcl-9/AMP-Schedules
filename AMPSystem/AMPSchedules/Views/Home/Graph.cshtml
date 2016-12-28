@@ -65,7 +65,10 @@
                         <p>
                             End: <span id="endTime"></span>
                         </p>
-                        <p id="description"></p>
+                        <div id="rooms"></div>
+                        <div id="lessonType"></div>
+                        <div id="teacher"></div>
+                        <div id="description"></div>
                     </div>
                     <div class="tab-pane" id="2">
                         <p>You can change the color of each occurence of the item you selected.</p>
@@ -216,6 +219,19 @@
                         $('#modalTitle').html(event.title);
                         $('#startTime').html(moment(event.start).format("MMM Do H:mm"));
                         $('#endTime').html(moment(event.end).format("MMM Do H:mm"));
+                        $("#rooms").html(function() {
+                            var rooms = "Room(s): <br><ul>";
+                            $.each(event.rooms, function(key, room) {
+                                rooms += "<li>" + room.Name + "<ul><li> Floor: " + room.Floor + "</li><li>Building: "+ room.Building.Name +"</li></ul>";
+                            })
+                            rooms += "</ul>";
+                            return rooms;
+                        });
+                        if (event.teacher != null) {
+
+                            $("#teacher").html("Teacher: " + event.teacher.Name);
+                            $("#lessonType").html("Lesson: " + event.lessonType);
+                        }
                         $('#description').html(event.description);
                         $('#eventUrl').attr('href', event.url);
                         $('#fullCalModal').modal();
@@ -272,13 +288,15 @@
                                 room += "<option value='" +
                                     val.Id +
                                     "'>" +
-                                    value.Name + " - " + val.Name +
+                                    value.Name +
+                                    " - " +
+                                    val.Name +
                                     "</option>";
                             });
                     });
-            return room;
-        });
-    }
+                return room;
+            });
+        }
 
 
         //Get my courses

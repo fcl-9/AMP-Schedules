@@ -30,7 +30,7 @@ namespace AMPSystem.Classes
         }
         #endregion
 
-        public ITimeTableItem Create (DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type)
+        public ITimeTableItem Create (DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
             var name = "";
             var i = 0;
@@ -41,12 +41,12 @@ namespace AMPSystem.Classes
                     name += "/";
                 i++;
             }
-           return new Lesson(startTime,endTime,rooms,courses,type,name,"");
+           return new Lesson(startTime,endTime,rooms,courses,type,name, teacher);
         }
 
         public ITimeTableItem Create(DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher)
         {
-            return new OfficeHours(startTime,endTime,rooms, teacher,"");
+            return new OfficeHours(startTime,endTime,rooms, teacher);
         }
 
         public ITimeTableItem Create(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
@@ -60,7 +60,7 @@ namespace AMPSystem.Classes
                     name += "/";
                 i++;
             }
-            return new EvaluationMoment(startTime, endTime, rooms, courses,name,"");
+            return new EvaluationMoment(startTime, endTime, rooms, courses,name);
         }
 
   
@@ -80,9 +80,9 @@ namespace AMPSystem.Classes
             return new Building(id, name, address, rooms);
         }
 
-        public User CreateUser(string name, string email, ICollection<string> roles, ICollection<Course> courses)
+        public User CreateUser(int id, string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
-            return new User(name,email,roles,courses);
+            return new User(id, name, email, roles, courses);
         }
     }
 }

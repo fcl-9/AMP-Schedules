@@ -26,7 +26,7 @@ namespace AMPSystem.Classes
         public Lesson() { }
 
         public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
-            string type, string name, string description)
+            string type, string name, User teacher)
         {
             StartTime = startTime;
             EndTime = endTime;
@@ -34,7 +34,7 @@ namespace AMPSystem.Classes
             Type = type;
             Courses = courses;
             Name = name;
-            Description = description;
+            Teacher = teacher;
         }
     }
 }

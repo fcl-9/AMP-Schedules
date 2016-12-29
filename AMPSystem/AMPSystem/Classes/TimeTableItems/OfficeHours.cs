@@ -17,16 +17,11 @@ namespace AMPSystem.Classes.TimeTableItems
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public ICollection<Room> Rooms { get; set; }
+        public bool Editable { get; set; }
+        public ICollection<Alert> Alerts { get; set; }
 
         private static int _id;
-
-        public bool Editable { get; set; }
-
-        /// <summary>
-        /// Empty construtor to create data into database.
-        /// </summary>
-        public OfficeHours() { }
-
+        
         /// <summary>
         /// Construtor. Used when data is loaded from the "API" (This data don't need to be persistent).
         /// </summary>
@@ -48,6 +43,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Teacher = teacher;
             Name = "Horário de Atendimento de " + teacher.Name;
             Description = description;
+            Alerts = new List<Alert>();
         }
 
         public OfficeHours(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher)
@@ -61,6 +57,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Rooms = rooms;
             Teacher = teacher;
             Name = "Horário de Atendimento de " + teacher.Name;
+            Alerts = new List<Alert>();
         }
     }
 }

@@ -181,6 +181,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AddAlertController.cs" />
+    <Compile Include="Controllers\RemoveAlertController.cs" />
     <Compile Include="Controllers\RemoveEventController.cs" />
     <Compile Include="Controllers\AddEventController.cs" />
     <Compile Include="Controllers\ColorController.cs" />
@@ -387,7 +389,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\images\" />
+    <Folder Include="Views\AddAlert\" />
     <Folder Include="Views\AddEvent\" />
+    <Folder Include="Views\RemoveAlert\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

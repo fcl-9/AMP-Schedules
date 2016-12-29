@@ -19,14 +19,10 @@ namespace AMPSystem.Classes.TimeTableItems
         public ICollection<Course> Courses { get; set; }
 
         public bool Editable { get; set; }
+        public ICollection<Alert> Alerts { get; set; }
 
         private static int _id;
         
-        /// <summary>
-        /// Empty construtor to create data into database.
-        /// </summary>
-        public EvaluationMoment() { }
-
         /// <summary>
         /// Construtor. Used when data is loaded from the "API" (This data don't need to be persistent).
         /// </summary>
@@ -50,6 +46,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Courses = courses;
             Name = name;
             Description = description;
+            Alerts = new List<Alert>();
         }
 
         public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms,
@@ -64,6 +61,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Rooms = rooms;
             Courses = courses;
             Name = name;
+            Alerts = new List<Alert>();
         }
 
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
@@ -77,6 +75,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Courses = courses;
             Name = name;
             Description = description;
+            Alerts = new List<Alert>();
         }
     }
 }

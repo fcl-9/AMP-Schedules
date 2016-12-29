@@ -19,7 +19,6 @@ namespace AMPSystem.DAL
 
         /// <summary>
         /// Method used to check if a User exist in the DB.
-        /// TODO Replace id for email?
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -33,7 +32,6 @@ namespace AMPSystem.DAL
 
         /// <summary>
         /// Method used to check if a user has alerts.
-        /// TODO See this.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

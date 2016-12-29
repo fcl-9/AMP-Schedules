@@ -14,5 +14,6 @@ namespace AMPSystem.Interfaces
         ICollection<Room> Rooms { get; set; }
         string Description { get; set; }
         bool Editable { get; set; }
+        ICollection<Alert> Alerts { get; set; }
     }
 }

@@ -21,20 +21,21 @@ namespace AMPSystem.DAL
         /// Method used to check if a User exist in the DB.
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="externId"></param>
+        /// <param name="control"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        private static bool HasTimeTableItems(string type, int externId)
+        private static bool HasTimeTableItems(string type, string control, int id)
         {
             using (var db = new AmpContext())
             {
                 switch (type)
                 {
                     case "Lesson":
-                        return db.Lessons.Any(o => o.ExternId == externId);
+                        return control == "ID" ? db.Lessons.Any(o => o.ID == id) : db.Lessons.Any(o => o.ExternId == id);
                     case "EvaluationMoment":
-                        return db.EvalMoments.Any(o => o.ExternId == externId);
+                        return control == "ID" ? db.EvalMoments.Any(o => o.ID == id) : db.EvalMoments.Any(o => o.ExternId == id);
                     case "OfficeHours":
-                        return db.OfficeHours.Any(o => o.ExternId == externId);
+                        return control == "ID" ? db.OfficeHours.Any(o => o.ID == id) : db.OfficeHours.Any(o => o.ExternId == id);
                     default:
                         return false;
                 }
@@ -45,9 +46,10 @@ namespace AMPSystem.DAL
         /// Returns the ITimeTableItem
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="externId"></param>
+        /// <param name="control"></param>
+        /// <param name="Id"></param>
         /// <returns></returns>
-        private static ITimeTableItem ReturnTableData(string type, int externId)
+        private static ITimeTableItem ReturnTableData(string type, string control, int Id)
         {
             using (var db = new AmpContext())
             {
@@ -55,23 +57,47 @@ namespace AMPSystem.DAL
                 {
                     case "Lesson":
                         var lessonTable = db.Lessons.SqlQuery("SELECT * FROM dbo.Lesson").ToList();
-                        foreach (var raw in lessonTable)
+                        foreach (var row in lessonTable)
                         {
-                            if (raw.ExternId == externId) { return raw; }
+                            switch (control)
+                            {
+                                case "ID":
+                                    if (row.ID == Id) { return row; }
+                                    break;
+                                case "ExternID":
+                                    if (row.ExternId == Id) { return row; }
+                                    break;
+                            }
                         }
                         return null;
                     case "EvaluationMoment":
                         var evalTable = db.EvalMoments.SqlQuery("SELECT * FROM dbo.EvaluationMoment").ToList();
-                        foreach (var raw in evalTable)
+                        foreach (var row in evalTable)
                         {
-                            if (raw.ExternId == externId) { return raw; }
+                            switch (control)
+                            {
+                                case "ID":
+                                    if (row.ID == Id) { return row; }
+                                    break;
+                                case "ExternID":
+                                    if (row.ExternId == Id) { return row; }
+                                    break;
+                            }
                         }
                         return null;
                     case "OfficeHours":
                         var officeTable = db.OfficeHours.SqlQuery("SELECT * FROM dbo.OfficeHours").ToList();
-                        foreach (var raw in officeTable)
+                        foreach (var row in officeTable)
                         {
-                            if (raw.ExternId == externId) { return raw; }
+                            switch (control)
+                            {
+                                case "ID":
+                                    if (row.ID == Id) { return row; }
+                                    break;
+                                case "ExternID":
+                                    if (row.ExternId == Id) { return row; }
+                                    break;
+                            }
                         }
                         return null;
                     default:
@@ -84,11 +110,37 @@ namespace AMPSystem.DAL
         /// Return a item if exists.
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="externId"></param>
+        /// <param name="control"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public ITimeTableItem ReturnItemIfExists(string type, int externId)
+        public ITimeTableItem ReturnItemIfExists(string type, string control, int id)
         {
-            return HasTimeTableItems(type, externId) ? ReturnTableData(type, externId) : null;
+            return HasTimeTableItems(type, control, id) ? ReturnTableData(type, control, id) : null;
+        }
+
+        public void UpdateTimeTableItem(ITimeTableItem item)
+        {
+            using (var db = new AmpContext())
+            {
+                if (item is Lesson)
+                {
+                    var original = db.Lessons.Find(item.ID);
+                    db.Entry(original).CurrentValues.SetValues(item);
+                    db.SaveChanges();
+                }
+                else if (item is EvaluationMoment)
+                {
+                    var original = db.EvalMoments.Find(item.ID);
+                    db.Entry(original).CurrentValues.SetValues(item);
+                    db.SaveChanges();
+                }
+                else if (item is OfficeHours)
+                {
+                    var original = db.OfficeHours.Find(item.ID);
+                    db.Entry(original).CurrentValues.SetValues(item);
+                    db.SaveChanges();
+                }
+            }
         }
 
         /// <summary>

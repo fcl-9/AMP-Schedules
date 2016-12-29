@@ -12,9 +12,15 @@ namespace AMPSystem.Classes
         public TimeSpan Time { get; set; }
         public ITimeTableItem Item { get; set; }
 
-        /// <summary>
-        /// Empty construtor to create data into database.
-        /// </summary>
-        public Alert() { }
+        private static int _id;
+        
+        public Alert(TimeSpan time, ITimeTableItem tableItem)
+        {
+            AlertID = _id;
+            _id++;
+
+            Time = time;
+            Item = tableItem;
+        }
     }
 }

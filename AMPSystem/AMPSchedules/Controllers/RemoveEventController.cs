@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using AMPSystem.Classes;
 using AMPSystem.Interfaces;
-using Microsoft.Ajax.Utilities;
 using Microsoft.Graph;
 using Resources;
 
-namespace AMPSchedules.Controllers
+namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
     public class RemoveEventController : TemplateController
     {
@@ -31,7 +27,7 @@ namespace AMPSchedules.Controllers
 
         }
 
-        public override ActionResult hook(TimeTableManager manager)
+        public override ActionResult Hook(TimeTableManager manager)
         {
             var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
                 i =>
@@ -39,8 +35,8 @@ namespace AMPSchedules.Controllers
                     i.StartTime == Convert.ToDateTime(Request.QueryString["start"]) &&
                     i.EndTime == Convert.ToDateTime(Request.QueryString["end"]));
             // Remove event
-            manager.TimeTable.RemoveTimeTableItem(item);
-            return base.hook(manager);
+            manager.RemoveTimeTableItem(item);
+            return base.Hook(manager);
         }
     }
 }

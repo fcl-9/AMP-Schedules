@@ -446,9 +446,26 @@
                                 }
                             }
                             console.log(alerts);
-                            if ($error == false) {
-                                requestGetType("/AddAlert/Index", alerts);
-                                console.log("asdasdasdad");
+                            if ($error == false) {                              
+                                alerts["start"] = $('#calendar').fullCalendar('getView').start.format();
+                                alerts["end"] = $('#calendar').fullCalendar('getView').end.format();
+                                $.ajax({
+                                    type: "POST",
+                                    url: requesturl,
+                                    alerts,
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    success: function(events) {
+                                        $('#calendar').fullCalendar('removeEvents'); //Removes Everything
+                                        $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
+                                        $('#calendar').fullCalendar('rerenderEvents');
+                                    },
+                                    failure: function(response) {
+                                        console.log("Fail");
+                                        alert(response.d);
+                                    }
+                                });
+
                                 $('#fullCalModal').modal('hide');
                             } else {
                                 console.log("Check the data you inputed.");

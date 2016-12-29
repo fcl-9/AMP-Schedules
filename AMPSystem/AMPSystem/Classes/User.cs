@@ -7,6 +7,7 @@ namespace AMPSystem.Classes
         // By default, the Entity Framework interprets a property that's named ID or 
         // classnameID as the primary key.
         public int UserID { get; set; }
+        public int ExternId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public ICollection<string> Roles { get; set; }
@@ -22,15 +23,30 @@ namespace AMPSystem.Classes
         /// <summary>
         /// Construtor.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="name"></param>
         /// <param name="email"></param>
         /// <param name="roles"></param>
         /// <param name="courses"></param>
-        public User(string name, string email, ICollection<string> roles, ICollection<Course> courses)
+        public User(int id, string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
             UserID = _id;
             _id++;
 
+            ExternId = id;
+            Name = name;
+            Email = email;
+            Roles = new List<string>();
+            Roles = roles;
+            Courses = new List<Course>();
+            Courses = courses;
+        }
+
+        public User(string name, string email, ICollection<string> roles, ICollection<Course> courses)
+        {
+            UserID = _id;
+            _id++;
+            
             Name = name;
             Email = email;
             Roles = new List<string>();

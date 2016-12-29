@@ -5,6 +5,7 @@ namespace AMPSystem.Classes
     public class Room
     {
         public int Id { get; set; }
+        public int ExternId { get; set; }
         public string Name { get; set; }
         public int Floor { get; set; }
         public Building Building { get; set; }
@@ -14,17 +15,18 @@ namespace AMPSystem.Classes
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="name"></param>
         /// <param name="floor"></param>
         /// <param name="building"></param>
-        public Room(string name, int floor, Building building)
+        public Room(int id, string name, int floor)
         {
             Id = _id;
             _id++;
 
+            ExternId = id;
             Name = name;
             Floor = floor;
-            Building = building;
         }
     }
 }

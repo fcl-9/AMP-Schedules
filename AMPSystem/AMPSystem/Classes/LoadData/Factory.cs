@@ -15,7 +15,7 @@ namespace AMPSystem.Classes.LoadData
         public static Factory Instance => _instance ?? (_instance = new Factory());
         #endregion
 
-        public ITimeTableItem Create (DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type)
+        public ITimeTableItem Create (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
             var name = "";
             var i = 0;
@@ -26,15 +26,15 @@ namespace AMPSystem.Classes.LoadData
                     name += "/";
                 i++;
             }
-           return new Lesson(startTime, endTime, rooms, courses, type, name, "");
+           return new Lesson(id, startTime, endTime, rooms, courses, type, name, teacher);
         }
 
-        public ITimeTableItem Create (DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher)
+        public ITimeTableItem Create (int id, DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher)
         {
-            return new OfficeHours(startTime,endTime,rooms, teacher,"");
+            return new OfficeHours(id, startTime,endTime,rooms, teacher);
         }
 
-        public ITimeTableItem Create (DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
+        public ITimeTableItem Create (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
         {
             var name = "Avaliação de ";
             var i = 0;
@@ -45,27 +45,32 @@ namespace AMPSystem.Classes.LoadData
                     name += "/";
                 i++;
             }
-            return new EvaluationMoment(startTime, endTime, rooms, courses, name);
+            return new EvaluationMoment(id, startTime, endTime, rooms, courses, name);
         }
         
-        public Room CreateRoom(string name, int floor, Building building)
+        public Room CreateRoom(int id, string name, int floor)
         {
-            return new Room(name, floor, building);
+            return new Room(id, name, floor);
         }
 
-        public Course CreateCourse(string name, ICollection<int> years)
+        public Course CreateCourse(int id, string name, ICollection<int> years)
         {
-            return new Course(name, years);
+            return new Course(id, name, years);
         }
 
-        public Building CreateBuilding(string name, string address, ICollection<Room> rooms)
+        public Building CreateBuilding(int id, string name, string address, ICollection<Room> rooms)
         {
-            return new Building(name, address, rooms);
+            return new Building(id, name, address, rooms);
+        }
+
+        public User CreateUser(int id, string name, string email, ICollection<string> roles, ICollection<Course> courses)
+        {
+            return new User(id, name,email,roles,courses);
         }
 
         public User CreateUser(string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
-            return new User(name,email,roles,courses);
+            return new User(name, email, roles, courses);
         }
     }
 }

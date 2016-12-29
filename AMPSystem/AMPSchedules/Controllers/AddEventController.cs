@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSystem.Classes;
+using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.Interfaces;
 using Microsoft.Graph;
 using Resources;
@@ -57,9 +58,9 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 Convert.ToDateTime(Request.QueryString["endsAt"]),
                 rooms,
                 courses, 
-                Request.QueryString["title"]
+                Request.QueryString["title"],
+                Request.QueryString["description"]
                 );
-            newEvent.Description= Request.QueryString["description"];
             newEvent.Editable = true;
             //Add new Event
             manager.AddTimetableItem(newEvent);

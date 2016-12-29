@@ -9,6 +9,7 @@ namespace AMPSystem.Classes.TimeTableItems
         // By default, the Entity Framework interprets a property that's named ID or 
         // classnameID as the primary key.
         public int ID { get; set; }
+        public int ExternId { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public string Type { get; set; }
@@ -31,6 +32,7 @@ namespace AMPSystem.Classes.TimeTableItems
         /// <summary>
         /// Construtor. Used when data is loaded from the "API" (This data don't need to be persistent).
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <param name="rooms"></param>
@@ -38,19 +40,37 @@ namespace AMPSystem.Classes.TimeTableItems
         /// <param name="type"></param>
         /// <param name="name"></param>
         /// <param name="description"></param>
-        public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
-            string type, string name, string description)
+        public Lesson(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
+            string type, string name, User teacher, string description)
         {
             ID = _id;
             _id++;
 
+            ExternId = id;
             StartTime = startTime;
             EndTime = endTime;
             Rooms = rooms;
             Type = type;
             Courses = courses;
             Name = name;
-            //Teacher = teacher;
+            Teacher = teacher;
+            Description = description;
+        }
+
+        public Lesson(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
+            string type, string name, User teacher)
+        {
+            ID = _id;
+            _id++;
+
+            ExternId = id;
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Type = type;
+            Courses = courses;
+            Name = name;
+            Teacher = teacher;
         }
     }
 }

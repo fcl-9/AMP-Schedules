@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using AMPSystem.Interfaces;
 
-namespace AMPSystem.Classes
+namespace AMPSystem.Classes.TimeTableItems
 {
     public class EvaluationMoment : ITimeTableItem
     {
         // By default, the Entity Framework interprets a property that's named ID or 
         // classnameID as the primary key.
         public int ID { get; set; }
+        public int ExternId { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public string Description { get; set; }
@@ -29,22 +30,53 @@ namespace AMPSystem.Classes
         /// <summary>
         /// Construtor. Used when data is loaded from the "API" (This data don't need to be persistent).
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <param name="rooms"></param>
         /// <param name="name"></param>
         /// <param name="courses"></param>
-        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name)
+        /// <param name="description"></param>
+        public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms,
+            ICollection<Course> courses, string name, string description)
         {
             ID = _id;
             _id++;
 
+            ExternId = id;
             StartTime = startTime;
             EndTime = endTime;
             Rooms = rooms;
             Courses = courses;
             Name = name;
+            Description = description;
+        }
+
+        public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms,
+            ICollection<Course> courses, string name)
+        {
+            ID = _id;
+            _id++;
+
+            ExternId = id;
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Courses = courses;
+            Name = name;
+        }
+
+        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
+            ICollection<Course> courses, string name, string description)
+        {
+            ID = _id;
+            _id++;
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Courses = courses;
+            Name = name;
+            Description = description;
         }
     }
 }

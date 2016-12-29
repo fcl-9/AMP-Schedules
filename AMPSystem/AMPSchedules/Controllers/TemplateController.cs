@@ -17,7 +17,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         public virtual ActionResult Hook(TimeTableManager manager)
         {
             var parsedItems = ParseData(manager);
-            return Content(JsonConvert.SerializeObject(parsedItems.ToArray()), "application/json");
+            return Content(JsonConvert.SerializeObject(parsedItems.ToArray(), new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}), "application/json");
         }
 
         public async Task<ActionResult> TemplateMethod()

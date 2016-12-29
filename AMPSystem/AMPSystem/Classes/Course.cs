@@ -5,6 +5,7 @@ namespace AMPSystem.Classes
     public class Course
     {
         public int Id { get; set; }
+        public int ExternId { get; set; }
         public ICollection<int> Years { get; set; }
         public string Name { get; set; }
 
@@ -15,11 +16,12 @@ namespace AMPSystem.Classes
         /// </summary>
         /// <param name="name"></param>
         /// <param name="years"></param>
-        public Course(string name, ICollection<int> years)
+        public Course(int id, string name, ICollection<int> years)
         {
             Id = _id;
             _id++;
 
+            ExternId = id;
             Name = name;
             Years = years;
         }

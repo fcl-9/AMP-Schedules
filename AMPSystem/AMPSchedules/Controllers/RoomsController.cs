@@ -24,7 +24,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             catch (ServiceException se)
             {
                 if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error",
+                return RedirectToAction($"Index", $"Error",
                     new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
         }

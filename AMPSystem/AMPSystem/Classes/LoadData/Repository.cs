@@ -20,6 +20,7 @@ namespace AMPSystem.Classes.LoadData
             Items = new List<ITimeTableItem>();
             Buildings = new List<Building>();
             UserCourses = new List<Course>();
+            Teachers = new List<User>();
         }
 
         /// <summary>
@@ -32,28 +33,30 @@ namespace AMPSystem.Classes.LoadData
             var dataParsed = JObject.Parse(data);
             foreach (var item in dataParsed["Teachers"])
             {
-                //var id = item["ID"].Value<int>();
+                var id = item["ID"].Value<int>();
                 var name = item["Name"].Value<string>();
                 var email = item["Email"].Value<string>();
-                var building = ((List<Building>)Buildings).Find(b => b.Id == 1);
-                var room = ((List<Room>)building.Rooms).Find(r => r.Id == item["Room"].Value<int>());
+                var building = ((List<Building>)Buildings).Find(b => b.ExternId == 1);
+                var room = ((List<Room>)building.Rooms).Find(r => r.ExternId == item["Room"].Value<int>());
                 var rooms = new List<Room> {room};
                 var roles = new List<string> {"Teacher"};
 
                 var courses = new List<Course>();
                 foreach (var course in item["Courses"])
                 {
-                    var mCourse = ((List<Course>)Courses).Find(c => c.Id== course.Value<int>());
+                    var mCourse = ((List<Course>)Courses).Find(c => c.ExternId== course.Value<int>());
                     courses.Add(mCourse);
                 }
 
-                var teacher = CreateUser(name, email, roles, courses);
+                var teacher = CreateUser(id, name, email, roles, courses);
                 foreach (var officeHour in item["OfficeHours"])
                 {
+                    var officeHourId = officeHour["ID"].Value<int>();
                     var startTime = officeHour["StartTime"].Value<DateTime>();
                     var endTime = officeHour["EndTime"].Value<DateTime>();
-                    Items.Add(CreateOfficeHours(startTime, endTime,rooms,teacher));
+                    Items.Add(CreateOfficeHours(officeHourId, startTime, endTime,rooms,teacher));
                 }
+                Teachers.Add(teacher);
             }
         }
 
@@ -68,8 +71,8 @@ namespace AMPSystem.Classes.LoadData
             var dataParsed = JObject.Parse(data);
             foreach (var item in dataParsed["Courses"])
             {
-                //var id = item.Value<int>();
-                UserCourses.Add(((List<Course>)Courses).Find(c => c.Id == item.Value<int>()));
+                var id = item.Value<int>();
+                UserCourses.Add(((List<Course>)Courses).Find(c => c.ExternId == id));
             }
         }
 
@@ -83,14 +86,14 @@ namespace AMPSystem.Classes.LoadData
             var dataParsed = JObject.Parse(data);
             foreach (var item in dataParsed["Courses"])
             {
-                //var id = item["ID"].Value<int>();
+                var id = item["ID"].Value<int>();
                 var name = item["Name"].Value<string>();
                 var years = new List<int>();
                 foreach (var year in item["Year"])
                 {
                     years.Add(year.Value<int>());
                 }
-                Courses.Add(CreateCourse(name, years));
+                Courses.Add(CreateCourse(id, name, years));
             }
         }
 
@@ -104,16 +107,17 @@ namespace AMPSystem.Classes.LoadData
             var dataParsed = JObject.Parse(data);
             foreach (var item in dataParsed)
             {
-                //var buildingID = item.Value["ID"].Value<int>();
+                var buildingID = item.Value["ID"].Value<int>();
                 var buildingName = item.Value["Name"].Value<string>();
                 var buildingAddress = item.Value["Address"].Value<string>();
 
                 var rooms = new List<Room>();
                 foreach (var room in item.Value["Room"])
                 {
-                    //rooms.Add(CreateRoom(room["Name"].Value<string>(), room["Floor"].Value<int>()));
+                    var roomId = room["ID"].Value<int>();
+                    rooms.Add(CreateRoom(roomId, room["Name"].Value<string>(), room["Floor"].Value<int>()));
                 }
-                Buildings.Add(CreateBuilding(buildingName, buildingAddress, rooms));
+                Buildings.Add(CreateBuilding(buildingID, buildingName, buildingAddress, rooms));
             }
         }
 
@@ -129,6 +133,7 @@ namespace AMPSystem.Classes.LoadData
             var dataParsed = JObject.Parse(data);
             foreach (var item in dataParsed["Schedule"])
             {
+                var itemId = item["ID"].Value<int>();
                 var startTime = item["StartTime"].Value<DateTime>();
                 var endTime = item["EndTime"].Value<DateTime>();
                 var lessonType = item["LessonType"].Value<string>();
@@ -136,65 +141,66 @@ namespace AMPSystem.Classes.LoadData
                 var rooms = new List<Room>();
                 foreach (var room in item["ClassRoom"])
                 {
-                    var building = ((List<Building>)Buildings).Find(b => b.Id == room["Building"].Value<int>());
-                    var mRoom = ((List<Room>) building.Rooms).Find(r => r.Id == room["Id"].Value<int>());
+                    var building = ((List<Building>)Buildings).Find(b => b.ExternId == room["Building"].Value<int>());
+                    var mRoom = ((List<Room>) building.Rooms).Find(r => r.ExternId == room["Id"].Value<int>());
                     rooms.Add(mRoom);
                 }
 
                 var courses = new List<Course>();
                 foreach (var course in item["Courses"])
                 {
-                    var mCourse = ((List<Course>)Courses).Find(c => c.Id == course.Value<int>());
+                    var mCourse = ((List<Course>)Courses).Find(c => c.ExternId == course.Value<int>());
                     courses.Add(mCourse);
                 }
 
                 //TODO Comment this.
                 if (lessonType == "T" || lessonType == "TP" || lessonType == "PL")
                 {
-                    Items.Add(CreateLesson(startTime, endTime, rooms, courses, lessonType));
+                    var teacher = ((List<User>) Teachers).Find(t => t.ExternId == item["Teacher"].Value<int>());
+                    Items.Add(CreateLesson(itemId, startTime, endTime, rooms, courses, lessonType, teacher));
                 }
                 else
                 {
-                    Items.Add(CreateEvaluationMoment(startTime, endTime, rooms, courses));
+                    Items.Add(CreateEvaluationMoment(itemId, startTime, endTime, rooms, courses));
                 }
 
             }
         }
 
         #region Calls Factory.
-        private static Course CreateCourse(string name, ICollection<int> years)
+        private static Course CreateCourse(int id, string name, ICollection<int> years)
         {
-            return Factory.Instance.CreateCourse(name, years);
+            return Factory.Instance.CreateCourse(id, name, years);
         }
 
-        private static Building CreateBuilding(string name, string address, ICollection<Room> rooms)
+        private static Building CreateBuilding(int id, string name, string address, ICollection<Room> rooms)
         {
-            return Factory.Instance.CreateBuilding(name, address, rooms);
+            return Factory.Instance.CreateBuilding(id, name, address, rooms);
         }
 
-        private static Room CreateRoom(string name, int floor, Building building)
+        private static Room CreateRoom(int id, string name, int floor)
         {
-            return Factory.Instance.CreateRoom(name, floor, building);
+            return Factory.Instance.CreateRoom(id, name, floor);
         }
 
-        private static User CreateUser (string name, string email, ICollection<string> roles, ICollection<Course> courses)
+        private static User CreateUser (int id, string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
-            return Factory.Instance.CreateUser(name, email, roles, courses);
+            return Factory.Instance.CreateUser(id, name, email, roles, courses);
         }
 
-        private static ITimeTableItem CreateLesson (DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type)
+        private static ITimeTableItem CreateLesson (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
-            return Factory.Instance.Create(startTime,endTime,rooms,courses,type);
+            return Factory.Instance.Create(id, startTime, endTime, rooms, courses, type, teacher);
         }
 
-        private static ITimeTableItem CreateOfficeHours(DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher)
+        private static ITimeTableItem CreateOfficeHours(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher)
         {
-            return Factory.Instance.Create(startTime, endTime, rooms, teacher);
+            return Factory.Instance.Create(id, startTime, endTime, rooms, teacher);
         }
 
-        private static ITimeTableItem CreateEvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
+        private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
         {
-            return Factory.Instance.Create(startTime, endTime, rooms, courses);
+            return Factory.Instance.Create(id, startTime, endTime, rooms, courses);
         }
         #endregion
     }

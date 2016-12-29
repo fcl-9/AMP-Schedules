@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
+using AMPSystem.Classes.LoadData;
+using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class TimeTableManager : ISubject, IObserver
+    public class TimeTableManager
     {
         public Timetable TimeTable { get; set; }
         public Repository Repository { get; set; }
-
-        #region Observer Pattern
-        public ICollection<IObserver> Observers { get; set; }
-        public ICollection<ISubject> Subjects { get; set; }
-        #endregion
-
+        
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -38,7 +34,7 @@ namespace AMPSystem.Classes
                         {
                             if (repository.UserCourses.Contains(course))
                             {
-                                TimeTable.AddTimetableItem(item);
+                                AddTimetableItem(item);
                             }
                         }
                     }
@@ -50,7 +46,7 @@ namespace AMPSystem.Classes
                         {
                             if (repository.UserCourses.Contains(course))
                             {
-                                TimeTable.AddTimetableItem(item);
+                                AddTimetableItem(item);
                             }
                         }
                     }
@@ -62,7 +58,7 @@ namespace AMPSystem.Classes
                         {
                             if (repository.UserCourses.Contains(course))
                             {
-                                TimeTable.AddTimetableItem(item);
+                                AddTimetableItem(item);
                             }
                         }
                     }
@@ -70,64 +66,47 @@ namespace AMPSystem.Classes
             }
 
         }
-        
-        /// <summary>
-        /// Update time table items to display. For this, get the repository data and add to
-        /// ItemList in time table.
-        /// </summary>
-        /// <param name="subject"></param>
-        public void Update(ISubject subject)
+
+        //This will only be used to get teachers information don't course data to be added to timetable.
+        public TimeTableManager(Repository repository)
         {
-            var startDateTime = ((IViewHandler) subject).StartDateTime;
-            var endDateTime = ((IViewHandler)subject).EndDateTime;
-
-            TimeTable.StartDateTime = startDateTime;
-            TimeTable.StartDateTime = endDateTime;
-
-            //Clears the item list
-            TimeTable.ItemList.Clear();
-
-            foreach (var item in Repository.Items)
-            {
-                //Less than zero: t1 is earlier than t2. 
-                //Zero: t1 is the same as t2. 
-                if (startDateTime.Date.CompareTo(item.StartTime) <= 0 &&
-                    endDateTime.Date.CompareTo(item.StartTime) >= 0)
-                {
-                    TimeTable.AddTimetableItem(item);
-                }
-            }
-        }
-        
-        #region Observer Pattern Methods
-        /// <summary>
-        /// Add observer.
-        /// </summary>
-        /// <param name="observer"></param>
-        public void Add(IObserver observer)
-        {
-            Observers.Add(observer);
+            Repository = repository;
         }
 
         /// <summary>
-        /// Remove observer.
+        /// Add a time table item to the list. (Add events)
         /// </summary>
-        /// <param name="observer"></param>
-        public void Remove(IObserver observer)
+        /// <param name="item"></param>
+        public void AddTimetableItem(ITimeTableItem item)
         {
-            Observers.Remove(observer);
+            TimeTable.ItemList.Add(item);
         }
 
         /// <summary>
-        /// Notify all observers.
+        /// Remove a given Time table item from the list.
         /// </summary>
-        public void Notify()
+        /// <param name="item"></param>
+        public void RemoveTimetableItem(ITimeTableItem item)
         {
-            foreach (var observer in Observers)
-            {
-                observer.Update(this);
-            }
+            TimeTable.ItemList.Remove(item);
         }
-        #endregion
+
+        /// <summary>
+        /// Remove a Time table item given a position from the list.
+        /// </summary>
+        /// <param name="position"></param>
+        public void RemoveTimeTableItem(int position)
+        {
+            TimeTable.ItemList.RemoveAt(position);
+        }
+
+        /// <summary>
+        /// Returns the lenght of the itemList.
+        /// </summary>
+        /// <returns></returns>
+        public int CountTimeTableItems()
+        {
+            return TimeTable.ItemList.Count;
+        }
     }
 }

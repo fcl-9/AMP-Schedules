@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using AMPSystem.Classes;
+using AMPSystem.Classes.TimeTableItems;
 
 namespace AMPSystem.DAL
 {
@@ -10,7 +11,6 @@ namespace AMPSystem.DAL
         //is passed in to the constructor.
         public AmpContext() : base("AmpContext")
         {
-            //Database.SetInitializer(new AmpInitializer());
         }
 
         public DbSet<User> Users { get; set; }
@@ -23,6 +23,5 @@ namespace AMPSystem.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
-
     }
 }

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using AMPSystem.Classes;
 using AMPSystem.Interfaces;
-using Microsoft.Ajax.Utilities;
 using Microsoft.Graph;
 using Resources;
 
-namespace AMPSchedules.Controllers
+namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
     public class AddEventController : TemplateController
     {
@@ -26,12 +22,11 @@ namespace AMPSchedules.Controllers
             catch (ServiceException se)
             {
                 if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
+                return RedirectToAction($"Index", $"Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
-
         }
 
-        public override ActionResult hook(TimeTableManager manager)
+        public override ActionResult Hook(TimeTableManager manager)
         {
             //Get the room
             ICollection<Room> rooms = new List<Room>();
@@ -39,7 +34,7 @@ namespace AMPSchedules.Controllers
             {
                 foreach (var room in building.Rooms)
                 {
-                    if (room.Id == Int32.Parse(Request.QueryString["room"]))
+                    if (room.Id == int.Parse(Request.QueryString["room"]))
                     {
                         rooms.Add(room);
                     }
@@ -67,8 +62,8 @@ namespace AMPSchedules.Controllers
             newEvent.Description= Request.QueryString["description"];
             newEvent.Editable = true;
             //Add new Event
-            manager.TimeTable.AddTimetableItem(newEvent);
-            return base.hook(manager);
+            manager.AddTimetableItem(newEvent);
+            return base.Hook(manager);
         }
     }
 }

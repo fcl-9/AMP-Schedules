@@ -10,21 +10,32 @@ namespace AMPSystem.Classes
         public string Name { get; set; }
         public string Email { get; set; }
         public ICollection<string> Roles { get; set; }
-        
         public ICollection<Course> Courses { get; set; }
 
-        public User()
-        {
-            //
-        }
+        private static int _id;
 
-        public User(int id, string name, string email, ICollection<string> roles, ICollection<Course> courses)
+        /// <summary>
+        /// Empty construtor to create data into database.
+        /// </summary>
+        public User(){ }
+
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="roles"></param>
+        /// <param name="courses"></param>
+        public User(string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
-            UserID = id;
+            UserID = _id;
+            _id++;
+
             Name = name;
             Email = email;
-            //Roles = new List<string>();
+            Roles = new List<string>();
             Roles = roles;
+            Courses = new List<Course>();
             Courses = courses;
         }
     }

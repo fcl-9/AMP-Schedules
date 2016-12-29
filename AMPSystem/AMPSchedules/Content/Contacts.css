@@ -1,0 +1,24 @@
+﻿.teacherContainer {
+    border: solid gray 2px;
+}
+
+.teacherContainer .classname {
+    text-align: center;
+    background-color: #337ab7;
+}
+
+.teacherPic img {
+    height: 150px;
+    width: 150px;
+    text-align: center
+}
+
+.information {
+    padding-top: 5px;
+    text-align: center;
+}
+
+.teacherContainer .centerBlock {
+  display: table;
+  margin: auto;
+}

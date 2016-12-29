@@ -12,7 +12,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 
-namespace AMPSchedules.Controllers
+namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
     public class AccountController : Controller
     {
@@ -27,7 +27,9 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        // Here we just clear the token cache, sign out the GraphServiceClient, and end the session with the web app.  
+        /// <summary>
+        /// Clear the token cache, sign out the GraphServiceClient, and end the session with the web app.  
+        /// </summary>
         public void SignOut()
         {
             if (Request.IsAuthenticated)
@@ -46,6 +48,5 @@ namespace AMPSchedules.Controllers
               CookieAuthenticationDefaults.AuthenticationType);
             Response.Redirect("/");
         }
-
     }
 }

@@ -103,12 +103,12 @@
     <Compile Include="Classes\Filters\TypeF.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="DAL\AmpContext.cs" />
+    <Compile Include="DAL\AmpDbManager.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
-    <Compile Include="Interfaces\DataReader.cs" />
+    <Compile Include="Interfaces\IDataReader.cs" />
     <Compile Include="Interfaces\IObserver.cs" />
     <Compile Include="Interfaces\ISubject.cs" />
     <Compile Include="Interfaces\ITimeTableItem.cs" />
-    <Compile Include="Interfaces\IViewHandler.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\TimeTableManager.cs" />

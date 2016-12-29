@@ -5,7 +5,7 @@
 
 using System.Web.Mvc;
 
-namespace AMPSchedules.Controllers
+namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
     public class ErrorController : Controller
     {
@@ -13,7 +13,7 @@ namespace AMPSchedules.Controllers
         public ActionResult Index(string message)
         {
             ViewBag.Message = message;
-            return View("Error");
+            return View($"Error");
         }
     }
 }

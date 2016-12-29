@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AMPSystem.Interfaces;
 
-namespace AMPSystem.Classes
+namespace AMPSystem.Classes.LoadData
 {
-    public class FileData : DataReader
+    /// <summary>
+    /// @FileData 
+    /// This class is used to fetch data from sample text files.
+    /// </summary>
+    public class FileData : IDataReader
     {
-        // This class is used to fetch data from sample text files
-
         public string RequestTeachers()
         {
             return System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"App_Data/Teacher");

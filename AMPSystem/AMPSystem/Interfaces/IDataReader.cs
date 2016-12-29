@@ -1,6 +1,6 @@
 ﻿namespace AMPSystem.Interfaces
 {
-    public interface DataReader
+    public interface IDataReader
     {
         /// <summary>
         /// Requests information about the teachers of the university

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
@@ -11,13 +7,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         // GET: ContactsController
         public ActionResult Index()
         {
-            return View("Contacts");
+            return View($"Contacts");
         }
-
-
-
-
-
-
     }
 }

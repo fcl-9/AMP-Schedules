@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using AMPSchedules.Helpers;
 using AMPSchedules.Models;
 using AMPSystem.Classes;
 using Microsoft.Graph;
 using Newtonsoft.Json;
 using Resources;
-using User = Microsoft.Graph.User;
 
 namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
     public class RoomsController : TemplateController
     {
-        GraphService graphService = new GraphService();
+        GraphService _graphService = new GraphService();
 
         // GET: Courses
         public async Task<ActionResult> Index()
@@ -35,7 +29,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             }
         }
 
-        public override ActionResult hook(TimeTableManager manager)
+        public override ActionResult Hook(TimeTableManager manager)
         {
             return Content(JsonConvert.SerializeObject(manager.Repository.Buildings), "application/json");
             

@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AMPSystem.Interfaces;
 
-namespace AMPSystem.Classes
+namespace AMPSystem.Classes.Filters
 {
     public class AndCompositeFilter : IFilter
     {
-        public ICollection<IFilter> Filters { get; set; } //List of filters you can apply to time table items
-        public TimeTableManager Manager { get; set; }//Allow you to access to all timetableitems
+        //List of filters you can apply to time table items
+        public ICollection<IFilter> Filters { get; set; } 
+        //Allow you to access to all timetableitems
+        public TimeTableManager Manager { get; set; }
 
         /// <summary>
-        /// Contructer Initializes the filters
+        /// Contructer initializes the filters.
         /// </summary>
         /// <param name="manager"></param>
         public AndCompositeFilter(TimeTableManager manager)
@@ -20,7 +21,7 @@ namespace AMPSystem.Classes
         }
 
         /// <summary>
-        /// Changes when a user selects a filter 
+        /// Changes when a user selects a filter.
         /// </summary>
         /// <param name="aFilter"></param>
         public void Add(IFilter aFilter)

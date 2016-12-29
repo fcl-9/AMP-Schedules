@@ -1,30 +1,27 @@
-﻿using System.CodeDom;
+﻿using AMPSystem.Classes.TimeTableItems;
 
-namespace AMPSystem.Classes
+namespace AMPSystem.Classes.Filters
 {
     public class TypeCreator
     {
-        //This way you add new TimeTableItems you can add them here without changing the TypeF Class.
-       public object CreateTypeOf(string typeToReturn)
+        /// <summary>
+        /// Ensures that as you add new TimeTableItems you can add them here without changing the TypeF class.
+        /// </summary>
+        /// <param name="typeToReturn"></param>
+        /// <returns></returns>
+        public object CreateTypeOf(string typeToReturn)
         {
-            if (typeToReturn == "Lesson")
+            switch (typeToReturn)
             {
-                return typeof(Lesson);
+                case "Lesson":
+                    return typeof(Lesson);
+                case "EvaluationMoment":
+                    return typeof(EvaluationMoment);
+                case "OfficeHours":
+                    return typeof(OfficeHours);
+                default:
+                    throw new System.InvalidOperationException("Your trying get type of an object tha doesn't exist");
             }
-            else if (typeToReturn == "EvaluationMoment")
-            {
-                return typeof(EvaluationMoment);
-            }
-            else if (typeToReturn == "OfficeHours")
-            {
-                return typeof(OfficeHours);
-            }
-            else
-            {
-                //This should throw an exception cause there is no object that matches the string sent
-                throw new System.InvalidOperationException("Your trying get type of an object tha doesn't exist");
-            }
-
         }
     }
 }

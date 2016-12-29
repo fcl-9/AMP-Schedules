@@ -8,11 +8,20 @@ namespace AMPSystem.Classes
         public ICollection<int> Years { get; set; }
         public string Name { get; set; }
 
-        public Course(int id, string name, ICollection<int> years)
+        private static int _id;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="years"></param>
+        public Course(string name, ICollection<int> years)
         {
-            Id = id;
-            Years = years;
+            Id = _id;
+            _id++;
+
             Name = name;
+            Years = years;
         }
     }
 }

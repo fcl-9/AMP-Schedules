@@ -16,26 +16,24 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
     public class CoursesController : TemplateController
     {
-        GraphService graphService = new GraphService();
+        GraphService _graphService = new GraphService();
 
         // GET: Courses
         public async Task<ActionResult> Index()
         {
             try
             {
-
                 return await TemplateMethod();
-
             }
             catch (ServiceException se)
             {
                 if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error",
+                return RedirectToAction($"Index", $"Error",
                     new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
         }
 
-        public override ActionResult hook(TimeTableManager manager)
+        public override ActionResult Hook(TimeTableManager manager)
         {
             return Content(JsonConvert.SerializeObject(CurrentUser.Courses), "application/json");
             

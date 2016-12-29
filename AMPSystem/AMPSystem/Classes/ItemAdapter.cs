@@ -4,12 +4,11 @@ using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes
 {
-    public class ItemAdapter : CalendarItem
+    public sealed class ItemAdapter : CalendarItem
     {
         // This class adapts the TimeTableItems to CalendarItems that have the structure
-        // needed to be used by the JS callendar used on the Web Interface
-
-        private ITimeTableItem Item { get; set; }
+        // needed to be used by the JS callendar used on the Web Interface.
+        private ITimeTableItem Item { get; }
         public override DateTime end { get { return Item.EndTime; } }
         public override DateTime start { get { return Item.StartTime; } }
         public override string title { get { return Item.Name; } }
@@ -24,7 +23,6 @@ namespace AMPSystem.Classes
                 description += "<li>" + room.Name + "<ul><li> Floor: " + room.Floor + "</li></ul>";
             }
             description += "</ul>";
-
         }
     }
 }

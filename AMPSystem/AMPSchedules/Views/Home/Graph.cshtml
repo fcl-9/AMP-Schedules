@@ -429,7 +429,7 @@
             var selectedElement = undefined;
             var FilterToApply = {};
 
-            selectedFilter.change(function() {
+            selectedFilter.click(function() {
                 selectedElement = $(this);
                 if ($(this).is(':checked')) {
                     FilterToApply[$(this).val()] = $(this).attr('name');
@@ -442,11 +442,11 @@
                         }
                     });
                     //Ajax Request
-                    requestGetType("/Filter/AddFilter", FilterToApply);
+                    //requestGetType("/Filter/AddFilter", FilterToApply);
                 } else {
                     var valueToRemove = $(this).val();
                     delete FilterToApply[valueToRemove];
-
+                    console.log(FilterToApply);
 
                     selectedFilter.each(function() {
                         if ($(this).attr('name') == selectedElement.attr('name') &&
@@ -456,12 +456,15 @@
                     });
 
                     //Ajax Request -- Update the data
-                    requestGetType("/Filter/AddFilter", FilterToApply);
+                    //requestGetType("/Filter/AddFilter", FilterToApply);
                 }
+                requestGetType("/Filter/AddFilter", FilterToApply);
             });
+            //console.log(FilterToApply);
+            //requestGetType("/Filter/AddFilter", FilterToApply);
         }
 
-        $().ready(applyFilters());
+        //$().ready(applyFilters());
 
         //Makes Request to the server
         function requestGetType(requesturl, data) {

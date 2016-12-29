@@ -86,7 +86,7 @@ namespace AMPSystem.Classes
         /// Remove a given Time table item from the list.
         /// </summary>
         /// <param name="item"></param>
-        public void RemoveTimetableItem(ITimeTableItem item)
+        public void RemoveTimeTableItem(ITimeTableItem item)
         {
             TimeTable.ItemList.Remove(item);
         }

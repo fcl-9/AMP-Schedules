@@ -181,6 +181,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\RemoveEventController.cs" />
     <Compile Include="Controllers\AddEventController.cs" />
     <Compile Include="Controllers\ColorController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />

@@ -60,6 +60,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 Request.QueryString["title"]
                 );
             newEvent.Description= Request.QueryString["description"];
+            newEvent.Editable = true;
             //Add new Event
             manager.AddTimetableItem(newEvent);
             return base.Hook(manager);

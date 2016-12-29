@@ -28,6 +28,9 @@
 
 @section scripts
 {
+    @Scripts.Render("~/Scripts/moment-with-locales.min.js")
+
+
     <script>
         $().ready(function() {
             requestTeachers(printInformation);
@@ -35,9 +38,13 @@
 
         //Ajax Request for teachers
         function requestTeachers(returnFunction) {
+            var data = {};
+            data["start"] = '2016-11-28'; //moment().isoWeekday(1).format("YYYY-MM-DD");
+            data["end"] = '2016-12-3'; //moment().isoWeekday(7).format("YYYY-MM-DD");
             $.ajax({
                 type: "GET",
                 url: '/Contacts/Teachers',
+                data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: returnFunction,
@@ -51,7 +58,7 @@
         //Adds Information to the page
         function printInformation(teachers) {
             $.each(teachers,
-                function(key, value) {
+                function(key, value) {//Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor 
                     console.log(key);
                     console.log(value);
                 });

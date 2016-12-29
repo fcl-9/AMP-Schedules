@@ -19,6 +19,8 @@ namespace AMPSystem.Classes.TimeTableItems
         public ICollection<Course> Courses { get; set; }
         public string Description { get; set; }
 
+        public bool Editable { get; set; }
+
         private static int _id;
 
         /// <summary>

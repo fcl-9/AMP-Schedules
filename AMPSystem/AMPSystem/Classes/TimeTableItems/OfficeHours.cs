@@ -19,6 +19,8 @@ namespace AMPSystem.Classes.TimeTableItems
 
         private static int _id;
 
+        public bool Editable { get; set; }
+
         /// <summary>
         /// Empty construtor to create data into database.
         /// </summary>

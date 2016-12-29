@@ -64,6 +64,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             newEvent.Editable = true;
             //Add new Event
             manager.AddTimetableItem(newEvent);
+            DbManager.AddTimeTableItem(newEvent);
             return base.Hook(manager);
         }
     }

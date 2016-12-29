@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSystem.Classes;
 using AMPSystem.Classes.LoadData;
+using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Newtonsoft.Json;
 
@@ -13,6 +14,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
     public abstract class TemplateController: Controller
     {
         public User CurrentUser { get; private set; }
+        public AmpDbManager DbManager { get { return AmpDbManager.Instance; } }
 
         public virtual ActionResult Hook(TimeTableManager manager)
         {
@@ -36,12 +38,12 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             var loadData = new Repository {DataReader = dataReader};
             loadData.GetCourses();
             loadData.GetRooms();
+            loadData.GetTeachers();
             //!!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
             //loadData.GetUserCourses(user);
             //loadData.GetSchedule(user);
             loadData.GetUserCourses("2054313");
             loadData.GetSchedule("2054313");
-            loadData.GetTeachers();
             var roles = new List<string> {"Student"};
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Comented only for tests!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             /*var mail = new MailAddress(await graphService.GetMyEmailAddress(graphClient));
@@ -61,7 +63,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
             var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
             //The manager will start the timetableitem list with the data read from the repo
-            var manager = new TimeTableManager(loadData, startDateTime, endDateTime);
+            var manager = new TimeTableManager(loadData, startDateTime, endDateTime, CurrentUser);
             return manager;
         }
 

@@ -65,6 +65,7 @@ namespace AMPSchedules.Controllers
                 Request.QueryString["title"]
                 );
             newEvent.Description= Request.QueryString["description"];
+            newEvent.Editable = true;
             //Add new Event
             manager.TimeTable.AddTimetableItem(newEvent);
             return base.hook(manager);

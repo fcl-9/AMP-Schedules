@@ -23,6 +23,8 @@ namespace AMPSystem.Classes
 
         public string Description { get; set; }
 
+        public bool Editable { get; set; }
+
         public Lesson() { }
 
         public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,

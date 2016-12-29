@@ -28,7 +28,7 @@ namespace AMPSystem.Classes
         }
 
         //TODO: rpbably this needs to be removed. The method in bottom will remove the items by index
-        public void RemoveTimetableItem(ITimeTableItem item)
+        public void RemoveTimeTableItem(ITimeTableItem item)
         {
             ItemList.Remove(item);
         }

@@ -24,6 +24,8 @@ namespace AMPSystem.Classes
 
         public string Description { get; set; }
 
+        public bool Editable { get; set; }
+
         public OfficeHours() { }
 
         public OfficeHours(DateTime starTime, DateTime endTime, ICollection<Room> rooms, User teacher)

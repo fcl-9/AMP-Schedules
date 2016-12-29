@@ -129,6 +129,7 @@
                   
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-danger" id="remove">Remove Event</button>
                 <button class="btn btn-primary" id="submit">Save</button>
             </div>
         </div>
@@ -212,6 +213,8 @@
 
 
     <script>
+        var currentEvent = null;
+
         //Renders the calendar.
         function calendar(urlToRequestData) {
             // page is now ready, initialize the calendar...
@@ -228,6 +231,12 @@
                     eventLimit: true, // allow "more" link when too many events
                     events: '' + urlToRequestData + '',
                     eventClick: function(event, jsEvent, view) {
+                        currentEvent = event;
+                        if (!currentEvent.editable) {
+                            $("#remove").attr("disabled", "disabled");
+                        } else {
+                            $("#remove").removeAttr("disabled");
+                        }
                         console.log(event);
                         console.log(moment(event.start).format("MMM Do H:mm"));
                         $('#modalTitle').html(event.title);
@@ -235,9 +244,16 @@
                         $('#endTime').html(moment(event.end).format("MMM Do H:mm"));
                         $("#rooms").html(function() {
                             var rooms = "Room(s): <br><ul>";
-                            $.each(event.rooms, function(key, room) {
-                                rooms += "<li>" + room.Name + "<ul><li> Floor: " + room.Floor + "</li><li>Building: "+ room.Building.Name +"</li></ul>";
-                            })
+                            $.each(event.rooms,
+                                function(key, room) {
+                                    rooms += "<li>" +
+                                        room.Name +
+                                        "<ul><li> Floor: " +
+                                        room.Floor +
+                                        "</li><li>Building: " +
+                                        room.Building.Name +
+                                        "</li></ul>";
+                                })
                             rooms += "</ul>";
                             return rooms;
                         });
@@ -345,69 +361,67 @@
         }
 
         //Load The Calendar with it's default events, the color picker and the datetime pickers
-        $()
-            .ready(function() {
-                calendar('/Home/CalendarDefaultData');
-                $('select[name="colorpicker"]').simplecolorpicker();
+        $().ready(function() {
+            calendar('/Home/CalendarDefaultData');
+            $('select[name="colorpicker"]').simplecolorpicker();
 
-                $("#datetimepicker_starttime").datetimepicker({
-                    minDate: 0,
-                    minTime: 0
-                });
+            $("#datetimepicker_starttime").datetimepicker({
+                minDate: 0,
+                minTime: 0
             });
+        });
 
         //Allow to modify colors and add alerts.
-        $()
-            .ready(function() {
-                $("#addAlert")
-                    .click(function() {
-                        $("#alertForm")
-                            .append('' +
-                                '<div class="col-sm-12 form-group">' +
-                                '<div class="col-sm-5">' +
-                                '<input class="form-control" />' +
-                                '</div>' +
-                                '<div class="col-sm-5">' +
-                                '<select class="form-control">' +
-                                '<option>Minutes</option>' +
-                                '<option>Hours</option>' +
-                                '<option>Days</option>' +
-                                '<option>Weeks</option>' +
-                                '</select>' +
-                                '</div>' +
-                                '<div class="col-sm-2">' +
-                                '<button class="rm-alert btn btn-danger">Remove</button>' +
-                                '</div>' +
-                                '</div>'
-                            );
+        $().ready(function() {
+            $("#addAlert")
+                .click(function() {
+                    $("#alertForm")
+                        .append('' +
+                            '<div class="col-sm-12 form-group">' +
+                            '<div class="col-sm-5">' +
+                            '<input class="form-control" />' +
+                            '</div>' +
+                            '<div class="col-sm-5">' +
+                            '<select class="form-control">' +
+                            '<option>Minutes</option>' +
+                            '<option>Hours</option>' +
+                            '<option>Days</option>' +
+                            '<option>Weeks</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '<div class="col-sm-2">' +
+                            '<button class="rm-alert btn btn-danger">Remove</button>' +
+                            '</div>' +
+                            '</div>'
+                        );
+                });
+
+            $("#alertForm")
+                .on("click",
+                    ".rm-alert",
+                    function(e) {
+                        alert("asd");
+                        e.preventDefault();
+                        $(this).parent().parent().remove();
                     });
 
-                $("#alertForm")
-                    .on("click",
-                        ".rm-alert",
-                        function(e) {
-                            alert("asd");
-                            e.preventDefault();
-                            $(this).parent().parent().remove();
-                        });
-
-                $("#submit").click(function() {
-                    if ($("#1").hasClass('active')) {
-                        console.log("Do Stuff 1");
-                        $('#fullCalModal').modal('hide');
-                    } else if ($("#2").hasClass('active')) {
-                        var colorApplyer = {};
-                        //                  Event Name                  Color Picked for the event Selected.
-                        colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
-                        //Request Data
-                        requestGetType("/Color/EventColor", colorApplyer);
-                        $('#fullCalModal').modal('hide');
-                    } else if ($("#3").hasClass('active')) {
-                        console.log("Do Stuff 3");
-                        $('#fullCalModal').modal('hide');
-                    }
-                });
+            $("#submit").click(function() {
+                if ($("#1").hasClass('active')) {
+                    console.log("Do Stuff 1");
+                    $('#fullCalModal').modal('hide');
+                } else if ($("#2").hasClass('active')) {
+                    var colorApplyer = {};
+                    //                  Event Name                  Color Picked for the event Selected.
+                    colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
+                    //Request Data
+                    requestGetType("/Color/EventColor", colorApplyer);
+                    $('#fullCalModal').modal('hide');
+                } else if ($("#3").hasClass('active')) {
+                    console.log("Do Stuff 3");
+                    $('#fullCalModal').modal('hide');
+                }
             });
+        });
 
         //Apply Filters
         function applyFilters() {
@@ -447,8 +461,7 @@
             });
         }
 
-        $()
-            .ready(applyFilters());
+        $().ready(applyFilters());
 
         //Makes Request to the server
         function requestGetType(requesturl, data) {
@@ -500,6 +513,17 @@
                 }
             });
 
+            // Remove events
+            $().ready(function () {
+                $("#remove").click(function () {
+                    var data = {};
+                    data.id = currentEvent.id;
+                    data.name = currentEvent.title;
+                    data.start = currentEvent.start;
+                    requestGetType("/RemoveEvent/", data);
+                    $("#fullCalModal").modal("hide");
+                });
+            });
 
             //Submit the Data of a new event
             $("#saveNewEvent").click(function() {

@@ -10,12 +10,15 @@ namespace AMPSystem.Classes
         // needed to be used by the JS callendar used on the Web Interface
 
         private ITimeTableItem Item { get; set; }
+        public override int id { get { return Item.ID; } }
         public override DateTime end { get { return Item.EndTime; } }
         public override DateTime start { get { return Item.StartTime; } }
         public override string title { get { return Item.Name; } }
         public override string color { get { return Item.Color; } }
         public override ICollection<Room> rooms { get { return Item.Rooms; } }
         public override string description { get { return Item.Description; } }
+        public override bool editable { get { return Item.Editable; } }
+
         public override User teacher
         {
             get

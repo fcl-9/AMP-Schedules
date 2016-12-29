@@ -240,8 +240,8 @@
                         console.log(event);
                         console.log(moment(event.start).format("MMM Do H:mm"));
                         $('#modalTitle').html(event.title);
-                        $('#startTime').html(moment(event.start).format("MMM Do H:mm"));
-                        $('#endTime').html(moment(event.end).format("MMM Do H:mm"));
+                        $('#startTime').html(moment(event.start).format("Do MMM YYYY H:mm"));
+                        $('#endTime').html(moment(event.end).format("Do MMM YYYY H:mm"));
                         $("#rooms")
                             .html(function() {
                                 var rooms = "Room(s): <br><ul>";
@@ -426,7 +426,7 @@
                             requestGetType("/Color/EventColor", colorApplyer);
                             $('#fullCalModal').modal('hide');
                         } else if ($("#3").hasClass('active')) {
-
+                            //console.log(" " + $("#startTime").text()+ " " + $("#endTime").text());
                             var times = $('#alertForm').find('.number');
                             var units = $('#alertForm').find('.timeUnit');
                             var alerts = {}
@@ -434,6 +434,9 @@
                             for (var i = 0; i < times.length; i++) {
                                 var alert = {}
                                 if ($.isNumeric($(times[i]).val()) && $(times[i]).val() !== "") {
+                                    alert['name'] = $('#modalTitle').text();
+                                    alert['startTime'] = moment($("#startTime").text(), "Do MMM YYYY H:mm").format();
+                                    alert['endTime'] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format();
                                     alert['time'] = $(times[i]).val();
                                     alert['unit'] = $(units[i]).val();
                                     alerts[i] = alert;
@@ -442,8 +445,10 @@
                                     break;
                                 }
                             }
+                            console.log(alerts);
                             if ($error == false) {
                                 requestGetType("/AddAlert/Index", alerts);
+                                console.log("asdasdasdad");
                                 $('#fullCalModal').modal('hide');
                             } else {
                                 console.log("Check the data you inputed.");
@@ -498,6 +503,7 @@
         function requestGetType(requesturl, data) {
             data["start"] = $('#calendar').fullCalendar('getView').start.format();
             data["end"] = $('#calendar').fullCalendar('getView').end.format();
+            console.log("dentro do");
             $.ajax({
                 type: "GET",
                 url: requesturl,

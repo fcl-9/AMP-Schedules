@@ -441,8 +441,8 @@
                             $(this).attr("disabled", true);
                         }
                     });
-                    //Ajax Request
-                    //requestGetType("/Filter/AddFilter", FilterToApply);
+                   
+
                 } else {
                     var valueToRemove = $(this).val();
                     delete FilterToApply[valueToRemove];
@@ -455,13 +455,12 @@
                         }
                     });
 
-                    //Ajax Request -- Update the data
-                    //requestGetType("/Filter/AddFilter", FilterToApply);
+
                 }
+                //Ajax Request
                 requestGetType("/Filter/AddFilter", FilterToApply);
             });
-            //console.log(FilterToApply);
-            //requestGetType("/Filter/AddFilter", FilterToApply);
+
         }
 
         //$().ready(applyFilters());

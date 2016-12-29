@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Windows.Input;
 using AMPSystem.Classes;
 using AMPSystem.Interfaces;
 using Microsoft.Graph;
@@ -30,35 +32,12 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 
         public override ActionResult Hook(TimeTableManager manager)
         {
-            var item = ((List<ITimeTableItem>)manager.TimeTable.ItemList).Find(
-                i =>
-                    i.Name == Request.QueryString["name"] &&
-                    i.StartTime == Convert.ToDateTime(Request.QueryString["start"]) &&
-                    i.EndTime == Convert.ToDateTime(Request.QueryString["end"]));
-
-            TimeSpan timeSpan;
-            switch (Request.QueryString["timeUnit"])
+            for (var i = 0; i <= Request.QueryString.Count; i++)
             {
-                case "Minutes":
-                    timeSpan = new TimeSpan(0, int.Parse(Request.QueryString["number"]),0);
-                    break;
-                case "Hours":
-                    timeSpan = new TimeSpan(int.Parse(Request.QueryString["number"]), 0, 0);
-                    break;
-                case "Days":
-                    timeSpan = new TimeSpan(int.Parse(Request.QueryString["number"]), 0, 0, 0);
-                    break;
-                case "Weeks":
-                    timeSpan = new TimeSpan(int.Parse(Request.QueryString["number"]) * 7, 0, 0, 0);
-                    break;
-                default:
-                    timeSpan = new TimeSpan();
-                    break;
+                //Debug.Write(Request.QueryString["alerts"][i]);
             }
-            var alert = new Alert(timeSpan, item);
-            item.Alerts.Add(alert);
-            DbManager.AddAlert(alert);
             return base.Hook(manager);
+            
         }
     }
 }

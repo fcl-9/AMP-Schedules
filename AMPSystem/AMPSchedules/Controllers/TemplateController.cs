@@ -36,12 +36,12 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             var loadData = new Repository {DataReader = dataReader};
             loadData.GetCourses();
             loadData.GetRooms();
+            loadData.GetTeachers();
             //!!!!!!!!!!!!!!!!!!!!!!! Commented only for tests!!!!!!!!!!!!!!!!!!!!!!!!
             //loadData.GetUserCourses(user);
             //loadData.GetSchedule(user);
             loadData.GetUserCourses("2054313");
             loadData.GetSchedule("2054313");
-            loadData.GetTeachers();
             var roles = new List<string> {"Student"};
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Comented only for tests!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             /*var mail = new MailAddress(await graphService.GetMyEmailAddress(graphClient));

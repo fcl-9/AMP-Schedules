@@ -130,64 +130,35 @@ namespace AMPSystem.DAL
         /// </summary>
         /// <param name="type"></param>
         /// <param name="parameters"></param>
-        public void AddTimeTableItem(string type, params object[] parameters)
+        public void AddTimeTableItem(ITimeTableItem item)
         {
             using (var db = new AmpContext())
             {
-                if (type == "Lesson")
+                if (item is Lesson)
                 {
-                    if (db.Lessons.Any(o => o.ID == (int)parameters[0])) return;
+                    if (db.Lessons.Any(o => o.ID == item.ID)) return;
 
-                    var lesson = new Lesson
-                    {
-                        ID = (int)parameters[0],
-                        StartTime = (DateTime) parameters[1],
-                        EndTime = (DateTime) parameters[2],
-                        Rooms = (IList<Room>) parameters[3],
-                        Courses = (IList<Course>)parameters[4],
-                        Type = (string) parameters[5],
-                        Name = (string) parameters[6],
-                        Description = (string) parameters[7]
-                    };
+                    
 
-                    db.Lessons.Add(lesson);
+                    db.Lessons.Add((Lesson)item);
                     db.SaveChanges();
                 }
-                else if (type == "EvaluationMoment")
+                else if(item is EvaluationMoment)
                 {
-                    if (db.EvalMoments.Any(o => o.ID == (int)parameters[0])) return;
+                    if (db.EvalMoments.Any(o => o.ID == item.ID)) return;
 
-                    var evalMoments = new EvaluationMoment()
-                    {
-                        ID = (int)parameters[0],
-                        StartTime = (DateTime)parameters[1],
-                        EndTime = (DateTime)parameters[2],
-                        Rooms = (IList<Room>)parameters[3],
-                        Courses = (IList<Course>)parameters[4],
-                        Name = (string)parameters[5],
-                        Description = (string)parameters[6],
-                        Color = (string)parameters[7]
-                    };
 
-                    db.EvalMoments.Add(evalMoments);
+
+                    db.EvalMoments.Add((EvaluationMoment)item);
                     db.SaveChanges();
                 }
-                else if (type == "OfficeHours")
+                else if (item is OfficeHours)
                 {
-                    if (db.OfficeHours.Any(o => o.ID == (int)parameters[0])) return;
+                    if (db.OfficeHours.Any(o => o.ID == item.ID)) return;
 
-                    var officeHours = new OfficeHours()
-                    {
-                        ID = (int)parameters[0],
-                        StartTime = (DateTime)parameters[1],
-                        EndTime = (DateTime)parameters[2],
-                        Rooms = (IList<Room>)parameters[3],
-                        Name = (string)parameters[4],
-                        Description = (string)parameters[5],
-                        Color = (string)parameters[6]
-                    };
 
-                    db.OfficeHours.Add(officeHours);
+
+                    db.OfficeHours.Add((OfficeHours)item);
                     db.SaveChanges();
                 }
             }

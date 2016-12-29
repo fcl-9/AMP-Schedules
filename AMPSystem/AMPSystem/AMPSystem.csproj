@@ -104,6 +104,7 @@
     <Compile Include="Classes\User.cs" />
     <Compile Include="DAL\AmpContext.cs" />
     <Compile Include="DAL\AmpDbManager.cs" />
+    <Compile Include="DAL\AmpInitializer.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Interfaces\IDataReader.cs" />
     <Compile Include="Interfaces\IObserver.cs" />

@@ -429,16 +429,20 @@
                             //console.log(" " + $("#startTime").text()+ " " + $("#endTime").text());
                             var times = $('#alertForm').find('.number');
                             var units = $('#alertForm').find('.timeUnit');
-                            var alerts = {};
+                            var alerts = [];
                             $error = false;
                             for (var i = 0; i < times.length; i++) {
                                 var alert = {}
                                 if ($.isNumeric($(times[i]).val()) && $(times[i]).val() !== "") {
                                     alert['name'] = $('#modalTitle').text();
-                                    alert['startTime'] = moment($("#startTime").text(), "Do MMM YYYY H:mm").format();
-                                    alert['endTime'] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format();
+                                    alert['startTime'] = moment($("#startTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
+                                    console.log(alert['startTime']);
+                                    alert['endTime'] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
                                     alert['time'] = $(times[i]).val();
                                     alert['unit'] = $(units[i]).val();
+                                    //This is for the time calendar
+                                    alert["start"] = $('#calendar').fullCalendar('getView').start.format();
+                                    alert["end"] = $('#calendar').fullCalendar('getView').end.format();
                                     alerts[i] = alert;
                                 } else {
                                     $error = true;
@@ -446,21 +450,20 @@
                                 }
                             }
                             console.log(alerts);
-                            if ($error == false) {                              
-                                alerts["start"] = $('#calendar').fullCalendar('getView').start.format();
-                                alerts["end"] = $('#calendar').fullCalendar('getView').end.format();
+                            if ($error == false) {
+                                
                                 $.ajax({
-                                    type: "POST",
-                                    url: requesturl,
-                                    alerts,
+                                    type: "GET",
+                                    url: "/AddAlert/Index",
+                                    data:  JSON.stringify(alerts),
                                     contentType: "application/json; charset=utf-8",
                                     dataType: "json",
-                                    success: function(events) {
+                                    success: function (events) {
                                         $('#calendar').fullCalendar('removeEvents'); //Removes Everything
                                         $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
                                         $('#calendar').fullCalendar('rerenderEvents');
                                     },
-                                    failure: function(response) {
+                                    failure: function (response) {
                                         console.log("Fail");
                                         alert(response.d);
                                     }

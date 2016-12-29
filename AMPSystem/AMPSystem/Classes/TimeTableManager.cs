@@ -16,9 +16,9 @@ namespace AMPSystem.Classes
         /// <param name="repository"></param>
         /// <param name="startDateTime"></param>
         /// <param name="endDateTime"></param>
-        public TimeTableManager(Repository repository, DateTime startDateTime, DateTime endDateTime)
+        public TimeTableManager(Repository repository, DateTime startDateTime, DateTime endDateTime, User currentUser)
         {
-            TimeTable = new Timetable(startDateTime, endDateTime);
+            TimeTable = new Timetable(startDateTime, endDateTime, currentUser);
             Repository = repository;
             //Adds Value to our data class whcih is TimeTable
             foreach (var item in Repository.Items)

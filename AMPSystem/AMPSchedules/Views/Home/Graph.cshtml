@@ -107,10 +107,10 @@
                             <label class="control-label">Configure Alerts</label>
                             <div class="col-sm-12 form-group">
                                 <div class="col-sm-5">
-                                    <input class="form-control" id="number" />
+                                    <input class="form-control number"/>
                                 </div>
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="timeUnit">
+                                    <select class="form-control timeUnit" >
                                         <option>Minutes</option>
                                         <option>Hours</option>
                                         <option>Days</option>
@@ -387,10 +387,10 @@
                             .append('' +
                                 '<div class="col-sm-12 form-group">' +
                                 '<div class="col-sm-5">' +
-                                '<input class="form-control" />' +
+                                '<input class="form-control number" />' +
                                 '</div>' +
                                 '<div class="col-sm-5">' +
-                                '<select class="form-control"  >' +
+                                '<select class="form-control timeUnit"  >' +
                                 '<option>Minutes</option>' +
                                 '<option>Hours</option>' +
                                 '<option>Days</option>' +
@@ -427,16 +427,27 @@
                             $('#fullCalModal').modal('hide');
                         } else if ($("#3").hasClass('active')) {
 
-                            $('#alertForm').each(function() {
-                                console.log($(this));
-                            });
-
-
-                            var number = $('#number').val();
-                            var unit = $('#timeUnit').val();
-
-
-                            $('#fullCalModal').modal('hide');
+                            var times = $('#alertForm').find('.number');
+                            var units = $('#alertForm').find('.timeUnit');
+                            var alerts = {}
+                            $error = false;
+                            for (var i = 0; i < times.length; i++) {
+                                var alert = {}
+                                if ($.isNumeric($(times[i]).val()) && $(times[i]).val() !== "") {
+                                    alert['time'] = $(times[i]).val();
+                                    alert['unit'] = $(units[i]).val();
+                                    alerts[i] = alert;
+                                } else {
+                                    $error = true;
+                                    break;
+                                }
+                            }
+                            if ($error == false) {
+                                requestGetType("/AddAlert/Index", alerts);
+                                $('#fullCalModal').modal('hide');
+                            } else {
+                                console.log("Check the data you inputed.");
+                            }
                         }
                     });
             });
@@ -459,7 +470,7 @@
                             $(this).attr("disabled", true);
                         }
                     });
-                   
+
 
                 } else {
                     var valueToRemove = $(this).val();

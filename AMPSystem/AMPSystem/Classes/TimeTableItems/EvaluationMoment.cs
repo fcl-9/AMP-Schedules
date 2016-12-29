@@ -31,7 +31,6 @@ namespace AMPSystem.Classes
         /// <param name="endTime"></param>
         /// <param name="rooms"></param>
         /// <param name="name"></param>
-        /// <param name="description"></param>
         /// <param name="courses"></param>
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
             ICollection<Course> courses, string name)

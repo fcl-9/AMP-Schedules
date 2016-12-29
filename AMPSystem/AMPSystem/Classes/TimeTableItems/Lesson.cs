@@ -37,7 +37,7 @@ namespace AMPSystem.Classes.TimeTableItems
         /// <param name="name"></param>
         /// <param name="description"></param>
         public Lesson(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
-            string type, string name, User teacher)
+            string type, string name, string description)
         {
             ID = _id;
             _id++;
@@ -48,7 +48,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Type = type;
             Courses = courses;
             Name = name;
-            Teacher = teacher;
+            //Teacher = teacher;
         }
     }
 }

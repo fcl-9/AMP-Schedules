@@ -45,12 +45,12 @@ namespace AMPSystem.Classes.LoadData
                     name += "/";
                 i++;
             }
-            return new EvaluationMoment(startTime, endTime, rooms, courses, name,"");
+            return new EvaluationMoment(startTime, endTime, rooms, courses, name);
         }
         
-        public Room CreateRoom(string name, int floor)
+        public Room CreateRoom(string name, int floor, Building building)
         {
-            return new Room(name, floor);
+            return new Room(name, floor, building);
         }
 
         public Course CreateCourse(string name, ICollection<int> years)

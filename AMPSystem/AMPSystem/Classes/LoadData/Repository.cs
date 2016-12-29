@@ -111,7 +111,7 @@ namespace AMPSystem.Classes.LoadData
                 var rooms = new List<Room>();
                 foreach (var room in item.Value["Room"])
                 {
-                    rooms.Add(CreateRoom(room["Name"].Value<string>(), room["Floor"].Value<int>()));
+                    //rooms.Add(CreateRoom(room["Name"].Value<string>(), room["Floor"].Value<int>()));
                 }
                 Buildings.Add(CreateBuilding(buildingName, buildingAddress, rooms));
             }
@@ -172,9 +172,9 @@ namespace AMPSystem.Classes.LoadData
             return Factory.Instance.CreateBuilding(name, address, rooms);
         }
 
-        private static Room CreateRoom(string name, int floor)
+        private static Room CreateRoom(string name, int floor, Building building)
         {
-            return Factory.Instance.CreateRoom(name, floor);
+            return Factory.Instance.CreateRoom(name, floor, building);
         }
 
         private static User CreateUser (string name, string email, ICollection<string> roles, ICollection<Course> courses)

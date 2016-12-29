@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using AMPSystem.Classes;
 using AMPSystem.Classes.TimeTableItems;
@@ -191,8 +192,8 @@ namespace AMPSystem.DAL
         {
             using (var db = new AmpContext())
             {
-                if (db.Alerts.Any(o => o.AlertID == alert.AlertID)) return;
-                db.Alerts.Add(alert); //or db.Alerts.AddOrUpdate(alert);
+                //if (db.Alerts.Any(o => o.AlertID == alert.AlertID)) return;
+                db.Alerts.AddOrUpdate(alert); //or db.Alerts.Add(alert);
                 db.SaveChanges();
             }
         }

@@ -34,7 +34,7 @@ namespace AMPSystem.Classes
         /// <param name="description"></param>
         /// <param name="courses"></param>
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string description)
+            ICollection<Course> courses, string name)
         {
             ID = _id;
             _id++;
@@ -44,7 +44,6 @@ namespace AMPSystem.Classes
             Rooms = rooms;
             Courses = courses;
             Name = name;
-            Description = description;
         }
     }
 }

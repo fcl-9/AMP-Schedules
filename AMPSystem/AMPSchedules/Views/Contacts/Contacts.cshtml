@@ -4,5 +4,59 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Contacts</h2>
+@Styles.Render("~/Content/Contacts.css")
+   
+<h2 style="text-align: center">Contacts</h2>
+<div class="showTeachers">
+    <div class="col-md-6">
+        <div class="teacherContainer">
+            <div class="classname"> Desenho e Implementação de Software</div>
+            <div class="teacherPic col-md-6 col-lg-6">
+                <div class="centerBlock">
+                    <img src="/Content/images/user.png" />
+                </div>
+            </div>
+            <div class="information col-md-6 col-lg-6">
+                <p>Nome: <span id="name">Leonel Nóbrega</span></p>
+                <p>E-mail: <span id="Email">lnobrega@uma.pt</span></p>
+                <p>Gabinete: <span id="Gabinete">2.34</span></p>
+                <p>Horário Atendimento: <span id="officeHour">Tuesday, 16:00 - 17:00</span></p>
+            </div>
+        </div>
+    </div>
+</div>
 
+@section scripts
+{
+    <script>
+        $().ready(function() {
+            requestTeachers(printInformation);
+        });
+
+        //Ajax Request for teachers
+        function requestTeachers(returnFunction) {
+            $.ajax({
+                type: "GET",
+                url: '/Contacts/Teachers',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: returnFunction,
+                failure: function(response) {
+                    console.log("Fail");
+                    alert(response.d);
+                }
+            });
+        }
+
+        //Adds Information to the page
+        function printInformation(teachers) {
+            $.each(teachers,
+                function(key, value) {
+                    console.log(key);
+                    console.log(value);
+                });
+        }
+
+
+    </script>
+}

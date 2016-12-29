@@ -56,9 +56,10 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 Convert.ToDateTime(Request.QueryString["beginsAt"]),
                 Convert.ToDateTime(Request.QueryString["endsAt"]),
                 rooms,
-                courses,
-                Request.QueryString["title"], Request.QueryString["description"]);
-            
+                courses, 
+                Request.QueryString["title"]
+                );
+            newEvent.Description= Request.QueryString["description"];
             //Add new Event
             manager.AddTimetableItem(newEvent);
             return base.Hook(manager);

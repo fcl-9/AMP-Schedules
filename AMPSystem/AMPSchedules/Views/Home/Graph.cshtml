@@ -107,10 +107,10 @@
                             <label class="control-label">Configure Alerts</label>
                             <div class="col-sm-12 form-group">
                                 <div class="col-sm-5">
-                                    <input class="form-control" />
+                                    <input class="form-control" id="number" />
                                 </div>
                                 <div class="col-sm-5">
-                                    <select class="form-control">
+                                    <select class="form-control" id="timeUnit">
                                         <option>Minutes</option>
                                         <option>Hours</option>
                                         <option>Days</option>
@@ -242,21 +242,22 @@
                         $('#modalTitle').html(event.title);
                         $('#startTime').html(moment(event.start).format("MMM Do H:mm"));
                         $('#endTime').html(moment(event.end).format("MMM Do H:mm"));
-                        $("#rooms").html(function() {
-                            var rooms = "Room(s): <br><ul>";
-                            $.each(event.rooms,
-                                function(key, room) {
-                                    rooms += "<li>" +
-                                        room.Name +
-                                        "<ul><li> Floor: " +
-                                        room.Floor +
-                                        "</li><li>Building: " +
-                                        room.Building.Name +
-                                        "</li></ul>";
-                                })
-                            rooms += "</ul>";
-                            return rooms;
-                        });
+                        $("#rooms")
+                            .html(function() {
+                                var rooms = "Room(s): <br><ul>";
+                                $.each(event.rooms,
+                                    function(key, room) {
+                                        rooms += "<li>" +
+                                            room.Name +
+                                            "<ul><li> Floor: " +
+                                            room.Floor +
+                                            "</li><li>Building: " +
+                                            room.Building.Name +
+                                            "</li></ul>";
+                                    })
+                                rooms += "</ul>";
+                                return rooms;
+                            });
                         if (event.teacher != null) {
 
                             $("#teacher").html("Teacher: " + event.teacher.Name);
@@ -270,66 +271,70 @@
         }
 
 
-        $().ready(function() {
-            getCourses(renderFilterCheckBoxes);
-        });
+        $()
+            .ready(function() {
+                getCourses(renderFilterCheckBoxes);
+            });
 
         //Render CheckBox Filters
         function renderFilterCheckBoxes(courses) {
-            $("#nameFilters").html(function() {
-                var mCourses = "";
-                $.each(courses,
-                    function(property, value) {
-                        mCourses += "" +
-                            "<div class='checkbox'>" +
-                            "<label>" +
-                            "<input type='checkbox' name='ClassName' value='" +
-                            value.Name +
-                            "'>" +
-                            value.Name +
-                            "</label>" +
-                            "</div>";
-                    });
-                return mCourses;
-            });
+            $("#nameFilters")
+                .html(function() {
+                    var mCourses = "";
+                    $.each(courses,
+                        function(property, value) {
+                            mCourses += "" +
+                                "<div class='checkbox'>" +
+                                "<label>" +
+                                "<input type='checkbox' name='ClassName' value='" +
+                                value.Name +
+                                "'>" +
+                                value.Name +
+                                "</label>" +
+                                "</div>";
+                        });
+                    return mCourses;
+                });
             applyFilters();
         }
 
         //Add Courses to SelectBox in Event Addition
         function addCourseToEventAdder(courses) {
-            $("#new_event_course").html(function() {
-                var mCourses = "";
-                $.each(courses,
-                    function(property, value) {
-                        mCourses += "<option value='" +
-                            value.Name +
-                            "'>" +
-                            value.Name +
-                            "</option>";
-                    });
-                return mCourses;
-            });
+            $("#new_event_course")
+                .html(function() {
+                    var mCourses = "";
+                    $.each(courses,
+                        function(property, value) {
+                            mCourses += "<option value='" +
+                                value.Name +
+                                "'>" +
+                                value.Name +
+                                "</option>";
+                        });
+                    return mCourses;
+                });
         }
 
         //Adding Rooms 
         function addRoomToEventAdder(rooms) {
-            $("#new_event_room").html(function() {
-                var room = "";
-                $.each(rooms,
-                    function(property, value) {
-                        $.each(value.Rooms,
-                            function(key, val) {
-                                room += "<option value='" +
-                                    val.Id +
-                                    "'>" +
-                                    value.Name +
-                                    " - " +
-                                    val.Name +
-                                    "</option>";
-                            });
-                    });
-                return room;
-            });
+            $("#new_event_room")
+                .html(function() {
+                    var room = "";
+                    $.each(rooms,
+                        function(property, value) {
+                            $.each(value.Rooms,
+                                function(key, val) {
+                                    room += "<option value='" +
+                                        val.Id +
+                                        "'>" +
+                                        value.Name +
+                                        " - " +
+                                        val.Name +
+                                        "</option>";
+                                });
+                        });
+                    return room;
+                });
         }
 
 
@@ -361,67 +366,80 @@
         }
 
         //Load The Calendar with it's default events, the color picker and the datetime pickers
-        $().ready(function() {
-            calendar('/Home/CalendarDefaultData');
-            $('select[name="colorpicker"]').simplecolorpicker();
+        $()
+            .ready(function() {
+                calendar('/Home/CalendarDefaultData');
+                $('select[name="colorpicker"]').simplecolorpicker();
 
-            $("#datetimepicker_starttime").datetimepicker({
-                minDate: 0,
-                minTime: 0
+                $("#datetimepicker_starttime")
+                    .datetimepicker({
+                        minDate: 0,
+                        minTime: 0
+                    });
             });
-        });
 
         //Allow to modify colors and add alerts.
-        $().ready(function() {
-            $("#addAlert")
-                .click(function() {
-                    $("#alertForm")
-                        .append('' +
-                            '<div class="col-sm-12 form-group">' +
-                            '<div class="col-sm-5">' +
-                            '<input class="form-control" />' +
-                            '</div>' +
-                            '<div class="col-sm-5">' +
-                            '<select class="form-control">' +
-                            '<option>Minutes</option>' +
-                            '<option>Hours</option>' +
-                            '<option>Days</option>' +
-                            '<option>Weeks</option>' +
-                            '</select>' +
-                            '</div>' +
-                            '<div class="col-sm-2">' +
-                            '<button class="rm-alert btn btn-danger">Remove</button>' +
-                            '</div>' +
-                            '</div>'
-                        );
-                });
-
-            $("#alertForm")
-                .on("click",
-                    ".rm-alert",
-                    function(e) {
-                        alert("asd");
-                        e.preventDefault();
-                        $(this).parent().parent().remove();
+        $()
+            .ready(function() {
+                $("#addAlert")
+                    .click(function() {
+                        $("#alertForm")
+                            .append('' +
+                                '<div class="col-sm-12 form-group">' +
+                                '<div class="col-sm-5">' +
+                                '<input class="form-control" />' +
+                                '</div>' +
+                                '<div class="col-sm-5">' +
+                                '<select class="form-control"  >' +
+                                '<option>Minutes</option>' +
+                                '<option>Hours</option>' +
+                                '<option>Days</option>' +
+                                '<option>Weeks</option>' +
+                                '</select>' +
+                                '</div>' +
+                                '<div class="col-sm-2">' +
+                                '<button class="rm-alert btn btn-danger">Remove</button>' +
+                                '</div>' +
+                                '</div>'
+                            );
                     });
 
-            $("#submit").click(function() {
-                if ($("#1").hasClass('active')) {
-                    console.log("Do Stuff 1");
-                    $('#fullCalModal').modal('hide');
-                } else if ($("#2").hasClass('active')) {
-                    var colorApplyer = {};
-                    //                  Event Name                  Color Picked for the event Selected.
-                    colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
-                    //Request Data
-                    requestGetType("/Color/EventColor", colorApplyer);
-                    $('#fullCalModal').modal('hide');
-                } else if ($("#3").hasClass('active')) {
-                    console.log("Do Stuff 3");
-                    $('#fullCalModal').modal('hide');
-                }
+                $("#alertForm")
+                    .on("click",
+                        ".rm-alert",
+                        function(e) {
+                            alert("asd");
+                            e.preventDefault();
+                            $(this).parent().parent().remove();
+                        });
+
+                $("#submit")
+                    .click(function() {
+                        if ($("#1").hasClass('active')) {
+                            console.log("Do Stuff 1");
+                            $('#fullCalModal').modal('hide');
+                        } else if ($("#2").hasClass('active')) {
+                            var colorApplyer = {};
+                            //                  Event Name                  Color Picked for the event Selected.
+                            colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
+                            //Request Data
+                            requestGetType("/Color/EventColor", colorApplyer);
+                            $('#fullCalModal').modal('hide');
+                        } else if ($("#3").hasClass('active')) {
+
+                            $('#alertForm').each(function() {
+                                console.log($(this));
+                            });
+
+
+                            var number = $('#number').val();
+                            var unit = $('#timeUnit').val();
+
+
+                            $('#fullCalModal').modal('hide');
+                        }
+                    });
             });
-        });
 
         //Apply Filters
         function applyFilters() {
@@ -490,103 +508,110 @@
 
 
         //Show the model for a new event addtion
-        $().ready(function() {
-            //When Button is Clicked open modal to add Event
-            $("#addEvent").click(function() {
-                $(".modal-title-addEvent").html("Add a New Event");
-                getCourses(addCourseToEventAdder);
-                getRooms(addRoomToEventAdder);
-                $("#addEventModal").modal();
-            });
-
-            //If the first value is changed after it's assigned remove the datepicker bellow
-            $("#datetimepicker_starttime").change(function() {
-                var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
-                if (startTime == null) {
-                    $("#datetimepicker_endtime").datetimepicker('destroy');
-                    if ($("#datetimepicker_endtime").text !== "") {
-                        $("#datetimepicker_endtime").val('');
-                        console.log("Cleaning");
-                    }
-                } else {
-                    $("#datetimepicker_endtime").datetimepicker({
-                        minDate: 0,
-                        minTime: 0
+        $()
+            .ready(function() {
+                //When Button is Clicked open modal to add Event
+                $("#addEvent")
+                    .click(function() {
+                        $(".modal-title-addEvent").html("Add a New Event");
+                        getCourses(addCourseToEventAdder);
+                        getRooms(addRoomToEventAdder);
+                        $("#addEventModal").modal();
                     });
-                }
+
+                //If the first value is changed after it's assigned remove the datepicker bellow
+                $("#datetimepicker_starttime")
+                    .change(function() {
+                        var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
+                        if (startTime == null) {
+                            $("#datetimepicker_endtime").datetimepicker('destroy');
+                            if ($("#datetimepicker_endtime").text !== "") {
+                                $("#datetimepicker_endtime").val('');
+                                console.log("Cleaning");
+                            }
+                        } else {
+                            $("#datetimepicker_endtime")
+                                .datetimepicker({
+                                    minDate: 0,
+                                    minTime: 0
+                                });
+                        }
+                    });
+
+                // Remove events
+                $()
+                    .ready(function() {
+                        $("#remove")
+                            .click(function() {
+                                var data = {};
+                                data.id = currentEvent.id;
+                                data.name = currentEvent.title;
+                                data.start = currentEvent.start;
+                                requestGetType("/RemoveEvent/", data);
+                                $("#fullCalModal").modal("hide");
+                            });
+                    });
+
+                //Submit the Data of a new event
+                $("#saveNewEvent")
+                    .click(function() {
+                        var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
+                        var endtime = $("#datetimepicker_endtime").datetimepicker('getValue');
+                        var today = new Date();
+                        //Checking if the choosen time are greater than now and end time is greater than start time.
+                        if (startTime > today && endtime > today && endtime > startTime) {
+                            var newEvent = {}; //Generates the json to send to the server and store it in the database.
+                            var name = $("#new_event_name").val();
+                            var beginsAt = $("#datetimepicker_starttime").datetimepicker('getValue');
+                            var endsAt = $("#datetimepicker_endtime").datetimepicker('getValue');
+                            var room = $("#new_event_room").val();
+                            var course = $("#new_event_course").val();
+                            var description = $("#new_event_description").val();
+                            //Check if there is any empty field
+                            if (name !== "" &&
+                                beginsAt !== "" &&
+                                endsAt !== "" &&
+                                room !== "" &&
+                                $.isNumeric(room) &&
+                                course !== "" &&
+                                description !== "") {
+                                //Parses Data
+                                beginsAt = beginsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
+                                endsAt = endsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
+                                beginsAt = moment(beginsAt, "ddd MMM DD YYYY HH:mm:ss");
+                                endsAt = moment(endsAt, "ddd MMM DD YYYY HH:mm:ss");
+                                //Add Values to Json
+                                newEvent['title'] = name;
+                                newEvent['beginsAt'] = beginsAt.format();
+                                newEvent['endsAt'] = endsAt.format();
+                                newEvent['room'] = room;
+                                newEvent['course'] = course;
+                                newEvent['description'] = description;
+
+                                $('#addEventModal').modal('hide');
+
+                                //Sanitize Fields
+                                $("#new_event_name").val('');
+                                $("#datetimepicker_starttime").val('');
+                                $("#datetimepicker_endtime").val('');
+                                $("#new_event_room").val('');
+                                $("#new_event_course").val('');
+                                $("#new_event_description").val('');
+                                //Request Ajax Send to Database.
+                                requestGetType("/AddEvent/AddEvent", newEvent);
+
+                            } else {
+                                console.log("Verify if it's everything ok with your input");
+                            }
+
+                        } else {
+                            console.log("ERROR: Can't Store an event for a previous date");
+                            console.log("This Should be block no problem.");
+                        }
+                    });
+
+
             });
-
-            // Remove events
-            $().ready(function () {
-                $("#remove").click(function () {
-                    var data = {};
-                    data.id = currentEvent.id;
-                    data.name = currentEvent.title;
-                    data.start = currentEvent.start;
-                    requestGetType("/RemoveEvent/", data);
-                    $("#fullCalModal").modal("hide");
-                });
-            });
-
-            //Submit the Data of a new event
-            $("#saveNewEvent").click(function() {
-                var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
-                var endtime = $("#datetimepicker_endtime").datetimepicker('getValue');
-                var today = new Date();
-                //Checking if the choosen time are greater than now and end time is greater than start time.
-                if (startTime > today && endtime > today && endtime > startTime) {
-                    var newEvent = {}; //Generates the json to send to the server and store it in the database.
-                    var name = $("#new_event_name").val();
-                    var beginsAt = $("#datetimepicker_starttime").datetimepicker('getValue');
-                    var endsAt = $("#datetimepicker_endtime").datetimepicker('getValue');
-                    var room = $("#new_event_room").val();
-                    var course = $("#new_event_course").val();
-                    var description = $("#new_event_description").val();
-                    //Check if there is any empty field
-                    if (name !== "" &&
-                        beginsAt !== "" &&
-                        endsAt !== "" &&
-                        room !== "" &&
-                        $.isNumeric(room) &&
-                        course !== "" &&
-                        description !== "") {
-                        //Parses Data
-                        beginsAt = beginsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
-                        endsAt = endsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
-                        beginsAt = moment(beginsAt, "ddd MMM DD YYYY HH:mm:ss");
-                        endsAt = moment(endsAt, "ddd MMM DD YYYY HH:mm:ss");
-                        //Add Values to Json
-                        newEvent['title'] = name;
-                        newEvent['beginsAt'] = beginsAt.format();
-                        newEvent['endsAt'] = endsAt.format();
-                        newEvent['room'] = room;
-                        newEvent['course'] = course;
-                        newEvent['description'] = description;
-
-                        $('#addEventModal').modal('hide');
-
-                        //Sanitize Fields
-                        $("#new_event_name").val('');
-                        $("#datetimepicker_starttime").val('');
-                        $("#datetimepicker_endtime").val('');
-                        $("#new_event_room").val('');
-                        $("#new_event_course").val('');
-                        $("#new_event_description").val('');
-                        //Request Ajax Send to Database.
-                        requestGetType("/AddEvent/AddEvent", newEvent);
-
-                    } else {
-                        console.log("Verify if it's everything ok with your input");
-                    }
-
-                } else {
-                    console.log("ERROR: Can't Store an event for a previous date");
-                    console.log("This Should be block no problem.");
-                }
-            });
-
-
-        });
     </script>
 
 

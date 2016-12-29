@@ -9,7 +9,7 @@ namespace AMPSystem.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(AMPSystem.DAL.AmpContext context)

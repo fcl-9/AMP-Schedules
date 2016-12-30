@@ -18,9 +18,6 @@ namespace AMPSystem.Classes
         /// <param name="years"></param>
         public Course(int id, string name, ICollection<int> years)
         {
-            Id = _id;
-            _id++;
-
             ExternId = id;
             Name = name;
             Years = years;

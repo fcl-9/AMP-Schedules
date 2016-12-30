@@ -36,9 +36,6 @@ namespace AMPSystem.Classes.TimeTableItems
         public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms,
             ICollection<Course> courses, string name, string description)
         {
-            ID = _id;
-            _id++;
-
             ExternId = id;
             StartTime = startTime;
             EndTime = endTime;
@@ -49,12 +46,22 @@ namespace AMPSystem.Classes.TimeTableItems
             Alerts = new List<Alert>();
         }
 
+        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
+            ICollection<Course> courses, string name, string description, bool editable)
+        {
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Courses = courses;
+            Name = name;
+            Description = description;
+            Alerts = new List<Alert>();
+            Editable = editable;
+        }
+
         public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms,
             ICollection<Course> courses, string name)
         {
-            ID = _id;
-            _id++;
-
             ExternId = id;
             StartTime = startTime;
             EndTime = endTime;
@@ -67,14 +74,37 @@ namespace AMPSystem.Classes.TimeTableItems
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
             ICollection<Course> courses, string name, string description)
         {
-            ID = _id;
-            _id++;
             StartTime = startTime;
             EndTime = endTime;
             Rooms = rooms;
             Courses = courses;
             Name = name;
             Description = description;
+            Alerts = new List<Alert>();
+        }
+
+        public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, string color,
+            ICollection<Course> courses, string name)
+        {
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Courses = courses;
+            Name = name;
+            Color = color;
+            Alerts = new List<Alert>();
+        }
+
+        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name, string color, string description, bool editable)
+        {
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Courses = courses;
+            Name = name;
+            Color = color;
+            Description = description;
+            Editable = editable;
             Alerts = new List<Alert>();
         }
     }

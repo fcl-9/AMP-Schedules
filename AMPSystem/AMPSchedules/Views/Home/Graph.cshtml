@@ -332,24 +332,23 @@
 
         //Adding Rooms 
         function addRoomToEventAdder(rooms) {
-            $("#new_event_room")
-                .html(function() {
-                    var room = "";
-                    $.each(rooms,
-                        function(property, value) {
-                            $.each(value.Rooms,
-                                function(key, val) {
-                                    room += "<option value='" +
-                                        val.Id +
-                                        "'>" +
-                                        value.Name +
-                                        " - " +
-                                        val.Name +
-                                        "</option>";
-                                });
-                        });
-                    return room;
-                });
+            $("#new_event_room").html(function() {
+                var room = "";
+                $.each(rooms,
+                    function(property, value) {
+                        $.each(value.Rooms,
+                            function(key, val) {
+                                room += "<option value='" +
+                                    value.Name +" - " + val.Name +
+                                    "'>" +
+                                    value.Name +
+                                    " - " +
+                                    val.Name +
+                                    "</option>";
+                            });
+                    });
+                return room;
+            });
         }
 
         //Get my courses
@@ -590,55 +589,53 @@
                         }
                     });
 
-                // Remove events
-                $()
-                    .ready(function() {
-                        $("#remove")
-                            .click(function() {
-                                var data = {};
-                                data.id = currentEvent.id;
-                                data.name = currentEvent.title;
-                                data.start = currentEvent.start;
-                                requestGetType("/RemoveEvent/", data);
-                                $("#fullCalModal").modal("hide");
-                            });
-                    });
+            // Remove events
+            $().ready(function () {
+                $("#remove").click(function () {
+                    var data = {};
+                    data.id = currentEvent.id;
+                    data.name = currentEvent.title;
+                    data.startEvent = currentEvent.start.format();
+                    data.endEvent = currentEvent.end.format();
+                    console.log(data);
+                    requestGetType("/RemoveEvent/", data);
+                    $("#fullCalModal").modal("hide");
+                });
+            });
 
-                //Submit the Data of a new event
-                $("#saveNewEvent")
-                    .click(function() {
-                        var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
-                        var endtime = $("#datetimepicker_endtime").datetimepicker('getValue');
-                        var today = new Date();
-                        //Checking if the choosen time are greater than now and end time is greater than start time.
-                        if (startTime > today && endtime > today && endtime > startTime) {
-                            var newEvent = {}; //Generates the json to send to the server and store it in the database.
-                            var name = $("#new_event_name").val();
-                            var beginsAt = $("#datetimepicker_starttime").datetimepicker('getValue');
-                            var endsAt = $("#datetimepicker_endtime").datetimepicker('getValue');
-                            var room = $("#new_event_room").val();
-                            var course = $("#new_event_course").val();
-                            var description = $("#new_event_description").val();
-                            //Check if there is any empty field
-                            if (name !== "" &&
-                                beginsAt !== "" &&
-                                endsAt !== "" &&
-                                room !== "" &&
-                                $.isNumeric(room) &&
-                                course !== "" &&
-                                description !== "") {
-                                //Parses Data
-                                beginsAt = beginsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
-                                endsAt = endsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
-                                beginsAt = moment(beginsAt, "ddd MMM DD YYYY HH:mm:ss");
-                                endsAt = moment(endsAt, "ddd MMM DD YYYY HH:mm:ss");
-                                //Add Values to Json
-                                newEvent['title'] = name;
-                                newEvent['beginsAt'] = beginsAt.format();
-                                newEvent['endsAt'] = endsAt.format();
-                                newEvent['room'] = room;
-                                newEvent['course'] = course;
-                                newEvent['description'] = description;
+            //Submit the Data of a new event
+            $("#saveNewEvent").click(function() {
+                var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
+                var endtime = $("#datetimepicker_endtime").datetimepicker('getValue');
+                var today = new Date();
+                //Checking if the choosen time are greater than now and end time is greater than start time.
+                if (startTime > today && endtime > today && endtime > startTime) {
+                    var newEvent = {}; //Generates the json to send to the server and store it in the database.
+                    var name = $("#new_event_name").val();
+                    var beginsAt = $("#datetimepicker_starttime").datetimepicker('getValue');
+                    var endsAt = $("#datetimepicker_endtime").datetimepicker('getValue');
+                    var room = $("#new_event_room").val();
+                    var course = $("#new_event_course").val();
+                    var description = $("#new_event_description").val();
+                    //Check if there is any empty field
+                    if (name !== "" &&
+                        beginsAt !== "" &&
+                        endsAt !== "" &&
+                        room !== "" &&
+                        course !== "" &&
+                        description !== "") {
+                        //Parses Data
+                        beginsAt = beginsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
+                        endsAt = endsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
+                        beginsAt = moment(beginsAt, "ddd MMM DD YYYY HH:mm:ss");
+                        endsAt = moment(endsAt, "ddd MMM DD YYYY HH:mm:ss");
+                        //Add Values to Json
+                        newEvent['title'] = name;
+                        newEvent['beginsAt'] = beginsAt.format();
+                        newEvent['endsAt'] = endsAt.format();
+                        newEvent['room'] = room;
+                        newEvent['course'] = course;
+                        newEvent['description'] = description;
 
                                 $('#addEventModal').modal('hide');
 

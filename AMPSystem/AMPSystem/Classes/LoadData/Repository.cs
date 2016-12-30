@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AMPSystem.Classes.TimeTableItems;
+using AMPSystem.DAL;
 using AMPSystem.Interfaces;
+using AMPSystem.Models;
 using Newtonsoft.Json.Linq;
+using EvaluationMoment = AMPSystem.Classes.TimeTableItems.EvaluationMoment;
 
 namespace AMPSystem.Classes.LoadData
 {
     public class Repository
     {
+        private AmpDbContext db = new AmpDbContext();
         public IDataReader DataReader { get; set; }
         public ICollection<Course> Courses { get; set; }
         public ICollection<Course> UserCourses { get; set; }
@@ -54,7 +60,17 @@ namespace AMPSystem.Classes.LoadData
                     var officeHourId = officeHour["ID"].Value<int>();
                     var startTime = officeHour["StartTime"].Value<DateTime>();
                     var endTime = officeHour["EndTime"].Value<DateTime>();
-                    Items.Add(CreateOfficeHours(officeHourId, startTime, endTime,rooms,teacher));
+
+                    var mName = GenerateOfficeHourName(teacher.Name);
+                    var mOfficeHour = DbManager.Instance.ReturnOfficeHourIfExists(mName, startTime, endTime);
+                    if (mOfficeHour == null)
+                    {
+                        Items.Add(CreateOfficeHours(officeHourId, mName, startTime, endTime, rooms, teacher));
+                    }
+                    else
+                    {
+                        Items.Add(CreateOfficeHours(officeHourId, mName, startTime, endTime, rooms, teacher, mOfficeHour.Color));
+                    }
                 }
                 Teachers.Add(teacher);
             }
@@ -157,14 +173,106 @@ namespace AMPSystem.Classes.LoadData
                 if (lessonType == "T" || lessonType == "TP" || lessonType == "PL")
                 {
                     var teacher = ((List<User>) Teachers).Find(t => t.ExternId == item["Teacher"].Value<int>());
-                    Items.Add(CreateLesson(itemId, startTime, endTime, rooms, courses, lessonType, teacher));
+                    var name = GenerateLessonName(courses);
+                    var mLesson = DbManager.Instance.ReturnLessonIfExists(name, startTime, endTime);
+                    if (mLesson == null)
+                    {
+                        Items.Add(CreateLesson(itemId, name, startTime, endTime, rooms, courses, lessonType, teacher));
+                    }
+                    else
+                    {
+                        Items.Add(CreateLesson(itemId, name, startTime, endTime, rooms, courses, lessonType, teacher, mLesson.Color));
+                    }
                 }
                 else
                 {
-                    Items.Add(CreateEvaluationMoment(itemId, startTime, endTime, rooms, courses));
+                    var name = GenerateEvaluationName(courses);
+                    var mEvaluation = DbManager.Instance.ReturnEvaluationMomentIfExists(name, startTime, endTime);
+                    if (mEvaluation == null)
+                    {
+                        Items.Add(CreateEvaluationMoment(itemId, startTime, endTime, rooms, courses, name));
+                    }
+                    else
+                    {
+                        Items.Add(CreateEvaluationMoment(itemId, startTime, endTime, rooms, courses, name, mEvaluation.Color));
+                    }
                 }
 
             }
+        }
+
+        public void AddCustomEvents()
+        {
+            List<ITimeTableItem> knownEvaluations = null;
+            try
+            {
+                knownEvaluations = ((List<ITimeTableItem>) Items).FindAll(i => i is EvaluationMoment);
+            }
+            catch (ArgumentNullException e)
+            {}
+            foreach (var dbEvMoment in DbManager.Instance.EvaluationMoments())
+            {
+                if (knownEvaluations != null)
+                {
+                    var knownEv = knownEvaluations.FirstOrDefault(
+                    e =>
+                        e.Name == dbEvMoment.Name && e.StartTime == dbEvMoment.StartTime &&
+                        e.EndTime == dbEvMoment.EndTime);
+                    if (knownEv != null)
+                    {
+                        return;
+                    } 
+                }
+                var rooms = new List<Room>();
+                foreach (var room in dbEvMoment.Rooms)
+                {
+                    var building = ((List<Building>) Buildings).FirstOrDefault(b => b.Name == room.Building.Name);
+                    rooms.Add(((List<Room>) building.Rooms).FirstOrDefault(r => r.Name == room.Name && r.Floor == room.Floor));
+                }
+
+                var courses = new List<Course>() {Courses.FirstOrDefault(c => c.Name == dbEvMoment.Course)};
+
+                Items.Add(CreateEvaluationMoment(dbEvMoment.StartTime, dbEvMoment.EndTime, rooms, courses, dbEvMoment.Name, dbEvMoment.Color, dbEvMoment.Description, true));
+
+            }
+        }
+
+        private ITimeTableItem CreateEvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name, string color, string description, bool editable)
+        {
+            return Factory.Instance.Create(startTime, endTime, rooms, courses, name, color, description, editable);
+        }
+
+        public string GenerateLessonName(ICollection<Course> courses)
+        {
+            var name = "";
+            var i = 0;
+            foreach (var course in courses)
+            {
+                name += course.Name;
+                if (courses.Count > 1 && i != courses.Count)
+                    name += "/";
+                i++;
+            }
+            return name;
+        }
+
+        public string GenerateEvaluationName(ICollection<Course> courses)
+        {
+            var name = "Avaliação de ";
+            var i = 0;
+            foreach (var course in courses)
+            {
+                name += course.Name;
+                if (courses.Count > 1 && i != courses.Count)
+                    name += "/";
+                i++;
+            }
+            return name;
+        }
+
+        public string GenerateOfficeHourName(string teacherName)
+        {
+            return "Horário de Atendimento de " + teacherName;
         }
 
         #region Calls Factory.
@@ -188,19 +296,34 @@ namespace AMPSystem.Classes.LoadData
             return Factory.Instance.CreateUser(id, name, email, roles, courses);
         }
 
-        private static ITimeTableItem CreateLesson (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
+        private static ITimeTableItem CreateLesson (int id, string name, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
-            return Factory.Instance.Create(id, startTime, endTime, rooms, courses, type, teacher);
+            return Factory.Instance.Create(id, name, startTime, endTime, rooms, courses, type, teacher);
         }
 
-        private static ITimeTableItem CreateOfficeHours(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher)
+        private static ITimeTableItem CreateLesson(int id, string name,DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher, string color)
         {
-            return Factory.Instance.Create(id, startTime, endTime, rooms, teacher);
+            return Factory.Instance.Create(id, name, color, startTime, endTime, rooms, courses, type, teacher);
         }
 
-        private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
+        private static ITimeTableItem CreateOfficeHours(int id, string name, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher)
         {
-            return Factory.Instance.Create(id, startTime, endTime, rooms, courses);
+            return Factory.Instance.Create(id, startTime, endTime, rooms, teacher, name);
+        }
+
+        private static ITimeTableItem CreateOfficeHours(int id, string name, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher, string color)
+        {
+            return Factory.Instance.Create(id, startTime, endTime, rooms, teacher, name, color);
+        }
+
+        private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name)
+        {
+            return Factory.Instance.Create(id, startTime, endTime, rooms, courses, name);
+        }
+
+        private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name, string color)
+        {
+            return Factory.Instance.Create(id, startTime, endTime, rooms, courses, name, color);
         }
         #endregion
     }

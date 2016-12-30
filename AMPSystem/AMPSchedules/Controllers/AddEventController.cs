@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Security;
 using AMPSystem.Classes;
 using AMPSystem.Classes.TimeTableItems;
+using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Microsoft.Graph;
 using Resources;
@@ -30,14 +34,24 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         public override ActionResult Hook(TimeTableManager manager)
         {
             //Get the room
+            var roomFullName = Request.QueryString["room"];
+            var stringSeparators = new string[] { " - " };
+            var buildingName = roomFullName.Split(stringSeparators, StringSplitOptions.None)[0];
+            var roomName = roomFullName.Split(stringSeparators, StringSplitOptions.None)[1];
             ICollection<Room> rooms = new List<Room>();
+            ICollection<AMPSystem.Models.Room> mRooms = new List<AMPSystem.Models.Room>();
             foreach (var building in manager.Repository.Buildings)
             {
-                foreach (var room in building.Rooms)
+                if (building.Name == buildingName)
                 {
-                    if (room.Id == int.Parse(Request.QueryString["room"]))
+                    foreach (var room in building.Rooms)
                     {
-                        rooms.Add(room);
+                        if (room.Name == roomName)
+                        {
+                            rooms.Add(room);
+                            var mBulding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
+                            mRooms.Add(DbManager.Instance.CreateRoomIfNotExists(mBulding, room.Floor, room.Name));
+                        }
                     }
                 }
             }
@@ -51,20 +65,28 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                     courses.Add(course);
                 }
             }
-
+            var startTime = Convert.ToDateTime(Request.QueryString["beginsAt"]);
+            var endTime = Convert.ToDateTime(Request.QueryString["endsAt"]);
+            var name = Request.QueryString["title"];
+            var description = Request.QueryString["description"];
+            var editable = true;
             //Get the course
             ITimeTableItem newEvent = new EvaluationMoment(
-                Convert.ToDateTime(Request.QueryString["beginsAt"]),
-                Convert.ToDateTime(Request.QueryString["endsAt"]),
+                startTime,
+                endTime,
                 rooms,
                 courses, 
-                Request.QueryString["title"],
-                Request.QueryString["description"]
+                name,
+                description,
+                editable
                 );
             newEvent.Editable = true;
             //Add new Event
             manager.AddTimetableItem(newEvent);
-            DbManager.AddTimeTableItem(newEvent);
+            var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
+            DbManager.Instance.CreateEvaluationMoment(name, mRooms, mUser, null, startTime, endTime, description,
+                courses.First().Name, null);
+            DbManager.Instance.SaveChanges();
             return base.Hook(manager);
         }
     }

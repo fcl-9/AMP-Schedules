@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSystem.Classes;
+using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Microsoft.Graph;
 using Resources;
@@ -32,9 +34,11 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
                 i =>
                     i.Name == Request.QueryString["name"] &&
-                    i.StartTime == Convert.ToDateTime(Request.QueryString["start"]) &&
-                    i.EndTime == Convert.ToDateTime(Request.QueryString["end"]));
+                    i.StartTime == Convert.ToDateTime(Request.QueryString["startEvent"]) &&
+                    i.EndTime == Convert.ToDateTime(Request.QueryString["endEvent"]));
             // Remove event
+            var dbItem = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime, item.EndTime);
+            DbManager.Instance.RemoveEvent(dbItem);
             manager.RemoveTimeTableItem(item);
             return base.Hook(manager);
         }

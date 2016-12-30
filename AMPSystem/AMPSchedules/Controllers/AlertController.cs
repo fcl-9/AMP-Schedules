@@ -53,7 +53,18 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 new Alert(new TimeSpan(13, 00, 59), item),
                 new Alert(new TimeSpan(14, 30, 00), item)
             };
-            return Content(JsonConvert.SerializeObject(alerts.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
+
+            IDictionary<int, DateTime> data = new Dictionary<int, DateTime>();
+            foreach (var t in alerts)
+            {
+                var time = t.Item.StartTime;
+                time = time.Subtract(t.Time);
+
+                Debug.Write(t.Item.StartTime + " " + t.Time + " " + time);
+                data[t.AlertID] = time;
+            }
+
+            return Content(JsonConvert.SerializeObject(data.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
         }
     }
 }

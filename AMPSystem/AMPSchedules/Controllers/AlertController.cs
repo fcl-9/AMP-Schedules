@@ -37,11 +37,11 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
                 Debug.WriteLine(Request.QueryString[(string) key]);
             }
+
             var item = ((List<ITimeTableItem>)manager.TimeTable.ItemList).Find(
                 i =>
                     i.Name == Request.QueryString["name"] &&
-                    i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]) &&
-                    i.EndTime == Convert.ToDateTime(Request.QueryString["endTime"]));
+                    i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
 
             var alerts = item.Alerts.OrderBy(x => x.Time).ToList();
             Debug.WriteLine(alerts.Count);

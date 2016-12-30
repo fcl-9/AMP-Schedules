@@ -20,25 +20,26 @@ namespace AMPSystem.Classes.LoadData
            return new Lesson(id, startTime, endTime, rooms, courses, type, name, teacher);
         }
 
-        public ITimeTableItem Create (int id, DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher)
+        public ITimeTableItem Create (int id, DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher, string name)
         {
-            return new OfficeHours(id, startTime,endTime,rooms, teacher);
+            return new OfficeHours(id, name, startTime, endTime, rooms, teacher);
         }
 
-        public ITimeTableItem Create (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
+        public ITimeTableItem Create(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher, string name, string color)
         {
-            var name = "Avaliação de ";
-            var i = 0;
-            foreach (var course in courses)
-            {
-                name += course.Name;
-                if (courses.Count > 1 && i != courses.Count)
-                    name += "/";
-                i++;
-            }
+            return new OfficeHours(id, name, startTime, endTime, rooms, teacher, color);
+        }
+
+        public ITimeTableItem Create (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name)
+        {
             return new EvaluationMoment(id, startTime, endTime, rooms, courses, name);
         }
-        
+
+        public ITimeTableItem Create(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name, string color)
+        {
+            return new EvaluationMoment(id, startTime, endTime, rooms, color, courses, name);
+        }
+
         public Room CreateRoom(int id, string name, int floor)
         {
             return new Room(id, name, floor);

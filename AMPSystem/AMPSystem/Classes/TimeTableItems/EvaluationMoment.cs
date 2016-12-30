@@ -77,5 +77,19 @@ namespace AMPSystem.Classes.TimeTableItems
             Description = description;
             Alerts = new List<Alert>();
         }
+
+        public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, string color,
+            ICollection<Course> courses, string name)
+        {
+            ID = _id;
+            _id++;
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Courses = courses;
+            Name = name;
+            Color = color;
+            Alerts = new List<Alert>();
+        }
     }
 }

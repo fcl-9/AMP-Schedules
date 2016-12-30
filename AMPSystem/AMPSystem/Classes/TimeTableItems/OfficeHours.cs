@@ -59,5 +59,34 @@ namespace AMPSystem.Classes.TimeTableItems
             Name = "Horário de Atendimento de " + teacher.Name;
             Alerts = new List<Alert>();
         }
+
+        public OfficeHours(int id, string name ,DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher)
+        {
+            ID = _id;
+            _id++;
+
+            ExternId = id;
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Teacher = teacher;
+            Name = name;
+            Alerts = new List<Alert>();
+        }
+
+        public OfficeHours(int id, string name, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher, string color)
+        {
+            ID = _id;
+            _id++;
+
+            ExternId = id;
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Teacher = teacher;
+            Name = name;
+            Color = color;
+            Alerts = new List<Alert>();
+        }
     }
 }

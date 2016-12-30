@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -15,8 +16,6 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
     public class ColorController: TemplateController
     {
-        private AmpDbContext db = new AmpDbContext();
-
         public override ActionResult Hook(TimeTableManager manager)
         {
             //Read The Color that was sent
@@ -49,49 +48,64 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                         Debug.Write("No Color was Defined");
                         break;
                     }
+
+                    var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
                     if (item is Lesson)
                     {
-                        var mUser = db.Users.FirstOrDefault(u => u.Email == CurrentUser.Email) ??
-                                    new User {Email = CurrentUser.Email};
                         var room = item.Rooms.First();
-                        var mBuilding = db.Buildings.FirstOrDefault(b => b.Name == room.Building.Name) ??
-                                        new Building {Name = room.Building.Name};
-
-                        var mRoom =
-                            db.Rooms.FirstOrDefault(
-                                r =>
-                                    r.Building.Name == mBuilding.Name && r.Name == room.Name &&
-                                    r.Floor == room.Floor) ??
-                            new Room
-                            {
-                                Building = mBuilding,
-                                Floor = item.Rooms.First().Floor,
-                                Name = item.Rooms.First().Name
-                            };
-
-                        var mLesson =
-                            db.Lessons.FirstOrDefault(
-                                l => l.Name == item.Name && l.StartTime == item.StartTime && l.EndTime == item.EndTime);
+                        var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
+                        var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name);
+                        var mLesson = DbManager.Instance.ReturnLessonIfExists(item.Name, item.StartTime,item.EndTime);
                         if (mLesson == null)
                         {
-                            mLesson = new AMPSystem.Models.Lesson
-                            {
-                                Color = item.Color,
-                                EndTime = item.EndTime,
-                                StartTime = item.StartTime,
-                                Name = item.Name,
-                                Room = mRoom,
-                                User = mUser
-                            };
-                            db.Lessons.Add(mLesson);
+                            DbManager.Instance.CreateLesson(item.Name, mRoom, mUser, item.Color, item.StartTime,
+                            item.EndTime);
                         }
                         else
                         {
-                            mLesson.Color = item.Color;
-                            db.Entry(mLesson).State = System.Data.Entity.EntityState.Modified;
+                            DbManager.Instance.SaveLessonColorChange(mLesson, item.Color);
                         }
-                        db.SaveChanges();
+                        
                     }
+                    else if (item is OfficeHours)
+                    {
+                        var room = item.Rooms.First();
+                        var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
+                        var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name);
+                        var mOfficeHours = DbManager.Instance.ReturnOfficeHourIfExists(item.Name, item.StartTime, item.EndTime);
+                        if (mOfficeHours == null)
+                        {
+                            DbManager.Instance.CreateOfficeHour(item.Name, mRoom, mUser, item.Color, item.StartTime,
+                            item.EndTime);
+                        }
+                        else
+                        {
+                            DbManager.Instance.SaveOfficeHourColorChange(mOfficeHours, item.Color);
+                        }
+
+                    }
+                    else if (item is EvaluationMoment)
+                    {
+                        var mRooms = new List<Room>();
+                        foreach (var room in item.Rooms)
+                        {
+                            var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
+                            mRooms.Add(DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name));
+                        }
+                        
+                        var mEvaluation = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime, item.EndTime);
+                        if (mEvaluation == null)
+                        {
+                            DbManager.Instance.CreateEvaluationMoment(item.Name, mRooms, mUser, item.Color, item.StartTime,
+                            item.EndTime, item.Description);
+                        }
+                        else
+                        {
+                            DbManager.Instance.SaveEvaluationColorChange(mEvaluation, item.Color);
+                        }
+
+                    }
+                    DbManager.Instance.SaveChanges();
                 }
             }
             return base.Hook(manager);

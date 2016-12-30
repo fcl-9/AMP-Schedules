@@ -64,6 +64,9 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 data[t.AlertID] = time;
             }
 
+            //Order the alerts by time
+            data.OrderBy(x => x.Value);
+
             return Content(JsonConvert.SerializeObject(data.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
         }
     }

@@ -33,20 +33,13 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 
         public override ActionResult Hook(TimeTableManager manager)
         {
-            Debug.WriteLine("Message: " + Request.QueryString);
-
-            foreach (var key in Request.QueryString)
-            {
-                Debug.WriteLine(Request.QueryString[(string) key]);
-            }
-
             var item = ((List<ITimeTableItem>)manager.TimeTable.ItemList).Find(
                 i =>
                     i.Name == Request.QueryString["name"] &&
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]) &&
                     i.EndTime == Convert.ToDateTime(Request.QueryString["endTime"]));
 
-            var alerts = item.Alerts.ToList();
+            var alerts = item.Alerts.OrderBy(x => x.Time).ToList();
             return Content(JsonConvert.SerializeObject(alerts.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
         }
     }

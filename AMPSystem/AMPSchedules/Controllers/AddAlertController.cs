@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -30,57 +31,45 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         public override ActionResult Hook(TimeTableManager manager)
         {
             var keys = Request.QueryString.AllKeys;
-            for (var i = 0 ; i < keys.Length; i++)
+            for (var i = 0 ; i < keys.Length - 2; i = i + 5)
             {
-                Debug.WriteLine(Request.QueryString[i]);
-                //var dataParsed = JArray.Parse(Request.QueryString[i]);
-                //foreach (var data in dataParsed)
-                //{
-                    //var name = data["name"].Value<string>();
-                    //var startTime = Convert.ToDateTime(data["startTime"].Value<string>());
-                    //var endTime = Convert.ToDateTime(data["endTime"].Value<string>());
+                var name = Request.QueryString[i];
+                var startTime = Convert.ToDateTime(Request.QueryString[i + 1]);
+                var endTime = Convert.ToDateTime(Request.QueryString[i + 2]);
 
-                    //var time = data["time"].Value<int>();
-                    //var units = data["unit"].Value<string>();
+                var time = int.Parse(Request.QueryString[i + 3]);
+                var units = Request.QueryString[i + 4];
+                
+                Debug.WriteLine(name + " " + startTime + " " + endTime + " " + time + " " + units);
 
-                    //BEGIN - This parametrs should be passed to timetable 
-                    //var start = Convert.ToDateTime(data["start"].Value<string>());
-                    //var end = Convert.ToDateTime(data["end"].Value<string>());
-                    //END - This parametrs should be passed to timetable 
-                    
-                    //var item = ((List<ITimeTableItem>)manager.TimeTable.ItemList).Find(
-                    //    it =>
-                    //         it.Name == name &&
-                    //         it.StartTime == startTime &&
-                    //         it.EndTime == endTime
-                    //
-                    
-                    //TimeSpan timeSpan;
-                    //switch (units)
-                    //{
-                    //    case "Minutes":
-                    //        timeSpan = new TimeSpan(0, time, 0);
-                    //        break;
-                    //    case "Hours":
-                    //        timeSpan = new TimeSpan(time, 0, 0);
-                    //        break;
-                    //    case "Days":
-                    //        timeSpan = new TimeSpan(time, 0, 0, 0);
-                    //        break;
-                    //    case "Weeks":
-                    //        timeSpan = new TimeSpan(time * 7, 0, 0, 0);
-                    //        break;
-                    //    default:
-                    //        timeSpan = new TimeSpan(0, 0, 0);
-                    //        break;
-                    //}
+                var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
+                    it =>
+                        it.Name == name &&
+                        it.StartTime == startTime &&
+                        it.EndTime == endTime);
 
-                    //if (item != null)
-                    //{
-                    //    var alert = new Alert(timeSpan, item);
-                    //    item.Alerts.Add(alert);
-                    //}
-                //}
+                TimeSpan timeSpan;
+                switch (units)
+                {
+                    case "Minutes":
+                        timeSpan = new TimeSpan(0, time, 0);
+                        break;
+                    case "Hours":
+                        timeSpan = new TimeSpan(time, 0, 0);
+                        break;
+                    case "Days":
+                        timeSpan = new TimeSpan(time, 0, 0, 0);
+                        break;
+                    case "Weeks":
+                        timeSpan = new TimeSpan(time * 7, 0, 0, 0);
+                        break;
+                    default:
+                        timeSpan = new TimeSpan(0, 0, 0);
+                        break;
+                }
+                var alert = new Alert(timeSpan, item);
+                item.Alerts.Add(alert);
+                //TODO Add into BD
             }
             return base.Hook(manager);
         }

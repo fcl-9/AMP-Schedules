@@ -65,7 +65,6 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
             //The manager will start the timetableitem list with the data read from the repo
             var manager = new TimeTableManager(loadData, startDateTime, endDateTime, CurrentUser);
-            Debug.WriteLine(manager.TimeTable.ItemList.Count);
             return manager;
         }
 

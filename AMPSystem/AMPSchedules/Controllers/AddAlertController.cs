@@ -45,8 +45,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
                     it =>
                         it.Name == name &&
-                        it.StartTime == startTime &&
-                        it.EndTime == endTime);
+                        it.StartTime == startTime);
 
                 TimeSpan timeSpan;
                 switch (units)

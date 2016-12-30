@@ -34,23 +34,40 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         {
             foreach (var key in Request.QueryString)
             {
-                Debug.WriteLine(Request.QueryString[(string)key]);
+                //Debug.WriteLine("Message:" + Request.QueryString[(string)key]);
             }
 
             var item = ((List<ITimeTableItem>)manager.TimeTable.ItemList).Find(
                 i =>
                     i.Name == Request.QueryString["name"] &&
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
+            //Mockobject
+            var alerts = new List<Alert>
+            {
+                new Alert(new TimeSpan(13, 00, 59), item),
+                new Alert(new TimeSpan(14, 30, 00), item)
+            };
+            alerts[0].AlertID = 0;
+            alerts[1].AlertID = 1;
+            item.Alerts = alerts;
+            //Mockobject
 
             var alert = ((List<Alert>)item.Alerts).Find(
                 i =>
-                    i.AlertID == int.Parse(Request.QueryString["id"]));
+                    i.AlertID == int.Parse(Request.QueryString["alertId"]));
 
-            //TODO Remove from DB
             item.Alerts.Remove(alert);
-            var alerts = item.Alerts.OrderBy(x => x.Time).ToList();
+            IDictionary<int, DateTime> data = new Dictionary<int, DateTime>();
+            foreach (var t in item.Alerts)
+            {
+                var time = t.Item.StartTime;
+                time = time.Subtract(t.Time);
+                data[t.AlertID] = time;
+            }
 
-            return Content(JsonConvert.SerializeObject(alerts.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
+            //Order the alerts by time
+            data.OrderBy(x => x.Value);
+            return Content(JsonConvert.SerializeObject(data.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
         }
     }
 }

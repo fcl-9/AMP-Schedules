@@ -47,6 +47,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 //loadData.GetSchedule(user);
                 loadData.GetUserCourses("2054313");
                 loadData.GetSchedule("2054313");
+                loadData.AddCustomEvents();
                 var roles = new List<string> {"Student"};
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Comented only for tests!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 /*var mail = new MailAddress(await graphService.GetMyEmailAddress(graphClient));

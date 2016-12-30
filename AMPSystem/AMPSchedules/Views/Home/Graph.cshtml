@@ -320,7 +320,7 @@
                         $.each(value.Rooms,
                             function(key, val) {
                                 room += "<option value='" +
-                                    val.Id +
+                                    value.Name +" - " + val.Name +
                                     "'>" +
                                     value.Name +
                                     " - " +
@@ -522,7 +522,9 @@
                     var data = {};
                     data.id = currentEvent.id;
                     data.name = currentEvent.title;
-                    data.start = currentEvent.start;
+                    data.startEvent = currentEvent.start.format();
+                    data.endEvent = currentEvent.end.format();
+                    console.log(data);
                     requestGetType("/RemoveEvent/", data);
                     $("#fullCalModal").modal("hide");
                 });
@@ -547,7 +549,6 @@
                         beginsAt !== "" &&
                         endsAt !== "" &&
                         room !== "" &&
-                        $.isNumeric(room) &&
                         course !== "" &&
                         description !== "") {
                         //Parses Data

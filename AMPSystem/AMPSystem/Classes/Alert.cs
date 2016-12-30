@@ -16,9 +16,6 @@ namespace AMPSystem.Classes
         
         public Alert(TimeSpan time, ITimeTableItem tableItem)
         {
-            AlertID = _id;
-            _id++;
-
             Time = time;
             Item = tableItem;
         }

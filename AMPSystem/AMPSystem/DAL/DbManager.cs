@@ -33,7 +33,7 @@ namespace AMPSystem.DAL
         /// <returns></returns>
         public Lesson ReturnLessonIfExists(string name, DateTime startTime, DateTime endTime)
         {
-            return db.Lessons.FirstOrDefault(l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
+            return db.Lessons.Include("Room.Building").FirstOrDefault(l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace AMPSystem.DAL
             DateTime endTime)
         {
             return
-                db.EvaluationMoments.FirstOrDefault(
+                db.EvaluationMoments.Include("Rooms.Building").FirstOrDefault(
                     l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
         }
 
@@ -62,7 +62,7 @@ namespace AMPSystem.DAL
         /// <returns></returns>
         public OfficeHour ReturnOfficeHourIfExists(string name, DateTime startTime, DateTime endTime)
         {
-            return db.OfficeHours.FirstOrDefault(l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
+            return db.OfficeHours.Include("Room.Building").FirstOrDefault(l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
         }
 
         public Lesson CreateLesson(string name, Room room, User user, string color, DateTime startTime, DateTime endTime)
@@ -147,7 +147,7 @@ namespace AMPSystem.DAL
         }
 
         public EvaluationMoment CreateEvaluationMoment(string name, ICollection<Room> rooms, User user, string color, DateTime startTime,
-            DateTime endTime, string description, ICollection<Alert> alerts)
+            DateTime endTime, string description, string course, ICollection<Alert> alerts)
         {
             var mEvaluationMoment = new EvaluationMoment
             {
@@ -158,6 +158,7 @@ namespace AMPSystem.DAL
                 Rooms = rooms,
                 User = user,
                 Description = description,
+                Course = course,
                 Alerts = alerts
             };
             db.EvaluationMoments.Add(mEvaluationMoment);
@@ -198,7 +199,7 @@ namespace AMPSystem.DAL
 
         public Room ReturnRoomIfExists(string buildingName, string roomName, int floor)
         {
-            return db.Rooms.FirstOrDefault(
+            return db.Rooms.Include("Building").FirstOrDefault(
                 r =>
                     r.Building.Name == buildingName && r.Name == roomName &&
                     r.Floor == floor);
@@ -206,7 +207,7 @@ namespace AMPSystem.DAL
 
         public Building ReturnBuildingIfExists(string name)
         {
-            return db.Buildings.FirstOrDefault(b => b.Name == name);
+            return db.Buildings.Include("Rooms").FirstOrDefault(b => b.Name == name);
         }
 
         public User ReturnUserIfExists(string email)
@@ -261,6 +262,18 @@ namespace AMPSystem.DAL
 
         public void SaveChanges()
         {
+            db.SaveChanges();
+        }
+
+        public ICollection<EvaluationMoment> EvaluationMoments()
+        {
+            return db.EvaluationMoments.ToList();
+        }
+
+        public void RemoveEvent(EvaluationMoment evaluationMoment)
+        {
+            db.Entry(evaluationMoment).State = System.Data.Entity.EntityState.Deleted;
+
             db.SaveChanges();
         }
 

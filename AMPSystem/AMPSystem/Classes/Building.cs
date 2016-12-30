@@ -21,9 +21,6 @@ namespace AMPSystem.Classes
         /// <param name="rooms"></param>
         public Building(int id, string name, string address, ICollection<Room> rooms)
         {
-            Id = _id;
-            _id++;
-
             ExternId = id;
             Name = name;
             Address = address;

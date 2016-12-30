@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
+using AMPSystem.Models;
 using Newtonsoft.Json.Linq;
+using EvaluationMoment = AMPSystem.Classes.TimeTableItems.EvaluationMoment;
 
 namespace AMPSystem.Classes.LoadData
 {
@@ -196,6 +199,47 @@ namespace AMPSystem.Classes.LoadData
                 }
 
             }
+        }
+
+        public void AddCustomEvents()
+        {
+            List<ITimeTableItem> knownEvaluations = null;
+            try
+            {
+                knownEvaluations = ((List<ITimeTableItem>) Items).FindAll(i => i is EvaluationMoment);
+            }
+            catch (ArgumentNullException e)
+            {}
+            foreach (var dbEvMoment in DbManager.Instance.EvaluationMoments())
+            {
+                if (knownEvaluations != null)
+                {
+                    var knownEv = knownEvaluations.FirstOrDefault(
+                    e =>
+                        e.Name == dbEvMoment.Name && e.StartTime == dbEvMoment.StartTime &&
+                        e.EndTime == dbEvMoment.EndTime);
+                    if (knownEv != null)
+                    {
+                        return;
+                    } 
+                }
+                var rooms = new List<Room>();
+                foreach (var room in dbEvMoment.Rooms)
+                {
+                    var building = ((List<Building>) Buildings).FirstOrDefault(b => b.Name == room.Building.Name);
+                    rooms.Add(((List<Room>) building.Rooms).FirstOrDefault(r => r.Name == room.Name && r.Floor == room.Floor));
+                }
+
+                var courses = new List<Course>() {Courses.FirstOrDefault(c => c.Name == dbEvMoment.Course)};
+
+                Items.Add(CreateEvaluationMoment(dbEvMoment.StartTime, dbEvMoment.EndTime, rooms, courses, dbEvMoment.Name, dbEvMoment.Color, dbEvMoment.Description, true));
+
+            }
+        }
+
+        private ITimeTableItem CreateEvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name, string color, string description, bool editable)
+        {
+            return Factory.Instance.Create(startTime, endTime, rooms, courses, name, color, description, editable);
         }
 
         public string GenerateLessonName(ICollection<Course> courses)

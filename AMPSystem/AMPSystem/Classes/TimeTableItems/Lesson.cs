@@ -41,9 +41,6 @@ namespace AMPSystem.Classes.TimeTableItems
         public Lesson(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
             string type, string name, User teacher, string description)
         {
-            ID = _id;
-            _id++;
-
             ExternId = id;
             StartTime = startTime;
             EndTime = endTime;
@@ -59,9 +56,6 @@ namespace AMPSystem.Classes.TimeTableItems
         public Lesson(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
             string type, string name, User teacher)
         {
-            ID = _id;
-            _id++;
-
             ExternId = id;
             StartTime = startTime;
             EndTime = endTime;

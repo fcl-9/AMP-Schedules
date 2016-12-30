@@ -69,5 +69,10 @@ namespace AMPSystem.Classes.LoadData
         {
             return new Lesson(id, startTime, endTime, color, rooms, courses, type, name, teacher);
         }
+
+        public ITimeTableItem Create(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name, string color, string description, bool editable)
+        {
+            return new EvaluationMoment(startTime, endTime, rooms, courses, name, color, description, editable);
+        }
     }
 }

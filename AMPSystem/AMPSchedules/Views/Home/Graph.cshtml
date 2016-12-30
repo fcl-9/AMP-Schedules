@@ -12,6 +12,13 @@
     @Styles.Render("~/Content/button.css")
     @Styles.Render("~/Content/jquery.datetimepicker.min.css")
 }
+<div id="feedbackbar" class="alert alert-dismissable fade in">
+    <a href="#" id="close-feedbackbar" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Indicates a successful or positive action.
+</div>
+
+
+
 <h1 style="text-align: center">Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value)</h1>
 
     <br/>
@@ -128,8 +135,8 @@
                     </div>
                     <div class="tab-pane" id="4">
                         <div class="row">
+                            <label class="control-label col-md-12"> Active Alerts</label>
                             <div id="activeAlertForm" class="col-md-12">
-                                <label class="control-label">Active Alerts</label>
 
                             </div>
                         </div>
@@ -155,7 +162,7 @@
                 <h4 id="modalTitle" class="modal-title-addEvent"></h4>
             </div>
             <div id="modalBody" class="modal-body">
-                <form class="form-horizontal">
+                <form id="new_event-add-form"class="form-horizontal">
                     <div class="form-group">
                         <label for="new_event_name" class="col-sm-2 control-label">Event Name: </label>
                         <div class="col-sm-10">
@@ -678,7 +685,7 @@
         }
 
         //Removes one alert from the database
-        function removeAnAlert(datatoSend) {
+        function removeAnAlert(datatoSend, onSuccess) {
             datatoSend["start"] = $('#calendar').fullCalendar('getView').start.format();
             datatoSend["end"] = $('#calendar').fullCalendar('getView').end.format();
             $.ajax({
@@ -687,9 +694,7 @@
                 data: datatoSend,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function(e) {
-                    console.log(e);
-                },
+                success: onSuccess,
                 failure: function(response) {
                     console.log("Fail");
                     alert(response.d);
@@ -721,7 +726,13 @@
 
         //Clicks on active alerts tab
         $().ready(function() {
+            //When the div is pressed
             $('a[href="#4"]').click(function() {
+                if ($('#activeAlertForm').is(':empty')) {
+                    //pass
+                } else {
+                    $('#activeAlertForm').html("");
+                }
                 var selectedItem = {};
                 selectedItem["name"] = $('#modalTitle').text();
                 selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
@@ -730,7 +741,7 @@
                     .format("YYYY-MM-DD HH:mm:ss");
                 getActiveAlerts(selectedItem, renderActiveAlerts);
             });
-
+            //When button to remove an active alert is clicked
             $('#activeAlertForm').on('click',
                 '.rm-active-alert',
                 function(e) {
@@ -741,16 +752,24 @@
                         .format("YYYY-MM-DD HH:mm:ss");
                     removeAlert["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
                         .format("YYYY-MM-DD HH:mm:ss");
-                    console.log(removeAlert);
-                    removeAnAlert(removeAlert);
-
-
-                    //Removes the field that as sent TODO: remove the item only when we receive the confirmation
-                    //e.preventDefault();
-                    //$(this).parent().parent().remove();
+                    //Removes Everything
+                    $('#activeAlertForm').html("");
+                    //Makes ajax request and receives it back
+                    removeAnAlert(removeAlert, renderActiveAlerts);
                 });
-
         });
+
+        function handleFeedBackBar(type) {
+            if (type === "error") {
+                $("#feedbackbar").addClass('alert-danger');
+            }
+            else if (type === "success") {
+                $("#feedbackbar").addClass('alert-success');
+            }
+
+            //$("#close-feedbackbar").click
+        }
+
 
 
     </script>

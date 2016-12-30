@@ -43,8 +43,14 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                     i.Name == Request.QueryString["name"] &&
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
 
-            var alerts = item.Alerts.OrderBy(x => x.Time).ToList();
-            Debug.WriteLine(alerts.Count);
+            //TODO Get from DB
+            //var alerts = item.Alerts.OrderBy(x => x.Time).ToList();
+            //Debug.WriteLine(alerts.Count);
+
+            //TODO HARD CODE
+            var alerts = new List<Alert>();
+            alerts.Add(new Alert(new TimeSpan(13,00,59), item));
+            alerts.Add(new Alert(new TimeSpan(14,30,00), item));
             return Content(JsonConvert.SerializeObject(alerts.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
         }
     }

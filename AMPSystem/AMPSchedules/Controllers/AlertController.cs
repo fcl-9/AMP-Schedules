@@ -48,9 +48,11 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             //Debug.WriteLine(alerts.Count);
 
             //TODO HARD CODE
-            var alerts = new List<Alert>();
-            alerts.Add(new Alert(new TimeSpan(13,00,59), item));
-            alerts.Add(new Alert(new TimeSpan(14,30,00), item));
+            var alerts = new List<Alert>
+            {
+                new Alert(new TimeSpan(13, 00, 59), item),
+                new Alert(new TimeSpan(14, 30, 00), item)
+            };
             return Content(JsonConvert.SerializeObject(alerts.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
         }
     }

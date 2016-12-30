@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSystem.Classes;
 using AMPSystem.Classes.LoadData;
-using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Newtonsoft.Json;
 
@@ -14,7 +13,6 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
     public abstract class TemplateController: Controller
     {
         public User CurrentUser { get; private set; }
-        public AmpDbManager DbManager { get { return AmpDbManager.Instance; } }
 
         public virtual ActionResult Hook(TimeTableManager manager)
         {

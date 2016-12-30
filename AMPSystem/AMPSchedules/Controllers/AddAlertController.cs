@@ -57,7 +57,6 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             }
             var alert = new Alert(timeSpan, item);
             item.Alerts.Add(alert);
-            DbManager.AddAlert(alert);
             return base.Hook(manager);
         }
     }

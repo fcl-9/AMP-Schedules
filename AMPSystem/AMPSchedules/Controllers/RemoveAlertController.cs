@@ -40,7 +40,6 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                     a.AlertID == int.Parse(Request.QueryString["id"]));
             // Remove Alert
             item.Alerts.Remove(alert);
-            DbManager.RemoveAlert(alert);
             return base.Hook(manager);
         }
     }

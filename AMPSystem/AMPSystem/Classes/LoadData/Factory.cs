@@ -15,17 +15,8 @@ namespace AMPSystem.Classes.LoadData
         public static Factory Instance => _instance ?? (_instance = new Factory());
         #endregion
 
-        public ITimeTableItem Create (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
+        public ITimeTableItem Create (int id, string name, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
-            var name = "";
-            var i = 0;
-            foreach (var course in courses)
-            {
-                name += course.Name;
-                if (courses.Count > 1 && i != courses.Count)
-                    name += "/";
-                i++;
-            }
            return new Lesson(id, startTime, endTime, rooms, courses, type, name, teacher);
         }
 
@@ -71,6 +62,11 @@ namespace AMPSystem.Classes.LoadData
         public User CreateUser(string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
             return new User(name, email, roles, courses);
+        }
+
+        public ITimeTableItem Create(int id, string name, string color, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
+        {
+            return new Lesson(id, startTime, endTime, color, rooms, courses, type, name, teacher);
         }
     }
 }

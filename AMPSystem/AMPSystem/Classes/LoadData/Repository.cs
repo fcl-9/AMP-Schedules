@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Newtonsoft.Json.Linq;
 
@@ -7,6 +9,7 @@ namespace AMPSystem.Classes.LoadData
 {
     public class Repository
     {
+        private AmpDbContext db = new AmpDbContext();
         public IDataReader DataReader { get; set; }
         public ICollection<Course> Courses { get; set; }
         public ICollection<Course> UserCourses { get; set; }
@@ -157,7 +160,18 @@ namespace AMPSystem.Classes.LoadData
                 if (lessonType == "T" || lessonType == "TP" || lessonType == "PL")
                 {
                     var teacher = ((List<User>) Teachers).Find(t => t.ExternId == item["Teacher"].Value<int>());
-                    Items.Add(CreateLesson(itemId, startTime, endTime, rooms, courses, lessonType, teacher));
+                    var name = GenerateLessonName(courses);
+                    var mLesson =
+                            db.Lessons.FirstOrDefault(
+                                l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
+                    if (mLesson == null)
+                    {
+                        Items.Add(CreateLesson(itemId, name, startTime, endTime, rooms, courses, lessonType, teacher));
+                    }
+                    else
+                    {
+                        Items.Add(CreateLesson(itemId, name, startTime, endTime, rooms, courses, lessonType, teacher, mLesson.Color));
+                    }
                 }
                 else
                 {
@@ -165,6 +179,20 @@ namespace AMPSystem.Classes.LoadData
                 }
 
             }
+        }
+
+        public string GenerateLessonName(ICollection<Course> courses)
+        {
+            var name = "";
+            var i = 0;
+            foreach (var course in courses)
+            {
+                name += course.Name;
+                if (courses.Count > 1 && i != courses.Count)
+                    name += "/";
+                i++;
+            }
+            return name;
         }
 
         #region Calls Factory.
@@ -188,9 +216,14 @@ namespace AMPSystem.Classes.LoadData
             return Factory.Instance.CreateUser(id, name, email, roles, courses);
         }
 
-        private static ITimeTableItem CreateLesson (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
+        private static ITimeTableItem CreateLesson (int id, string name, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
-            return Factory.Instance.Create(id, startTime, endTime, rooms, courses, type, teacher);
+            return Factory.Instance.Create(id, name, startTime, endTime, rooms, courses, type, teacher);
+        }
+
+        private static ITimeTableItem CreateLesson(int id, string name,DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher, string color)
+        {
+            return Factory.Instance.Create(id, name, color, startTime, endTime, rooms, courses, type, teacher);
         }
 
         private static ITimeTableItem CreateOfficeHours(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher)

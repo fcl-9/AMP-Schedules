@@ -182,6 +182,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AddAlertController.cs" />
+    <Compile Include="Controllers\LessonsController.cs" />
     <Compile Include="Controllers\RemoveAlertController.cs" />
     <Compile Include="Controllers\RemoveEventController.cs" />
     <Compile Include="Controllers\AddEventController.cs" />
@@ -366,6 +367,11 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Teacher" />
     <Content Include="Views\Contacts\Contacts.cshtml" />
+    <Content Include="Views\Lessons\Create.cshtml" />
+    <Content Include="Views\Lessons\Delete.cshtml" />
+    <Content Include="Views\Lessons\Details.cshtml" />
+    <Content Include="Views\Lessons\Edit.cshtml" />
+    <Content Include="Views\Lessons\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

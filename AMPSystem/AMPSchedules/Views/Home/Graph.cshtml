@@ -127,7 +127,7 @@
                         <button id="addAlert" class="btn btn-default">Add new alert</button>
                     </div>
                     <div class="tab-pane" id="4">
-                        <form id="alertForm">
+                        <form id="activeAlertForm">
                             <label class="control-label">Active Alerts</label>
                            
                             
@@ -670,7 +670,8 @@
             console.log(item);
             return $.ajax({
                 type: "GET",
-                url: "/Alert/Index",item,
+                url: "/Alert/Index",
+                data: item,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function(success) {
@@ -682,33 +683,46 @@
                 }
             });
         }
-       
-        
 
 
         $().ready(function() {
-            $('a[href="#4"]').click(function () {
+            $('a[href="#4"]').click(function() {
                 var selectedItem = {};
-                selectedItem ["name"] =  $('#modalTitle').text();
-                selectedItem["startTime"] =moment($("#startTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
-                selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
+                selectedItem["name"] = $('#modalTitle').text();
+                selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
+                    .format("YYYY-MM-DD HH:mm:ss");
+                selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
+                    .format("YYYY-MM-DD HH:mm:ss");
                 var activeAlerts = getActiveAlerts(selectedItem);
-                console.log(selectedItem);
+
+                $.each(activeAlerts,
+                    function(key,value) {
+                        $("#activeAlertForm").append(
+                            '<div class="col-sm-12 form-group" id="active-alerts">'+
+                                '<div class="col-sm-5" id="minutes">'+
+                                '<input class="form-control" readonly="readonly"/>'+
+                                '</div>'+
+                                '<div class="col-sm-5" id="unities">'+
+                                '<input class="form-control" readonly="readonly" />'+
+                                '</div>'+
+                                '<div class="col-sm-2">'+
+                                      '<button class="rm-alert btn btn-danger">Remove</button>'+
+                                '</div>'+
+                            '</div>'
+
+
+
+
+
+
+
+                            );
+                    });
             });
         });
 
 
-        //<div class="col-sm-12 form-group" id="active-alerts">
-        //<div class="col-sm-5" id="minutes">
-        //<input class="form-control" readonly="readonly"/>
-        //</div>
-        //<div class="col-sm-5" id="unities">
-        //<input class="form-control" readonly="readonly" />
-        //</div>
-        //<div class="col-sm-2">
-        //      <button class="rm-alert btn btn-danger">Remove</button>
-        //</div>
-        //</div>
+        
 
     </script>
 

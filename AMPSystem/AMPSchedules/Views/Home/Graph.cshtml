@@ -127,16 +127,12 @@
                         <button id="addAlert" class="btn btn-default">Add new alert</button>
                     </div>
                     <div class="tab-pane" id="4">
-                        <form id="activeAlertForm">
-                            <label class="control-label">Active Alerts</label>
-                           
-                            
-                            
-                            
-                            
-                            
+                        <div class="row">
+                            <div id="activeAlertForm" class="col-md-12">
+                                <label class="control-label">Active Alerts</label>
 
-                        </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -531,7 +527,6 @@
 
         }
 
-        //$().ready(applyFilters());
 
         //Makes Request to the server
         function requestGetType(requesturl, data) {
@@ -664,18 +659,36 @@
             });
 
         //Return a Json with active alerts
-        function getActiveAlerts(item) {
+        function getActiveAlerts(item, funtionSucess) {
             item["start"] = $('#calendar').fullCalendar('getView').start.format();
             item["end"] = $('#calendar').fullCalendar('getView').end.format();
             //console.log(item);
-            return $.ajax({
+            $.ajax({
                 type: "GET",
                 url: "/Alert/Index",
                 data: item,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function(success) {
-                    return success;
+                success: funtionSucess,
+                failure: function(response) {
+                    console.log("Fail");
+                    alert(response.d);
+                }
+            });
+        }
+
+        //Removes one alert from the database
+        function removeAnAlert(datatoSend) {
+            datatoSend["start"] = $('#calendar').fullCalendar('getView').start.format();
+            datatoSend["end"] = $('#calendar').fullCalendar('getView').end.format();
+            $.ajax({
+                type: "GET",
+                url: "/RemoveAlert/Index",
+                data: datatoSend,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(e) {
+                    console.log(e);
                 },
                 failure: function(response) {
                     console.log("Fail");
@@ -684,41 +697,61 @@
             });
         }
 
-
-        $().ready(function() {
-            $('a[href="#4"]').click(function() {
-                var selectedItem = {};
-                selectedItem["name"] = $('#modalTitle').text();
-                selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
-                selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
-                var activeAlerts = getActiveAlerts(selectedItem);
-                console.log(activeAlerts);
-                //Ver se vem active alerts
-                //renderActiveAlerts(activeAlerts);
-
-
-            });
-        });
-
-
+        //This function will render the form used to remove active alerts
         function renderActiveAlerts(activeAlerts) {
             $.each(activeAlerts,
-                function (key, value) {
+                function(key, value) {
                     $("#activeAlertForm").append(
-                        '<div class="col-sm-12 form-group" id="active-alerts">' +
-                        '<div class="col-sm-5">' +
-                        '<input class="form-control" readonly="readonly" value="'+ +'"/>' +
-                        '</div>' +
-                        '<div class="col-sm-5">' +
-                        '<input class="form-control" readonly="readonly" value="'+ +'"/>' +
+                        '' +
+                        '<div class="col-sm-12 form-group">' +
+                        '<div class="col-sm-10">' +
+                        '<input class="form-control" value="' +
+                        value.Value +
+                        '" readonly=""/>' +
                         '</div>' +
                         '<div class="col-sm-2">' +
-                        '<button class="rm-active-alert btn btn-danger" id="'+ +'">Remove</button>' +
+                        '<button class="rm-active-alert btn btn-danger" id="' +
+                        value.Key +
+                        '">Remove</button>' +
                         '</div>' +
                         '</div>'
                     );
                 });
         }
+
+        //Clicks on active alerts tab
+        $().ready(function() {
+            $('a[href="#4"]').click(function() {
+                var selectedItem = {};
+                selectedItem["name"] = $('#modalTitle').text();
+                selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
+                    .format("YYYY-MM-DD HH:mm:ss");
+                selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
+                    .format("YYYY-MM-DD HH:mm:ss");
+                getActiveAlerts(selectedItem, renderActiveAlerts);
+            });
+
+            $('#activeAlertForm').on('click',
+                '.rm-active-alert',
+                function(e) {
+                    removeAlert = {};
+                    removeAlert['alertId'] = $(this).attr('id');
+                    removeAlert["name"] = $('#modalTitle').text();
+                    removeAlert["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
+                        .format("YYYY-MM-DD HH:mm:ss");
+                    removeAlert["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
+                        .format("YYYY-MM-DD HH:mm:ss");
+                    console.log(removeAlert);
+                    removeAnAlert(removeAlert);
+
+
+                    //Removes the field that as sent TODO: remove the item only when we receive the confirmation
+                    //e.preventDefault();
+                    //$(this).parent().parent().remove();
+                });
+
+        });
+
 
     </script>
 

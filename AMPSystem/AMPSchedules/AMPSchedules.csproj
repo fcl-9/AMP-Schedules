@@ -395,7 +395,6 @@
     <Folder Include="Content\images\" />
     <Folder Include="Views\AddAlert\" />
     <Folder Include="Views\AddEvent\" />
-    <Folder Include="Views\Alert\" />
     <Folder Include="Views\RemoveAlert\" />
   </ItemGroup>
   <PropertyGroup>

@@ -667,7 +667,7 @@
         function getActiveAlerts(item) {
             item["start"] = $('#calendar').fullCalendar('getView').start.format();
             item["end"] = $('#calendar').fullCalendar('getView').end.format();
-            console.log(item);
+            //console.log(item);
             return $.ajax({
                 type: "GET",
                 url: "/Alert/Index",
@@ -689,40 +689,36 @@
             $('a[href="#4"]').click(function() {
                 var selectedItem = {};
                 selectedItem["name"] = $('#modalTitle').text();
-                selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
-                    .format("YYYY-MM-DD HH:mm:ss");
-                selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
-                    .format("YYYY-MM-DD HH:mm:ss");
+                selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
+                selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
                 var activeAlerts = getActiveAlerts(selectedItem);
-
-                $.each(activeAlerts,
-                    function(key,value) {
-                        $("#activeAlertForm").append(
-                            '<div class="col-sm-12 form-group" id="active-alerts">'+
-                                '<div class="col-sm-5" id="minutes">'+
-                                '<input class="form-control" readonly="readonly"/>'+
-                                '</div>'+
-                                '<div class="col-sm-5" id="unities">'+
-                                '<input class="form-control" readonly="readonly" />'+
-                                '</div>'+
-                                '<div class="col-sm-2">'+
-                                      '<button class="rm-alert btn btn-danger">Remove</button>'+
-                                '</div>'+
-                            '</div>'
+                console.log(activeAlerts);
+                //Ver se vem active alerts
+                //renderActiveAlerts(activeAlerts);
 
 
-
-
-
-
-
-                            );
-                    });
             });
         });
 
 
-        
+        function renderActiveAlerts(activeAlerts) {
+            $.each(activeAlerts,
+                function (key, value) {
+                    $("#activeAlertForm").append(
+                        '<div class="col-sm-12 form-group" id="active-alerts">' +
+                        '<div class="col-sm-5">' +
+                        '<input class="form-control" readonly="readonly" value="'+ +'"/>' +
+                        '</div>' +
+                        '<div class="col-sm-5">' +
+                        '<input class="form-control" readonly="readonly" value="'+ +'"/>' +
+                        '</div>' +
+                        '<div class="col-sm-2">' +
+                        '<button class="rm-active-alert btn btn-danger" id="'+ +'">Remove</button>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                });
+        }
 
     </script>
 

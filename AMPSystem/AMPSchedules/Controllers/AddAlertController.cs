@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using System.Windows.Input;
 using AMPSystem.Classes;
 using AMPSystem.Interfaces;
 using Microsoft.Graph;
@@ -33,43 +29,60 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 
         public override ActionResult Hook(TimeTableManager manager)
         {
-            //["Name"].Value<string>()
-            //foreach (var key in Request.Form)
-            //{
-            //    Debug.Write(key);
-            //    Debug.Write(Request.Form);
-            //}
-            string[] keys = Request.QueryString.AllKeys;
+            var keys = Request.QueryString.AllKeys;
             for (var i = 0 ; i < keys.Length; i++)
             {
-               // Debug.Write(Request.QueryString[i]);
-               var dataParsed = JArray.Parse(Request.QueryString[i]);
-                //dataParsed[i].Value<String>()
-                foreach (var data in dataParsed)
-                {
-                    var name = data["name"].Value<string>();
-                    var startTime = Convert.ToDateTime(data["startTime"].Value<string>());
-                    var endTime = Convert.ToDateTime(data["endTime"].Value<string>());
+                Debug.WriteLine(Request.QueryString[i]);
+                //var dataParsed = JArray.Parse(Request.QueryString[i]);
+                //foreach (var data in dataParsed)
+                //{
+                    //var name = data["name"].Value<string>();
+                    //var startTime = Convert.ToDateTime(data["startTime"].Value<string>());
+                    //var endTime = Convert.ToDateTime(data["endTime"].Value<string>());
 
-                    var time = data["time"].Value<int>();
-                    var units = data["unit"].Value<string>();
+                    //var time = data["time"].Value<int>();
+                    //var units = data["unit"].Value<string>();
 
                     //BEGIN - This parametrs should be passed to timetable 
-                    var start = Convert.ToDateTime(data["start"].Value<string>());
-                    var end = Convert.ToDateTime(data["end"].Value<string>());
+                    //var start = Convert.ToDateTime(data["start"].Value<string>());
+                    //var end = Convert.ToDateTime(data["end"].Value<string>());
                     //END - This parametrs should be passed to timetable 
+                    
+                    //var item = ((List<ITimeTableItem>)manager.TimeTable.ItemList).Find(
+                    //    it =>
+                    //         it.Name == name &&
+                    //         it.StartTime == startTime &&
+                    //         it.EndTime == endTime
+                    //
+                    
+                    //TimeSpan timeSpan;
+                    //switch (units)
+                    //{
+                    //    case "Minutes":
+                    //        timeSpan = new TimeSpan(0, time, 0);
+                    //        break;
+                    //    case "Hours":
+                    //        timeSpan = new TimeSpan(time, 0, 0);
+                    //        break;
+                    //    case "Days":
+                    //        timeSpan = new TimeSpan(time, 0, 0, 0);
+                    //        break;
+                    //    case "Weeks":
+                    //        timeSpan = new TimeSpan(time * 7, 0, 0, 0);
+                    //        break;
+                    //    default:
+                    //        timeSpan = new TimeSpan(0, 0, 0);
+                    //        break;
+                    //}
 
-
-
-                    Debug.Write(name +" "+ startTime + " "+ endTime + " " + time +  " " + units + " " + start + " "+ end );
-                    //Podes ver no output do debug que esta tudo funcional :D
-                }
+                    //if (item != null)
+                    //{
+                    //    var alert = new Alert(timeSpan, item);
+                    //    item.Alerts.Add(alert);
+                    //}
+                //}
             }
-
-
-
             return base.Hook(manager);
-            
         }
     }
 }

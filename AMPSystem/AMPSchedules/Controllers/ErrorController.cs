@@ -5,7 +5,7 @@
 
 using System.Web.Mvc;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class ErrorController : Controller
     {

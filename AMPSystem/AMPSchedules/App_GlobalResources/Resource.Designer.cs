@@ -283,13 +283,5 @@ namespace Resources {
                 return ResourceManager.GetString("SignOut", resourceCulture);
             }
         }
-
-        internal static string Events
-        {
-            get
-            {
-                return ResourceManager.GetString("Event", resourceCulture);
-            }
-        }
     }
 }

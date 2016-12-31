@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSystem.Classes;
@@ -9,17 +9,21 @@ using AMPSystem.Classes.LoadData;
 using AMPSystem.Interfaces;
 using Newtonsoft.Json;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
-    public abstract class TemplateController: Controller
+    public abstract class TemplateController : Controller
     {
-        private static object _lockobject = new object();
+        private static readonly object _lockobject = new object();
         public User CurrentUser { get; private set; }
 
         public virtual ActionResult Hook(TimeTableManager manager)
         {
             var parsedItems = ParseData(manager);
-            return Content(JsonConvert.SerializeObject(parsedItems.ToArray(), new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}), "application/json");
+            return
+                Content(
+                    JsonConvert.SerializeObject(parsedItems.ToArray(),
+                        new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
+                    "application/json");
         }
 
         public async Task<ActionResult> TemplateMethod()
@@ -30,14 +34,14 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 
         private async Task<TimeTableManager> LoadData()
         {
-            var x = System.Security.Claims.ClaimsPrincipal.Current;
+            var x = ClaimsPrincipal.Current;
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Commented for testes only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //GraphServiceClient graphClient = SDKHelper.GetAuthenticatedClient();
             //var user = await graphService.GetUsername(graphClient);
-            
-                IDataReader dataReader = new FileData();
-                var loadData = new Repository {DataReader = dataReader};
-            
+
+            IDataReader dataReader = new FileData();
+            var loadData = new Repository {DataReader = dataReader};
+
             lock (_lockobject)
             {
                 loadData.GetCourses();

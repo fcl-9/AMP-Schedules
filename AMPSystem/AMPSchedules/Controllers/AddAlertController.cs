@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSystem.Classes;
+using AMPSystem.Classes.TimeTableItems;
+using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Microsoft.Graph;
 using Newtonsoft.Json.Linq;
@@ -69,6 +72,18 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 var alert = new Alert(timeSpan, item);
                 item.Alerts.Add(alert);
                 //TODO Add into BD
+                if (item is Lesson)
+                {
+                    //DbManager.Instance.CreateLessonIfNotExists(item.Name,item.Rooms.First(),item.)
+                }
+                else if (item is EvaluationMoment)
+                {
+                    
+                }
+                else if (item is OfficeHours)
+                {
+                    
+                }
             }
             return base.Hook(manager);
         }

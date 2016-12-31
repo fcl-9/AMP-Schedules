@@ -277,6 +277,39 @@ namespace AMPSystem.DAL
             db.SaveChanges();
         }
 
+        public void AddAlertToLesson(TimeSpan timeInterval, Lesson lesson)
+        {
+            var mAlert = new Alert
+            {
+                TimeInterval = timeInterval,
+                Lesson = lesson
+            };
+            db.Alerts.Add(mAlert);
+            db.SaveChanges();
+        }
+
+        public void AddAlertToEvaluation(TimeSpan timeInterval, EvaluationMoment evaluationMoment)
+        {
+            var mAlert = new Alert
+            {
+                TimeInterval = timeInterval,
+                EvaluationMoment = evaluationMoment
+            };
+            db.Alerts.Add(mAlert);
+            db.SaveChanges();
+        }
+
+        public void AddAlertToOfficeH(TimeSpan timeInterval, OfficeHour officeHour)
+        {
+            var mAlert = new Alert
+            {
+                TimeInterval = timeInterval,
+                OfficeHour = officeHour
+            };
+            db.Alerts.Add(mAlert);
+            db.SaveChanges();
+        }
+
     }
 
 }

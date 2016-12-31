@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AMPSystem.Classes;
+using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Microsoft.Graph;
 using Newtonsoft.Json;
@@ -55,6 +56,10 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             var alert = ((List<Alert>)item.Alerts).Find(
                 i =>
                     i.Id == int.Parse(Request.QueryString["alertId"]));
+
+            // Removes alert from the DB
+            var dbAlert = DbManager.Instance.ReturnAlert(int.Parse(Request.QueryString["alertId"]));
+            DbManager.Instance.RemoveAlert(dbAlert);
 
             item.Alerts.Remove(alert);
             IDictionary<int, DateTime> data = new Dictionary<int, DateTime>();

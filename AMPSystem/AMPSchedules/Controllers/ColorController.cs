@@ -97,7 +97,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                         if (mEvaluation == null)
                         {
                             DbManager.Instance.CreateEvaluationMoment(item.Name, mRooms, mUser, item.Color, item.StartTime,
-                            item.EndTime, item.Description);
+                            item.EndTime, item.Description, null); // Courses could be null since this is an event that came from the API
                         }
                         else
                         {

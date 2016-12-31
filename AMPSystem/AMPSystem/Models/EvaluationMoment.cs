@@ -5,7 +5,6 @@ namespace AMPSystem.Models
 {
     public class EvaluationMoment
     {
-
         public int ID { get; set; }
         public string Color { get; set; }
         public string Name { get; set; }

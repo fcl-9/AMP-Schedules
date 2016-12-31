@@ -4,6 +4,9 @@ using AMPSystem.Models;
 
 namespace AMPSystem.DAL
 {
+    /// <summary>
+    ///     Class that create the references to the DB
+    /// </summary>
     public class AmpDbContext : DbContext
     {
         public AmpDbContext() : base("AmpDbContext")

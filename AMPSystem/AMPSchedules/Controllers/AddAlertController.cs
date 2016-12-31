@@ -9,7 +9,6 @@ using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Microsoft.Graph;
-using Newtonsoft.Json.Linq;
 using Resources;
 using Room = AMPSystem.Models.Room;
 
@@ -28,14 +27,15 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             catch (ServiceException se)
             {
                 if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction($"Index", $"Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
+                return RedirectToAction($"Index", $"Error",
+                    new {message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message});
             }
         }
 
         public override ActionResult Hook(TimeTableManager manager)
         {
             var keys = Request.QueryString.AllKeys;
-            for (var i = 0 ; i < keys.Length - 2; i = i + 5)
+            for (var i = 0; i < keys.Length - 2; i = i + 5)
             {
                 var name = Request.QueryString[i];
                 var startTime = Convert.ToDateTime(Request.QueryString[i + 1]);
@@ -43,7 +43,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 
                 var time = int.Parse(Request.QueryString[i + 3]);
                 var units = Request.QueryString[i + 4];
-                
+
                 Debug.WriteLine(name + " " + startTime + " " + endTime + " " + time + " " + units);
 
                 var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
@@ -72,12 +72,13 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 }
                 var alertTime = item.StartTime - timeSpan;
                 var alert = new Alert(alertTime, item);
-                //TODO Add into BD
+                // Add alert to the DB
                 if (item is Lesson)
                 {
                     var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
                     var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(item.Rooms.First().Building.Name);
-                    var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding,item.Rooms.First().Floor, item.Rooms.First().Name);
+                    var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, item.Rooms.First().Floor,
+                        item.Rooms.First().Name);
                     var mLesson = DbManager.Instance.CreateLessonIfNotExists(item.Name, mRoom, mUser, item.Color,
                         item.StartTime, item.EndTime);
                     DbManager.Instance.AddAlertToLesson(alertTime, mLesson);
@@ -93,8 +94,9 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                         var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name);
                         mRooms.Add(mRoom);
                     }
-                    var mEvMoment = DbManager.Instance.CreateEvaluationMomentIfNotExists(item.Name, mRooms, mUser, item.Color,
-                        item.StartTime, item.EndTime, item.Description);
+                    var mEvMoment = DbManager.Instance.CreateEvaluationMomentIfNotExists(item.Name, mRooms, mUser,
+                        item.Color,
+                        item.StartTime, item.EndTime, item.Description, null);  // Courses could be null since this is an event that came from the API
                     DbManager.Instance.AddAlertToEvaluation(alertTime, mEvMoment);
                     DbManager.Instance.SaveChanges();
                 }
@@ -102,7 +104,8 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 {
                     var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
                     var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(item.Rooms.First().Building.Name);
-                    var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, item.Rooms.First().Floor, item.Rooms.First().Name);
+                    var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, item.Rooms.First().Floor,
+                        item.Rooms.First().Name);
                     var mOfficeHour = DbManager.Instance.CreateOfficeHourIfNotExists(item.Name, mRoom, mUser, item.Color,
                         item.StartTime, item.EndTime);
                     DbManager.Instance.AddAlertToOfficeH(alertTime, mOfficeHour);

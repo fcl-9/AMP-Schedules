@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using AMPSystem.Classes;
-using AMPSystem.Classes.LoadData;
 using AMPSystem.Interfaces;
 using Newtonsoft.Json;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class ContactsController : TemplateController
     {
@@ -22,10 +19,8 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 
         public async Task<ActionResult> ReturnOfficeHours()
         {
-            return await base.TemplateMethod();
+            return await TemplateMethod();
         }
-
-
 
 
         public override ActionResult Hook(TimeTableManager manager)
@@ -42,13 +37,18 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 items.Add(officeHour);
                 //}
             }
-            return Content(JsonConvert.SerializeObject(items.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
+            return
+                Content(
+                    JsonConvert.SerializeObject(items.ToArray(),
+                        new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
+                    "application/json");
         }
+
+        //    IDataReader dataReader = new FileData();
+        //{
 
 
         //public ActionResult Teachers()
-        //{
-        //    IDataReader dataReader = new FileData();
         //    Repository loadData = new Repository();
         //    loadData.DataReader = dataReader;
         //    loadData.GetCourses();

@@ -19,16 +19,15 @@ namespace AMPSchedules
 {
     public partial class Startup
     {
-
         // The appId is used by the application to uniquely identify itself to Azure AD.
         // The appSecret is the application's password.
         // The redirectUri is where users are redirected after sign in and consent.
         // The graphScopes are the Microsoft Graph permission scopes that are used by this sample: User.Read Mail.Send
-        private static string appId = ConfigurationManager.AppSettings["ida:AppId"];
-        private static string appSecret = ConfigurationManager.AppSettings["ida:AppSecret"];
-        private static string redirectUri = ConfigurationManager.AppSettings["ida:RedirectUri"];
-        private static string graphScopes = ConfigurationManager.AppSettings["ida:GraphScopes"];
-        
+        private static readonly string appId = ConfigurationManager.AppSettings["ida:AppId"];
+        private static readonly string appSecret = ConfigurationManager.AppSettings["ida:AppSecret"];
+        private static readonly string redirectUri = ConfigurationManager.AppSettings["ida:RedirectUri"];
+        private static readonly string graphScopes = ConfigurationManager.AppSettings["ida:GraphScopes"];
+
         public void ConfigureAuth(IAppBuilder app)
         {
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
@@ -38,7 +37,6 @@ namespace AMPSchedules
             app.UseOpenIdConnectAuthentication(
                 new OpenIdConnectAuthenticationOptions
                 {
-
                     // The `Authority` represents the Microsoft v2.0 authentication and authorization service.
                     // The `Scope` describes the permissions that your app will need. See https://azure.microsoft.com/documentation/articles/active-directory-v2-scopes/                    
                     ClientId = appId,
@@ -48,7 +46,7 @@ namespace AMPSchedules
                     Scope = "openid email profile offline_access " + graphScopes,
                     TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
+                        ValidateIssuer = false
                         // In a real application you would use IssuerValidator for additional checks, 
                         // like making sure the user's organization has signed up for your app.
                         //     IssuerValidator = (issuer, token, tvp) =>
@@ -61,20 +59,22 @@ namespace AMPSchedules
                     },
                     Notifications = new OpenIdConnectAuthenticationNotifications
                     {
-                        AuthorizationCodeReceived = async (context) =>
+                        AuthorizationCodeReceived = async context =>
                         {
                             var code = context.Code;
-                            string signedInUserID = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
-                            ConfidentialClientApplication cca = new ConfidentialClientApplication(
+                            var signedInUserID =
+                                context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                            var cca = new ConfidentialClientApplication(
                                 appId,
                                 redirectUri,
                                 new ClientCredential(appSecret),
-                                new SessionTokenCache(signedInUserID, context.OwinContext.Environment["System.Web.HttpContextBase"] as HttpContextBase));
-                            string[] scopes = graphScopes.Split(new char[] { ' ' });
+                                new SessionTokenCache(signedInUserID,
+                                    context.OwinContext.Environment["System.Web.HttpContextBase"] as HttpContextBase));
+                            var scopes = graphScopes.Split(' ');
 
-                            AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
+                            var result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
                         },
-                        AuthenticationFailed = (context) =>
+                        AuthenticationFailed = context =>
                         {
                             context.HandleResponse();
                             context.Response.Redirect("/Error?message=" + context.Exception.Message);

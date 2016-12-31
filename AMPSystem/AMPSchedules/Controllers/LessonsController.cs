@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using AMPSchedules.Models;
 using AMPSystem.DAL;
 using AMPSystem.Models;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class LessonsController : Controller
     {
-        private AmpDbContext db = new AmpDbContext();
+        private readonly AmpDbContext db = new AmpDbContext();
 
         // GET: Lessons
         public ActionResult Index()
@@ -27,14 +22,10 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Lesson lesson = db.Lessons.Find(id);
+            var lesson = db.Lessons.Find(id);
             if (lesson == null)
-            {
                 return HttpNotFound();
-            }
             return View(lesson);
         }
 
@@ -69,14 +60,10 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Lesson lesson = db.Lessons.Find(id);
+            var lesson = db.Lessons.Find(id);
             if (lesson == null)
-            {
                 return HttpNotFound();
-            }
             ViewBag.RoomID = new SelectList(db.Rooms, "ID", "Name", lesson.RoomID);
             ViewBag.UserID = new SelectList(db.Users, "ID", "Email", lesson.UserID);
             return View(lesson);
@@ -104,23 +91,20 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Lesson lesson = db.Lessons.Find(id);
+            var lesson = db.Lessons.Find(id);
             if (lesson == null)
-            {
                 return HttpNotFound();
-            }
             return View(lesson);
         }
 
         // POST: Lessons/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Lesson lesson = db.Lessons.Find(id);
+            var lesson = db.Lessons.Find(id);
             db.Lessons.Remove(lesson);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -129,9 +113,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

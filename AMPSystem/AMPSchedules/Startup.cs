@@ -4,8 +4,8 @@
 */
 
 using Microsoft.Owin;
-using AMPSchedules;
 using Owin;
+using Startup = AMPSchedules.Startup;
 
 [assembly: OwinStartup(typeof(Startup))]
 

@@ -60,15 +60,18 @@
             var StartingTime = undefined;
             var ClassRoom = undefined;
             var Floor = undefined;
+            var Color = undefined;
             var iteration = 0;
 
             $.each(sortBy(teachers, { prop: "StartTime" }),
                 function(key, value) { //Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor
 
                     $.each(value.Courses,
-                        function(chave, valor) {
+                        function (chave, valor) {
+                            console.log(value);
                             ClassName = value.Name;
                             StartingTime = value.StartTime;
+                            Color = value.Color;
 
                             $.each(value.Rooms,
                                 function(property, val) {
@@ -78,20 +81,20 @@
                         });
                     iteration += 1;
                     if (iteration == 1) {
-                        renderNextEvent(ClassName, StartingTime, ClassRoom, Floor);
+                        renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color);
                     } else
                     {
-                        renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor);
+                        renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color);
                     }
 
                 });
             renderTeacher(iteration, endTime, startTime, office, floor, email, name, course);
         }
 
-        function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor) {
+        function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color) {
             $('.NextEvent').append(
                 '<div class="panel-group">' +
-                '<div class="panel panel-primary">' +
+                '<div class="panel panel-primary" style="background:'+Color+'">' +
                 '<div class="panel-body">' +
                 '<h5>' +
                 ClassName +
@@ -112,10 +115,10 @@
             );
 
         }
-        function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor) {
+        function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color) {
             $('.FutureEvents').append(
                 '<div class="panel-group">' +
-                '<div class="panel panel-primary">' +
+                '<div class="panel panel-primary" style="background:' + Color + '">' +
                 '<div class="panel-body">' +
                 '<h5>' +
                 ClassName +

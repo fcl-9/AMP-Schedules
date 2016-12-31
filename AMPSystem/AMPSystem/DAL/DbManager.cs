@@ -387,7 +387,7 @@ namespace AMPSystem.DAL
         /// </summary>
         /// <param name="alertTime"></param>
         /// <param name="lesson"></param>
-        public void AddAlertToLesson(DateTime alertTime, Lesson lesson)
+        public Alert AddAlertToLesson(DateTime alertTime, Lesson lesson)
         {
             var mAlert = new Alert
             {
@@ -395,7 +395,7 @@ namespace AMPSystem.DAL
                 Lesson = lesson
             };
             db.Alerts.Add(mAlert);
-            db.SaveChanges();
+            return mAlert;
         }
 
         /// <summary>
@@ -403,7 +403,7 @@ namespace AMPSystem.DAL
         /// </summary>
         /// <param name="alertTime"></param>
         /// <param name="evaluationMoment"></param>
-        public void AddAlertToEvaluation(DateTime alertTime, EvaluationMoment evaluationMoment)
+        public Alert AddAlertToEvaluation(DateTime alertTime, EvaluationMoment evaluationMoment)
         {
             var mAlert = new Alert
             {
@@ -411,7 +411,7 @@ namespace AMPSystem.DAL
                 EvaluationMoment = evaluationMoment
             };
             db.Alerts.Add(mAlert);
-            db.SaveChanges();
+            return mAlert;
         }
 
         /// <summary>
@@ -419,7 +419,7 @@ namespace AMPSystem.DAL
         /// </summary>
         /// <param name="alertTime"></param>
         /// <param name="officeHour"></param>
-        public void AddAlertToOfficeH(DateTime alertTime, OfficeHour officeHour)
+        public Alert AddAlertToOfficeH(DateTime alertTime, OfficeHour officeHour)
         {
             var mAlert = new Alert
             {
@@ -427,7 +427,7 @@ namespace AMPSystem.DAL
                 OfficeHour = officeHour
             };
             db.Alerts.Add(mAlert);
-            db.SaveChanges();
+            return mAlert;
         }
 
         /// <summary>

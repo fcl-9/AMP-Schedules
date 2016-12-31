@@ -7,10 +7,9 @@ using AMPSystem.Classes;
 using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
-using Microsoft.Graph;
 using Resources;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class AddEventController : TemplateController
     {
@@ -22,11 +21,11 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
                 return await TemplateMethod();
             }
-            catch (ServiceException se)
+            catch (Exception e)
             {
-                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction($"Index", $"Error",
-                    new {message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message});
+                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error",
+                    new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
             }
         }
 

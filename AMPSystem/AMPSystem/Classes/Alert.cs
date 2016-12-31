@@ -6,18 +6,30 @@ namespace AMPSystem.Classes
 {
     public class Alert
     {
-        // By default, the Entity Framework interprets a property that's named ID or 
-        // classnameID as the primary key.
-        public int AlertID { get; set; }
-        public TimeSpan Time { get; set; }
+        public int Id { get; set; }
+        public DateTime AlertTime { get; set; }
         public ITimeTableItem Item { get; set; }
 
         private static int _id;
-        
-        public Alert(TimeSpan time, ITimeTableItem tableItem)
+
+        public Alert(DateTime alertTime, ITimeTableItem tableItem)
         {
-            Time = time;
+            AlertTime = alertTime;
             Item = tableItem;
+            InformItem();
+        }
+
+        public Alert(int id, DateTime alertTime, ITimeTableItem tableItem)
+        {
+            Id = id;
+            AlertTime = alertTime;
+            Item = tableItem;
+            InformItem();
+        }
+
+        private void InformItem()
+        {
+            Item.Alerts.Add(this);
         }
     }
 }

@@ -116,6 +116,7 @@
     <Compile Include="Models\Lesson.cs" />
     <Compile Include="Models\OfficeHour.cs" />
     <Compile Include="Models\Room.cs" />
+    <Compile Include="Models\TimeTableItem.cs" />
     <Compile Include="Models\User .cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\TimeTableManager.cs" />

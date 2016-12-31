@@ -260,6 +260,18 @@ namespace AMPSystem.DAL
             return lesson ?? CreateLesson(name,room,user,color,startTime,endTime);
         }
 
+        public OfficeHour CreateOfficeHourIfNotExists(string name, Room room, User user, string color, DateTime startTime, DateTime endTime)
+        {
+            var officeHour = ReturnOfficeHourIfExists(name, startTime, endTime);
+            return officeHour ?? CreateOfficeHour(name, room, user, color, startTime, endTime);
+        }
+
+        public EvaluationMoment CreateEvaluationMomentIfNotExists(string name, ICollection<Room> rooms, User user, string color, DateTime startTime, DateTime endTime, string description)
+        {
+            var evMoment = ReturnEvaluationMomentIfExists(name, startTime, endTime);
+            return evMoment ?? CreateEvaluationMoment(name,rooms,user,color,startTime,endTime,description);
+        }
+
         public void SaveChanges()
         {
             db.SaveChanges();
@@ -277,33 +289,33 @@ namespace AMPSystem.DAL
             db.SaveChanges();
         }
 
-        public void AddAlertToLesson(TimeSpan timeInterval, Lesson lesson)
+        public void AddAlertToLesson(DateTime alertTime, Lesson lesson)
         {
             var mAlert = new Alert
             {
-                TimeInterval = timeInterval,
+                AlertTime = alertTime,
                 Lesson = lesson
             };
             db.Alerts.Add(mAlert);
             db.SaveChanges();
         }
 
-        public void AddAlertToEvaluation(TimeSpan timeInterval, EvaluationMoment evaluationMoment)
+        public void AddAlertToEvaluation(DateTime alertTime, EvaluationMoment evaluationMoment)
         {
             var mAlert = new Alert
             {
-                TimeInterval = timeInterval,
+                AlertTime = alertTime,
                 EvaluationMoment = evaluationMoment
             };
             db.Alerts.Add(mAlert);
             db.SaveChanges();
         }
 
-        public void AddAlertToOfficeH(TimeSpan timeInterval, OfficeHour officeHour)
+        public void AddAlertToOfficeH(DateTime alertTime, OfficeHour officeHour)
         {
             var mAlert = new Alert
             {
-                TimeInterval = timeInterval,
+                AlertTime = alertTime,
                 OfficeHour = officeHour
             };
             db.Alerts.Add(mAlert);

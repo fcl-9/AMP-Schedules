@@ -69,7 +69,10 @@ namespace AMPSystem.Classes.LoadData
                     }
                     else
                     {
-                        Items.Add(CreateOfficeHours(officeHourId, mName, startTime, endTime, rooms, teacher, mOfficeHour.Color));
+                        var mItem = CreateOfficeHours(officeHourId, mName, startTime, endTime, rooms, teacher,
+                            mOfficeHour.Color);
+                        Items.Add(mItem);
+                        AddAlertsToOfficeHour(mOfficeHour,(OfficeHours)mItem);
                     }
                 }
                 Teachers.Add(teacher);
@@ -169,7 +172,7 @@ namespace AMPSystem.Classes.LoadData
                     courses.Add(mCourse);
                 }
 
-                //TODO Comment this.
+                // In the API the lessons and evaluation came together so when the type isn't T TP or PL it is considered an evaluation
                 if (lessonType == "T" || lessonType == "TP" || lessonType == "PL")
                 {
                     var teacher = ((List<User>) Teachers).Find(t => t.ExternId == item["Teacher"].Value<int>());
@@ -181,7 +184,10 @@ namespace AMPSystem.Classes.LoadData
                     }
                     else
                     {
-                        Items.Add(CreateLesson(itemId, name, startTime, endTime, rooms, courses, lessonType, teacher, mLesson.Color));
+                        var mItem = CreateLesson(itemId, name, startTime, endTime, rooms, courses, lessonType, teacher,
+                            mLesson.Color);
+                        Items.Add(mItem);
+                        AddAlertsToLesson(mLesson,(TimeTableItems.Lesson)mItem);
                     }
                 }
                 else
@@ -194,7 +200,10 @@ namespace AMPSystem.Classes.LoadData
                     }
                     else
                     {
-                        Items.Add(CreateEvaluationMoment(itemId, startTime, endTime, rooms, courses, name, mEvaluation.Color));
+                        var mItem = CreateEvaluationMoment(itemId, startTime, endTime, rooms, courses, name,
+                            mEvaluation.Color);
+                        Items.Add(mItem);
+                        AddAlertsToEvaluation(mEvaluation,(EvaluationMoment)mItem);
                     }
                 }
 
@@ -231,9 +240,34 @@ namespace AMPSystem.Classes.LoadData
                 }
 
                 var courses = new List<Course>() {Courses.FirstOrDefault(c => c.Name == dbEvMoment.Course)};
+                var mItem = CreateEvaluationMoment(dbEvMoment.StartTime, dbEvMoment.EndTime, rooms, courses,
+                    dbEvMoment.Name, dbEvMoment.Color, dbEvMoment.Description, true);
+                Items.Add(mItem);
+                AddAlertsToEvaluation(dbEvMoment,(EvaluationMoment)mItem);    
+            }
+        }
 
-                Items.Add(CreateEvaluationMoment(dbEvMoment.StartTime, dbEvMoment.EndTime, rooms, courses, dbEvMoment.Name, dbEvMoment.Color, dbEvMoment.Description, true));
+        private void AddAlertsToLesson(Models.Lesson dbLesson, TimeTableItems.Lesson lesson)
+        {
+            foreach (var alert in dbLesson.Alerts)
+            {
+                var aAlert = new Alert(alert.ID, alert.AlertTime, lesson);
+            }
+        }
 
+        private void AddAlertsToOfficeHour(Models.OfficeHour dbOfficeHour, TimeTableItems.OfficeHours officeHours)
+        {
+            foreach (var alert in dbOfficeHour.Alerts)
+            {
+                var aAlert = new Alert(alert.ID, alert.AlertTime, officeHours);
+            }
+        }
+
+        private void AddAlertsToEvaluation(Models.EvaluationMoment dbEvaluation, TimeTableItems.EvaluationMoment evaluation)
+        {
+            foreach (var alert in dbEvaluation.Alerts)
+            {
+                var aAlert = new Alert(alert.ID, alert.AlertTime, evaluation);
             }
         }
 

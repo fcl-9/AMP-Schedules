@@ -5,7 +5,7 @@ namespace AMPSystem.Models
     public class Alert
     {
         public int ID { get; set; }
-        public TimeSpan TimeInterval { get; set; }
+        public DateTime AlertTime{ get; set; }
 
         public int? LessonID { get; set; }
         public Lesson Lesson { get; set; }

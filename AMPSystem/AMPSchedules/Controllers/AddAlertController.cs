@@ -11,6 +11,7 @@ using AMPSystem.Interfaces;
 using Microsoft.Graph;
 using Newtonsoft.Json.Linq;
 using Resources;
+using Room = AMPSystem.Models.Room;
 
 namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 {
@@ -69,21 +70,45 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                         timeSpan = new TimeSpan(0, 0, 0);
                         break;
                 }
-                var alert = new Alert(timeSpan, item);
-                item.Alerts.Add(alert);
+                var alertTime = item.StartTime - timeSpan;
+                var alert = new Alert(alertTime, item);
                 //TODO Add into BD
                 if (item is Lesson)
                 {
-                    //DbManager.Instance.CreateLessonIfNotExists(item.Name,item.Rooms.First(),item.)
+                    var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
+                    var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(item.Rooms.First().Building.Name);
+                    var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding,item.Rooms.First().Floor, item.Rooms.First().Name);
+                    var mLesson = DbManager.Instance.CreateLessonIfNotExists(item.Name, mRoom, mUser, item.Color,
+                        item.StartTime, item.EndTime);
+                    DbManager.Instance.AddAlertToLesson(alertTime, mLesson);
+                    DbManager.Instance.SaveChanges();
                 }
                 else if (item is EvaluationMoment)
                 {
-                    
+                    var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
+                    var mRooms = new List<Room>();
+                    foreach (var room in item.Rooms)
+                    {
+                        var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
+                        var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name);
+                        mRooms.Add(mRoom);
+                    }
+                    var mEvMoment = DbManager.Instance.CreateEvaluationMomentIfNotExists(item.Name, mRooms, mUser, item.Color,
+                        item.StartTime, item.EndTime, item.Description);
+                    DbManager.Instance.AddAlertToEvaluation(alertTime, mEvMoment);
+                    DbManager.Instance.SaveChanges();
                 }
                 else if (item is OfficeHours)
                 {
-                    
+                    var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
+                    var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(item.Rooms.First().Building.Name);
+                    var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, item.Rooms.First().Floor, item.Rooms.First().Name);
+                    var mOfficeHour = DbManager.Instance.CreateOfficeHourIfNotExists(item.Name, mRoom, mUser, item.Color,
+                        item.StartTime, item.EndTime);
+                    DbManager.Instance.AddAlertToOfficeH(alertTime, mOfficeHour);
+                    DbManager.Instance.SaveChanges();
                 }
+                item.Alerts.Add(alert);
             }
             return base.Hook(manager);
         }

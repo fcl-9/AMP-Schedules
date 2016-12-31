@@ -41,28 +41,26 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 i =>
                     i.Name == Request.QueryString["name"] &&
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
-            //Mockobject
-            var alerts = new List<Alert>
-            {
-                new Alert(new TimeSpan(13, 00, 59), item),
-                new Alert(new TimeSpan(14, 30, 00), item)
-            };
-            alerts[0].AlertID = 0;
-            alerts[1].AlertID = 1;
-            item.Alerts = alerts;
-            //Mockobject
+            ////Mockobject
+            //var alerts = new List<Alert>
+            //{
+            //    new Alert(new TimeSpan(13, 00, 59), item),
+            //    new Alert(new TimeSpan(14, 30, 00), item)
+            //};
+            //alerts[0].AlertID = 0;
+            //alerts[1].AlertID = 1;
+            //item.Alerts = alerts;
+            ////Mockobject
 
             var alert = ((List<Alert>)item.Alerts).Find(
                 i =>
-                    i.AlertID == int.Parse(Request.QueryString["alertId"]));
+                    i.Id == int.Parse(Request.QueryString["alertId"]));
 
             item.Alerts.Remove(alert);
             IDictionary<int, DateTime> data = new Dictionary<int, DateTime>();
             foreach (var t in item.Alerts)
             {
-                var time = t.Item.StartTime;
-                time = time.Subtract(t.Time);
-                data[t.AlertID] = time;
+                data[t.Id] = t.AlertTime;
             }
 
             //Order the alerts by time

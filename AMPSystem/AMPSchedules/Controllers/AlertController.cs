@@ -44,24 +44,20 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
 
             //TODO Get from DB
-            //var alerts = item.Alerts.OrderBy(x => x.Time).ToList();
-            //Debug.WriteLine(alerts.Count);
+            var alerts = item.Alerts.OrderBy(x => x.AlertTime).ToList();
+            Debug.WriteLine(alerts.Count);
 
             //TODO HARD CODE
-            var alerts = new List<Alert>
+            /*var alerts = new List<Alert>
             {
                 new Alert(new TimeSpan(13, 00, 59), item),
                 new Alert(new TimeSpan(14, 30, 00), item)
-            };
+            };*/
 
             IDictionary<int, DateTime> data = new Dictionary<int, DateTime>();
             foreach (var t in alerts)
             {
-                var time = t.Item.StartTime;
-                time = time.Subtract(t.Time);
-
-                Debug.Write(t.Item.StartTime + " " + t.Time + " " + time);
-                data[t.AlertID] = time;
+                data[t.Id] = t.AlertTime;
             }
 
             //Order the alerts by time

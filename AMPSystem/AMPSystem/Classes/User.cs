@@ -30,9 +30,6 @@ namespace AMPSystem.Classes
         /// <param name="courses"></param>
         public User(int id, string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
-            UserID = _id;
-            _id++;
-
             ExternId = id;
             Name = name;
             Email = email;
@@ -44,9 +41,6 @@ namespace AMPSystem.Classes
 
         public User(string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
-            UserID = _id;
-            _id++;
-            
             Name = name;
             Email = email;
             Roles = new List<string>();

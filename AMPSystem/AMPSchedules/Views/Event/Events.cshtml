@@ -1,0 +1,175 @@
+﻿@using Resources
+
+@{
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<h2 style="text-align: center">Events</h2>
+<br/>
+<br/>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Next Event</h4>
+            <br/>
+            <div class="NextEvent">
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <h4>Future Events</h4>
+            <br/>
+            <div class="FutureEvents">
+                
+            </div>
+        </div>
+    </div>
+</div> 
+
+@section scripts
+{
+    @Scripts.Render("~/Scripts/moment-with-locales.min.js")
+    <script>
+        $().ready(function() {
+            requestTeachers(printInformation);
+        });
+
+        //Ajax Request for teachers
+        function requestTeachers(returnFunction) {
+            var data = {};
+            // data["start"] = moment().isoWeekday(1).format("YYYY-MM-DD");
+            //data["end"] = moment().isoWeekday(7).format("YYYY-MM-DD");
+            $.ajax({
+                type: "GET",
+                url: '/Event/ReturnEvents?start=2017-01-02&end=2017-01-07',
+                data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: returnFunction,
+                failure: function(response) {
+                    console.log("Fail");
+                    alert(response.d);
+                }
+            });
+        }
+
+        //Adds Information to the page
+        function printInformation(teachers) {
+            console.log(teachers);
+            var ClassName = undefined;
+            var StartingTime = undefined;
+            var ClassRoom = undefined;
+            var Floor = undefined;
+            var iteration = 0;
+
+            $.each(sortBy(teachers, { prop: "StartTime" }),
+                function(key, value) { //Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor
+
+                    $.each(value.Courses,
+                        function(chave, valor) {
+                            ClassName = value.Name;
+                            StartingTime = value.StartTime;
+
+                            $.each(value.Rooms,
+                                function(property, val) {
+                                    ClassRoom = val.Name;
+                                    Floor = val.Floor;
+                                });
+                        });
+                    iteration += 1;
+                    if (iteration == 1) {
+                        renderNextEvent(ClassName, StartingTime, ClassRoom, Floor);
+                    } else
+                    {
+                        renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor);
+                    }
+
+                });
+            renderTeacher(iteration, endTime, startTime, office, floor, email, name, course);
+        }
+
+        function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor) {
+            $('.NextEvent').append(
+                '<div class="panel-group">' +
+                '<div class="panel panel-primary">' +
+                '<div class="panel-body">' +
+                '<h5>' +
+                ClassName +
+                '</h5>' +
+                '<br/>' +
+                '<p>Inicio: ' +
+                StartingTime +
+                ' H</p>' +
+                '<p>' +
+                ClassRoom +
+                '</p>' +
+                '<p>Piso: ' +
+                Floor +
+                '</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            );
+
+        }
+        function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor) {
+            $('.FutureEvents').append(
+                '<div class="panel-group">' +
+                '<div class="panel panel-primary">' +
+                '<div class="panel-body">' +
+                '<h5>' +
+                ClassName +
+                '</h5>' +
+                '<br/>' +
+                '<p>Inicio: ' +
+                StartingTime +
+                ' H</p>' +
+                '<p>' +
+                ClassRoom +
+                '</p>' +
+                '<p>Piso: ' +
+                Floor +
+                '</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            );
+
+        }
+        //Presents officehours of week
+       
+
+        var sortBy = (function() {
+
+            const _defaults = {
+                parser: (x) => x,
+                desc: false
+            };
+
+            const isObject = (o) => o !== null && typeof o === "object";
+            const isDefined = (v) => typeof v !== "undefined";
+
+            //gets the item to be sorted
+            function getItem(x) {
+                const isProp = isObject(x) && isDefined(x[this.prop]);
+                return this.parser(isProp ? x[this.prop] : x);
+            }
+
+            return function(array, options) {
+                if (!(array instanceof Array) || !array.length)
+                    return [];
+                const opt = Object.assign({}, _defaults, options);
+                opt.desc = opt.desc ? -1 : 1;
+                return array.sort(function(a, b) {
+                    a = getItem.call(opt, a);
+                    b = getItem.call(opt, b);
+                    return opt.desc * (a < b ? -1 : +(a > b));
+                });
+            };
+
+        }());
+    </script>
+
+}
+   
+

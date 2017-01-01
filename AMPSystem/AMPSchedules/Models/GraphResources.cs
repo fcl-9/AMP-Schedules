@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
+namespace AMPSchedules.Models
 {
     public class UserInfo
     {

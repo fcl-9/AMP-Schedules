@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Resources;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
+namespace AMPSchedules.Models
 {
     public class GraphService
     {

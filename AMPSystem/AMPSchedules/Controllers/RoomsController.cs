@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AMPSchedules.Models;
 using AMPSystem.Classes;
-using Microsoft_Graph_SDK_ASPNET_Connect.Models;
 using Newtonsoft.Json;
 using Resources;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -7,6 +8,7 @@ using AMPSystem.Classes;
 using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
+using Quartz.Xml;
 using Resources;
 
 namespace AMPSchedules.Controllers
@@ -31,6 +33,7 @@ namespace AMPSchedules.Controllers
 
         public override ActionResult Hook(TimeTableManager manager)
         {
+            Validate();
             //Get the room
             var roomFullName = Request.QueryString["room"];
             var stringSeparators = new[] {" - "};
@@ -47,12 +50,20 @@ namespace AMPSchedules.Controllers
                             var mBulding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
                             mRooms.Add(DbManager.Instance.CreateRoomIfNotExists(mBulding, room.Floor, room.Name));
                         }
+            if (rooms.Count == 0 || mRooms.Count == 0)
+                return RedirectToAction("Index", "Error",
+                    new { message = "There is a problem with the selected room." });
 
             //Get The course
             ICollection<Course> courses = new List<Course>();
             foreach (var course in manager.Repository.Courses)
                 if (course.Name == Request.QueryString["course"])
                     courses.Add(course);
+
+            if (courses.Count == 0)
+                return RedirectToAction("Index", "Error",
+                    new { message = "There is a problem with the selected course." });
+
             var startTime = Convert.ToDateTime(Request.QueryString["beginsAt"]);
             var endTime = Convert.ToDateTime(Request.QueryString["endsAt"]);
             var name = Request.QueryString["title"];
@@ -76,6 +87,34 @@ namespace AMPSchedules.Controllers
                 courses.First().Name);
             DbManager.Instance.SaveChanges();
             return base.Hook(manager);
+        }
+
+        private void Validate()
+        {
+            if (Request.QueryString["room"] == null)
+            {
+                throw new ValidationException("You need to select a room.");
+            }
+            if (Request.QueryString["course"] == null)
+            {
+                throw new ValidationException("You need to select a course"); 
+            }
+            if (Request.QueryString["beginsAt"] == null)
+            {
+                throw new ValidationException("You need to select a date and time to the start of the event");
+            }
+            if (Request.QueryString["endsAt"] == null)
+            {
+                throw new ValidationException("You need to select a date and time to the end of the event");
+            }
+            if (Request.QueryString["title"] == null)
+            {
+                throw new ValidationException("You need to give a name to the event");
+            }
+            if (Request.QueryString["description"] == null)
+            {
+                throw new ValidationException("You need to need to give a description the event");
+            }
         }
     }
 }

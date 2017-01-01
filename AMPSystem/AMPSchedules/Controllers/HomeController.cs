@@ -7,12 +7,11 @@ using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSchedules.Helpers;
-using Microsoft_Graph_SDK_ASPNET_Connect.Models;
+using AMPSchedules.Models;
 using Resources;
 
 namespace AMPSchedules.Controllers
 {
-    //Commented for tests only!!!!!!!!!!!!!![Authorize]
     public class HomeController : TemplateController
     {
         private readonly GraphService graphService = new GraphService();

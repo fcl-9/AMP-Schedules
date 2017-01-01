@@ -219,6 +219,8 @@
     <Compile Include="TokenStorage\SessionTokenCache.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\button.css" />
     <Content Include="Content\ColorPicker\jquery.simplecolorpicker.css" />
     <Content Include="Content\Contacts.css" />
@@ -274,10 +276,13 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\ColorPicker\jquery.simplecolorpicker.js" />
     <Content Include="Scripts\fullcalendar.js" />
     <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\gcal.js" />
+    <Content Include="Scripts\javascript\functions.js" />
     <Content Include="Scripts\jquery-ui-1.8.11.js" />
     <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
     <Content Include="Scripts\jquery.datetimepicker.full.js" />

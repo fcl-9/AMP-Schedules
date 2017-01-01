@@ -1,4 +1,25 @@
-﻿//Makes Request to the server - Generic
+﻿// Overides some configurations of validate to use bootstrap error
+function configureValidator() {
+    $.validator.setDefaults({
+        highlight: function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.form-group').removeClass('has-error');
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function(error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        }
+    });
+}
+
+//Makes Request to the server - Generic
 function requestGetType(requesturl, data) {
     data["start"] = $('#calendar').fullCalendar('getView').start.format();
     data["end"] = $('#calendar').fullCalendar('getView').end.format();
@@ -280,6 +301,7 @@ function sanitizeModalFields() {
     $("#new_event_description").val('');
 }
 
+var counter = 0;
 //Handles all the operations over alertModal
 function AlertModalFunctions() {
     $("#addAlert")
@@ -288,10 +310,11 @@ function AlertModalFunctions() {
                 .append('' +
                     '<div class="col-sm-12 form-group">' +
                     '<div class="col-sm-5">' +
-                    '<input class="form-control number" />' +
+                    '<input data-msg="Please insert a number" class="form-control number" name=number'+counter+'/>' +
                     '</div>' +
                     '<div class="col-sm-5">' +
-                    '<select class="form-control timeUnit"  >' +
+                    '<select data-msg="Please insert a time unit" class="form-control timeUnit" name=timeUnit' + counter + ' >' +
+                    '<option value="">Select...</option>' +
                     '<option>Minutes</option>' +
                     '<option>Hours</option>' +
                     '<option>Days</option>' +
@@ -303,13 +326,26 @@ function AlertModalFunctions() {
                     '</div>' +
                     '</div>'
                 );
+            counter += 1;
+            $(".timeUnit").each(function() {
+                $(this).rules("add",
+                {
+                    required: true
+                });
+            });
+            $(".number").each(function() {
+                $(this).rules("add",
+                {
+                    required: true,
+                    digits: true
+                });
+            });
         });
 
     $("#alertForm")
         .on("click",
             ".rm-alert",
             function (e) {
-                alert("asd");
                 e.preventDefault();
                 $(this).parent().parent().remove();
             });
@@ -326,6 +362,7 @@ function AlertModalFunctions() {
             requestGetType("/Color/EventColor", colorApplyer);
             $('#fullCalModal').modal('hide');
         } else if ($("#3").hasClass('active')) {
+            $("#alertForm").valid();
             //console.log(" " + $("#startTime").text()+ " " + $("#endTime").text());
             var times = $('#alertForm').find('.number');
             var units = $('#alertForm').find('.timeUnit');
@@ -496,7 +533,7 @@ function addJqueryValidator() {
             new_event_course: "required"
         },
         messages: {
-            new_event_name: "Please enter your first name.",
+            new_event_name: "Please enter a name for the event.",
             datetimepicker_starttime: "Please select a start date.",
             datetimepicker_endtime: "Please select a end date.",
             new_event_room: "Please select a room.",
@@ -506,6 +543,23 @@ function addJqueryValidator() {
             return false;
         }
     });
+    $("#alertForm").validate({
+        rules: {
+            number: {
+                required: true,
+                digits:true
+            },
+            timeUnit: "required"
+        },
+        messages: {
+            number: "Please enter a number",
+            timeUnit: "Please select a time unit",
+        },
+        submitHandler: function (form) {
+            return false;
+        }
+    });
+
 }
 
 //Submit the Data of a new event

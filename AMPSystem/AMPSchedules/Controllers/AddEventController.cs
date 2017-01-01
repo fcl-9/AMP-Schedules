@@ -111,10 +111,6 @@ namespace AMPSchedules.Controllers
             {
                 throw new ValidationException("You need to give a name to the event");
             }
-            if (Request.QueryString["description"] == null)
-            {
-                throw new ValidationException("You need to need to give a description the event");
-            }
         }
     }
 }

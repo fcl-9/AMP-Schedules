@@ -107,22 +107,7 @@
                     <div class="tab-pane" id="3">
                         <form id="alertForm">
                             <label class="control-label">Configure Alerts</label>
-                            <div class="col-sm-12 form-group">
-                                <div class="col-sm-5">
-                                    <input class="form-control number"/>
-                                </div>
-                                <div class="col-sm-5">
-                                    <select class="form-control timeUnit" >
-                                        <option>Minutes</option>
-                                        <option>Hours</option>
-                                        <option>Days</option>
-                                        <option>Weeks</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-2">
-                                    <button class="rm-alert btn btn-danger">Remove</button>
-                                </div>
-                            </div>
+                            
                         </form>
                         <button id="addAlert" class="btn btn-default">Add new alert</button>
                     </div>
@@ -241,6 +226,8 @@
                 calendar('/Home/CalendarDefaultData');
                 //Add the Color Picker that's inside alerts modal
                 $('select[name="colorpicker"]').simplecolorpicker();
+                // Configures validator
+                configureValidator();
                 //Ajax Request
                 getCourses(renderFilterCheckBoxes);
                 //Binds Events to Alerts Modal

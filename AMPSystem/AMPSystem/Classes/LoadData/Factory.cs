@@ -15,39 +15,31 @@ namespace AMPSystem.Classes.LoadData
         public static Factory Instance => _instance ?? (_instance = new Factory());
         #endregion
 
-        public ITimeTableItem Create (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
+        public ITimeTableItem Create (int id, string name, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
-            var name = "";
-            var i = 0;
-            foreach (var course in courses)
-            {
-                name += course.Name;
-                if (courses.Count > 1 && i != courses.Count)
-                    name += "/";
-                i++;
-            }
            return new Lesson(id, startTime, endTime, rooms, courses, type, name, teacher);
         }
 
-        public ITimeTableItem Create (int id, DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher)
+        public ITimeTableItem Create (int id, DateTime startTime , DateTime endTime , ICollection<Room> rooms, User teacher, string name)
         {
-            return new OfficeHours(id, startTime,endTime,rooms, teacher);
+            return new OfficeHours(id, name, startTime, endTime, rooms, teacher);
         }
 
-        public ITimeTableItem Create (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses)
+        public ITimeTableItem Create(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher, string name, string color)
         {
-            var name = "Avaliação de ";
-            var i = 0;
-            foreach (var course in courses)
-            {
-                name += course.Name;
-                if (courses.Count > 1 && i != courses.Count)
-                    name += "/";
-                i++;
-            }
+            return new OfficeHours(id, name, startTime, endTime, rooms, teacher, color);
+        }
+
+        public ITimeTableItem Create (int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name)
+        {
             return new EvaluationMoment(id, startTime, endTime, rooms, courses, name);
         }
-        
+
+        public ITimeTableItem Create(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name, string color)
+        {
+            return new EvaluationMoment(id, startTime, endTime, rooms, color, courses, name);
+        }
+
         public Room CreateRoom(int id, string name, int floor)
         {
             return new Room(id, name, floor);
@@ -71,6 +63,16 @@ namespace AMPSystem.Classes.LoadData
         public User CreateUser(string name, string email, ICollection<string> roles, ICollection<Course> courses)
         {
             return new User(name, email, roles, courses);
+        }
+
+        public ITimeTableItem Create(int id, string name, string color, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
+        {
+            return new Lesson(id, startTime, endTime, color, rooms, courses, type, name, teacher);
+        }
+
+        public ITimeTableItem Create(DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses, string name, string color, string description, bool editable)
+        {
+            return new EvaluationMoment(startTime, endTime, rooms, courses, name, color, description, editable);
         }
     }
 }

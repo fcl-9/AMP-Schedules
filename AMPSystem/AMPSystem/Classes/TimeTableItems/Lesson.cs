@@ -24,7 +24,9 @@ namespace AMPSystem.Classes.TimeTableItems
         public ICollection<Alert> Alerts { get; set; }
 
         private static int _id;
-        
+        private string name1;
+        private string name2;
+
         /// <summary>
         /// Construtor. Used when data is loaded from the "API" (This data don't need to be persistent).
         /// </summary>
@@ -39,9 +41,6 @@ namespace AMPSystem.Classes.TimeTableItems
         public Lesson(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
             string type, string name, User teacher, string description)
         {
-            ID = _id;
-            _id++;
-
             ExternId = id;
             StartTime = startTime;
             EndTime = endTime;
@@ -57,9 +56,6 @@ namespace AMPSystem.Classes.TimeTableItems
         public Lesson(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
             string type, string name, User teacher)
         {
-            ID = _id;
-            _id++;
-
             ExternId = id;
             StartTime = startTime;
             EndTime = endTime;
@@ -68,6 +64,21 @@ namespace AMPSystem.Classes.TimeTableItems
             Courses = courses;
             Name = name;
             Teacher = teacher;
+            Alerts = new List<Alert>();
+        }
+
+        public Lesson(int id, DateTime startTime, DateTime endTime, string color, ICollection<Room> rooms,
+            ICollection<Course> courses, string type, string name, User teacher)
+        {
+            Name = name;
+            StartTime = startTime;
+            EndTime = endTime;
+            Rooms = rooms;
+            Type = type;
+            Courses = courses;
+            Name = name;
+            Teacher = teacher;
+            Color = color;
             Alerts = new List<Alert>();
         }
     }

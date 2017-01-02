@@ -12,6 +12,13 @@
     @Styles.Render("~/Content/button.css")
     @Styles.Render("~/Content/jquery.datetimepicker.min.css")
 }
+<div id="feedbackbar" class="alert alert-dismissable fade in">
+    <a href="#" id="close-feedbackbar" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Indicates a successful or positive action.
+</div>
+
+
+
 <h1 style="text-align: center">Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value)</h1>
 
     <br/>
@@ -127,16 +134,12 @@
                         <button id="addAlert" class="btn btn-default">Add new alert</button>
                     </div>
                     <div class="tab-pane" id="4">
-                        <form id="activeAlertForm">
-                            <label class="control-label">Active Alerts</label>
-                           
-                            
-                            
-                            
-                            
-                            
+                        <div class="row">
+                            <label class="control-label col-md-12"> Active Alerts</label>
+                            <div id="activeAlertForm" class="col-md-12">
 
-                        </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -159,7 +162,7 @@
                 <h4 id="modalTitle" class="modal-title-addEvent"></h4>
             </div>
             <div id="modalBody" class="modal-body">
-                <form class="form-horizontal">
+                <form id="new_event-add-form"class="form-horizontal">
                     <div class="form-group">
                         <label for="new_event_name" class="col-sm-2 control-label">Event Name: </label>
                         <div class="col-sm-10">
@@ -329,24 +332,23 @@
 
         //Adding Rooms 
         function addRoomToEventAdder(rooms) {
-            $("#new_event_room")
-                .html(function() {
-                    var room = "";
-                    $.each(rooms,
-                        function(property, value) {
-                            $.each(value.Rooms,
-                                function(key, val) {
-                                    room += "<option value='" +
-                                        val.Id +
-                                        "'>" +
-                                        value.Name +
-                                        " - " +
-                                        val.Name +
-                                        "</option>";
-                                });
-                        });
-                    return room;
-                });
+            $("#new_event_room").html(function() {
+                var room = "";
+                $.each(rooms,
+                    function(property, value) {
+                        $.each(value.Rooms,
+                            function(key, val) {
+                                room += "<option value='" +
+                                    value.Name +" - " + val.Name +
+                                    "'>" +
+                                    value.Name +
+                                    " - " +
+                                    val.Name +
+                                    "</option>";
+                            });
+                    });
+                return room;
+            });
         }
 
         //Get my courses
@@ -531,7 +533,6 @@
 
         }
 
-        //$().ready(applyFilters());
 
         //Makes Request to the server
         function requestGetType(requesturl, data) {
@@ -588,55 +589,53 @@
                         }
                     });
 
-                // Remove events
-                $()
-                    .ready(function() {
-                        $("#remove")
-                            .click(function() {
-                                var data = {};
-                                data.id = currentEvent.id;
-                                data.name = currentEvent.title;
-                                data.start = currentEvent.start;
-                                requestGetType("/RemoveEvent/", data);
-                                $("#fullCalModal").modal("hide");
-                            });
-                    });
+            // Remove events
+            $().ready(function () {
+                $("#remove").click(function () {
+                    var data = {};
+                    data.id = currentEvent.id;
+                    data.name = currentEvent.title;
+                    data.startEvent = currentEvent.start.format();
+                    data.endEvent = currentEvent.end.format();
+                    console.log(data);
+                    requestGetType("/RemoveEvent/", data);
+                    $("#fullCalModal").modal("hide");
+                });
+            });
 
-                //Submit the Data of a new event
-                $("#saveNewEvent")
-                    .click(function() {
-                        var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
-                        var endtime = $("#datetimepicker_endtime").datetimepicker('getValue');
-                        var today = new Date();
-                        //Checking if the choosen time are greater than now and end time is greater than start time.
-                        if (startTime > today && endtime > today && endtime > startTime) {
-                            var newEvent = {}; //Generates the json to send to the server and store it in the database.
-                            var name = $("#new_event_name").val();
-                            var beginsAt = $("#datetimepicker_starttime").datetimepicker('getValue');
-                            var endsAt = $("#datetimepicker_endtime").datetimepicker('getValue');
-                            var room = $("#new_event_room").val();
-                            var course = $("#new_event_course").val();
-                            var description = $("#new_event_description").val();
-                            //Check if there is any empty field
-                            if (name !== "" &&
-                                beginsAt !== "" &&
-                                endsAt !== "" &&
-                                room !== "" &&
-                                $.isNumeric(room) &&
-                                course !== "" &&
-                                description !== "") {
-                                //Parses Data
-                                beginsAt = beginsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
-                                endsAt = endsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
-                                beginsAt = moment(beginsAt, "ddd MMM DD YYYY HH:mm:ss");
-                                endsAt = moment(endsAt, "ddd MMM DD YYYY HH:mm:ss");
-                                //Add Values to Json
-                                newEvent['title'] = name;
-                                newEvent['beginsAt'] = beginsAt.format();
-                                newEvent['endsAt'] = endsAt.format();
-                                newEvent['room'] = room;
-                                newEvent['course'] = course;
-                                newEvent['description'] = description;
+            //Submit the Data of a new event
+            $("#saveNewEvent").click(function() {
+                var startTime = $('#datetimepicker_starttime').datetimepicker('getValue');
+                var endtime = $("#datetimepicker_endtime").datetimepicker('getValue');
+                var today = new Date();
+                //Checking if the choosen time are greater than now and end time is greater than start time.
+                if (startTime > today && endtime > today && endtime > startTime) {
+                    var newEvent = {}; //Generates the json to send to the server and store it in the database.
+                    var name = $("#new_event_name").val();
+                    var beginsAt = $("#datetimepicker_starttime").datetimepicker('getValue');
+                    var endsAt = $("#datetimepicker_endtime").datetimepicker('getValue');
+                    var room = $("#new_event_room").val();
+                    var course = $("#new_event_course").val();
+                    var description = $("#new_event_description").val();
+                    //Check if there is any empty field
+                    if (name !== "" &&
+                        beginsAt !== "" &&
+                        endsAt !== "" &&
+                        room !== "" &&
+                        course !== "" &&
+                        description !== "") {
+                        //Parses Data
+                        beginsAt = beginsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
+                        endsAt = endsAt.toString().replace("GMT+0000 (GMT Standard Time)", "");
+                        beginsAt = moment(beginsAt, "ddd MMM DD YYYY HH:mm:ss");
+                        endsAt = moment(endsAt, "ddd MMM DD YYYY HH:mm:ss");
+                        //Add Values to Json
+                        newEvent['title'] = name;
+                        newEvent['beginsAt'] = beginsAt.format();
+                        newEvent['endsAt'] = endsAt.format();
+                        newEvent['room'] = room;
+                        newEvent['course'] = course;
+                        newEvent['description'] = description;
 
                                 $('#addEventModal').modal('hide');
 
@@ -664,19 +663,17 @@
             });
 
         //Return a Json with active alerts
-        function getActiveAlerts(item) {
+        function getActiveAlerts(item, funtionSucess) {
             item["start"] = $('#calendar').fullCalendar('getView').start.format();
             item["end"] = $('#calendar').fullCalendar('getView').end.format();
-            console.log(item);
-            return $.ajax({
+            //console.log(item);
+            $.ajax({
                 type: "GET",
                 url: "/Alert/Index",
                 data: item,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function(success) {
-                    return success;
-                },
+                success: funtionSucess,
                 failure: function(response) {
                     console.log("Fail");
                     alert(response.d);
@@ -684,45 +681,93 @@
             });
         }
 
+        //Removes one alert from the database
+        function removeAnAlert(datatoSend, onSuccess) {
+            datatoSend["start"] = $('#calendar').fullCalendar('getView').start.format();
+            datatoSend["end"] = $('#calendar').fullCalendar('getView').end.format();
+            $.ajax({
+                type: "GET",
+                url: "/RemoveAlert/Index",
+                data: datatoSend,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: onSuccess,
+                failure: function(response) {
+                    console.log("Fail");
+                    alert(response.d);
+                }
+            });
+        }
 
+        //This function will render the form used to remove active alerts
+        function renderActiveAlerts(activeAlerts) {
+            $.each(activeAlerts,
+                function(key, value) {
+                    $("#activeAlertForm").append(
+                        '' +
+                        '<div class="col-sm-12 form-group">' +
+                        '<div class="col-sm-10">' +
+                        '<input class="form-control" value="' +
+                        value.Value +
+                        '" readonly=""/>' +
+                        '</div>' +
+                        '<div class="col-sm-2">' +
+                        '<button class="rm-active-alert btn btn-danger" id="' +
+                        value.Key +
+                        '">Remove</button>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                });
+        }
+
+        //Clicks on active alerts tab
         $().ready(function() {
+            //When the div is pressed
             $('a[href="#4"]').click(function() {
+                if ($('#activeAlertForm').is(':empty')) {
+                    //pass
+                } else {
+                    $('#activeAlertForm').html("");
+                }
                 var selectedItem = {};
                 selectedItem["name"] = $('#modalTitle').text();
                 selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
                     .format("YYYY-MM-DD HH:mm:ss");
                 selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
                     .format("YYYY-MM-DD HH:mm:ss");
-                var activeAlerts = getActiveAlerts(selectedItem);
-
-                $.each(activeAlerts,
-                    function(key,value) {
-                        $("#activeAlertForm").append(
-                            '<div class="col-sm-12 form-group" id="active-alerts">'+
-                                '<div class="col-sm-5" id="minutes">'+
-                                '<input class="form-control" readonly="readonly"/>'+
-                                '</div>'+
-                                '<div class="col-sm-5" id="unities">'+
-                                '<input class="form-control" readonly="readonly" />'+
-                                '</div>'+
-                                '<div class="col-sm-2">'+
-                                      '<button class="rm-alert btn btn-danger">Remove</button>'+
-                                '</div>'+
-                            '</div>'
-
-
-
-
-
-
-
-                            );
-                    });
+                getActiveAlerts(selectedItem, renderActiveAlerts);
             });
+            //When button to remove an active alert is clicked
+            $('#activeAlertForm').on('click',
+                '.rm-active-alert',
+                function(e) {
+                    removeAlert = {};
+                    removeAlert['alertId'] = $(this).attr('id');
+                    removeAlert["name"] = $('#modalTitle').text();
+                    removeAlert["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
+                        .format("YYYY-MM-DD HH:mm:ss");
+                    removeAlert["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
+                        .format("YYYY-MM-DD HH:mm:ss");
+                    //Removes Everything
+                    $('#activeAlertForm').html("");
+                    //Makes ajax request and receives it back
+                    removeAnAlert(removeAlert, renderActiveAlerts);
+                });
         });
 
+        function handleFeedBackBar(type) {
+            if (type === "error") {
+                $("#feedbackbar").addClass('alert-danger');
+            }
+            else if (type === "success") {
+                $("#feedbackbar").addClass('alert-success');
+            }
 
-        
+            //$("#close-feedbackbar").click
+        }
+
+
 
     </script>
 

@@ -20,7 +20,7 @@ namespace AMPSchedules.Models
             // Get the current user. 
             // This sample only needs the user's email address, so select the mail and userPrincipalName properties.
             // If the mail property isn't defined, userPrincipalName should map to the email for all account types. 
-            User me = await graphClient.Me.Request().Select("mail,userPrincipalName").GetAsync();
+            Microsoft.Graph.User me = await graphClient.Me.Request().Select("mail,userPrincipalName").GetAsync();
             return me.Mail ?? me.UserPrincipalName;
         }
 
@@ -31,7 +31,7 @@ namespace AMPSchedules.Models
             // Get the current user. 
             // This sample only needs the user's email address, so select the mail and userPrincipalName properties.
             // If the mail property isn't defined, userPrincipalName should map to the email for all account types. 
-            User me = await graphClient.Me.Request().Select("userPrincipalName").GetAsync();
+            Microsoft.Graph.User me = await graphClient.Me.Request().Select("userPrincipalName").GetAsync();
             return me.UserPrincipalName;
         }
 

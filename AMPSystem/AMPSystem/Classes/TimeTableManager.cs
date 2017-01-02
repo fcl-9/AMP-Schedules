@@ -23,8 +23,10 @@ namespace AMPSystem.Classes
             //Adds Value to our data class whcih is TimeTable
             foreach (var item in Repository.Items)
             {
-                if (startDateTime.Date.CompareTo(item.StartTime) <= 0 &&
-                    endDateTime.Date.CompareTo(item.StartTime) >= 0)
+                //if (startDateTime.Date.CompareTo(item.StartTime) <= 0 &&
+                //    endDateTime.Date.CompareTo(item.StartTime) >= 0)
+                if(DateTime.Compare(startDateTime, item.StartTime) <= 0 &&
+                    DateTime.Compare(endDateTime, item.StartTime) >= 0)
                 {
                     if (item is Lesson)
                     {

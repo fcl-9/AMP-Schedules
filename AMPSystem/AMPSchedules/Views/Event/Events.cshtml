@@ -13,14 +13,20 @@
         <div class="col-sm-6">
             <h4>Next Event</h4>
             <br/>
-            <div class="NextEvent">
+            <div class="NextEvent" id="NextEvent">
             </div>
         </div>
         <div class="col-sm-6">
-            <h4>Future Events</h4>
+            <div class="container">
+                <h4 style="text-align: left">Future Events</h4>
+                <select style="text-align: center" onchange="changeFunc(value);">
+                    <option value="1">1 day</option>
+                    <option value="2">2 days</option>
+                    <option value="3">3 days</option>
+                </select>
+            </div>
             <br/>
-            <div class="FutureEvents">
-                
+            <div class="FutureEvents" id="FutureEvents">
             </div>
         </div>
     </div>
@@ -30,18 +36,52 @@
 {
     @Scripts.Render("~/Scripts/moment-with-locales.min.js")
     <script>
-        $().ready(function() {
-            requestTeachers(printInformation);
+        $(function () {
+
+            $('div.segmented-control a').on('click', function () {
+
+                $('div.segmented-control a').each(function (i, e) {
+                    $(e).removeClass('active');
+                });
+
+                $(this).addClass('active');
+                $(this).find('input').prop('checked', true);
+                return false;
+
+            });
+
         });
 
+        function changeFunc($i) {
+            $("#NextEvent").html("");
+            $("#FutureEvents").html("");
+           
+            requestTeachers(printInformation, $i);
+        }
+
+        $().ready(function () {   
+            requestTeachers(printInformation,1);
+        });
+        function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + parseInt(days));
+            return result;
+        }
         //Ajax Request for teachers
-        function requestTeachers(returnFunction) {
+        function requestTeachers(returnFunction, DaysFilter) {
+            
             var data = {};
+
             // data["start"] = moment().isoWeekday(1).format("YYYY-MM-DD");
             //data["end"] = moment().isoWeekday(7).format("YYYY-MM-DD");
+            var DateInicial = new Date();
+            var DateFinal = new Date();
+            DateFinal = moment(addDays(DateInicial, DaysFilter)).format("YYYY-MM-DD");
+            DateInicial = moment(DateInicial).format("YYYY-MM-DD");
+     
             $.ajax({
                 type: "GET",
-                url: '/Event/ReturnEvents?start=2017-01-02&end=2017-01-07',
+                url: '/Event/ReturnEvents?start=' + DateInicial + '&end=' + DateFinal,
                 data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -62,7 +102,6 @@
             var Floor = undefined;
             var Color = undefined;
             var iteration = 0;
-
             $.each(sortBy(teachers, { prop: "StartTime" }),
                 function(key, value) { //Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor
 
@@ -88,7 +127,6 @@
                     }
 
                 });
-            renderTeacher(iteration, endTime, startTime, office, floor, email, name, course);
         }
 
         function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color) {

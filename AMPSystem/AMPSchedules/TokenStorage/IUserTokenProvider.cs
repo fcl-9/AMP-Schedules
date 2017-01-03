@@ -5,9 +5,9 @@
 
 using System.Threading.Tasks;
 
-namespace AMPSchedules.Helpers
+namespace AMPSchedules.TokenStorage
 {
-    public interface IAuthProvider
+    public interface IUserTokenProvider
     {
         Task<string> GetUserAccessTokenAsync();
     }

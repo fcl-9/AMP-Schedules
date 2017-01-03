@@ -6,13 +6,12 @@
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
-using AMPSchedules.Helpers;
 using AMPSchedules.TokenStorage;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class AccountController : Controller
     {
@@ -22,14 +21,12 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
                 // Signal OWIN to send an authorization request to Azure.
                 HttpContext.GetOwinContext().Authentication.Challenge(
-                  new AuthenticationProperties { RedirectUri = "/" },
-                  OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                    new AuthenticationProperties { RedirectUri = "/" }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
         }
 
-        /// <summary>
-        /// Clear the token cache, sign out the GraphServiceClient, and end the session with the web app.  
-        /// </summary>
+        // BUGBUG: Ending a session with the v2.0 endpoint is not yet supported.  Here, we just end the session with the web app
+        // Here we just clear the token cache, sign out the GraphServiceClient, and end the session with the web app.  
         public void SignOut()
         {
             if (Request.IsAuthenticated)
@@ -37,16 +34,25 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 // Get the user's token cache and clear it.
                 string userObjectId = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                SessionTokenCache tokenCache = new SessionTokenCache(userObjectId, HttpContext);
+                UserTokenCache tokenCache = new UserTokenCache(userObjectId);
                 tokenCache.Clear(userObjectId);
             }
 
-            SDKHelper.SignOutClient();
+            string callbackUrl = Url.Action("SignOutCallback", "Account", routeValues: null, protocol: Request.Url.Scheme);
 
-            // Send an OpenID Connect sign-out request. 
             HttpContext.GetOwinContext().Authentication.SignOut(
-              CookieAuthenticationDefaults.AuthenticationType);
-            Response.Redirect("/");
+                    new AuthenticationProperties { RedirectUri = callbackUrl }, OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+        }
+
+        public ActionResult SignOutCallback()
+        {
+            if (Request.IsAuthenticated)
+            {
+                // Redirect to home page if the user is authenticated.
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
         }
     }
 }

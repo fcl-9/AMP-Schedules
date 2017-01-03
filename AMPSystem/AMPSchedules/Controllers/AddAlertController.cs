@@ -4,15 +4,17 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AMPSchedules.ScheduledTasks;
 using AMPSystem.Classes;
 using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
-using Microsoft.Graph;
+using Quartz;
+using Quartz.Impl;
 using Resources;
 using Room = AMPSystem.Models.Room;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class AddAlertController : TemplateController
     {
@@ -24,15 +26,15 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
                 return await TemplateMethod();
             }
-            catch (ServiceException se)
+            catch (Exception e)
             {
-                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction($"Index", $"Error",
-                    new {message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message});
+                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error",
+                    new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             var keys = Request.QueryString.AllKeys;
             for (var i = 0; i < keys.Length - 2; i = i + 5)
@@ -46,7 +48,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
 
                 Debug.WriteLine(name + " " + startTime + " " + endTime + " " + time + " " + units);
 
-                var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
+                var item = ((List<ITimeTableItem>) TimeTableManager.Instance.TimeTable.ItemList).Find(
                     it =>
                         it.Name == name &&
                         it.StartTime == startTime);
@@ -72,6 +74,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 }
                 var alertTime = item.StartTime - timeSpan;
                 var alert = new Alert(alertTime, item);
+                AMPSystem.Models.Alert dbAlert = null;
                 // Add alert to the DB
                 if (item is Lesson)
                 {
@@ -81,7 +84,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                         item.Rooms.First().Name);
                     var mLesson = DbManager.Instance.CreateLessonIfNotExists(item.Name, mRoom, mUser, item.Color,
                         item.StartTime, item.EndTime);
-                    DbManager.Instance.AddAlertToLesson(alertTime, mLesson);
+                    dbAlert = DbManager.Instance.AddAlertToLesson(alertTime, mLesson);
                     DbManager.Instance.SaveChanges();
                 }
                 else if (item is EvaluationMoment)
@@ -95,9 +98,10 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                         mRooms.Add(mRoom);
                     }
                     var mEvMoment = DbManager.Instance.CreateEvaluationMomentIfNotExists(item.Name, mRooms, mUser,
-                        item.Color,
-                        item.StartTime, item.EndTime, item.Description, null);  // Courses could be null since this is an event that came from the API
-                    DbManager.Instance.AddAlertToEvaluation(alertTime, mEvMoment);
+                            item.Color,
+                            item.StartTime, item.EndTime, item.Description, null);
+                        // Courses could be null since this is an event that came from the API
+                    dbAlert = DbManager.Instance.AddAlertToEvaluation(alertTime, mEvMoment);
                     DbManager.Instance.SaveChanges();
                 }
                 else if (item is OfficeHours)
@@ -108,12 +112,38 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                         item.Rooms.First().Name);
                     var mOfficeHour = DbManager.Instance.CreateOfficeHourIfNotExists(item.Name, mRoom, mUser, item.Color,
                         item.StartTime, item.EndTime);
-                    DbManager.Instance.AddAlertToOfficeH(alertTime, mOfficeHour);
+                    dbAlert = DbManager.Instance.AddAlertToOfficeH(alertTime, mOfficeHour);
                     DbManager.Instance.SaveChanges();
                 }
                 item.Alerts.Add(alert);
+                ScheduleAlert(item.Name, item.StartTime, alertTime, endTime, CurrentUser.Email, dbAlert.ID);
             }
-            return base.Hook(manager);
+            return base.Hook();
+        }
+
+        /// <summary>
+        ///     Schedules an email for the alert
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="startTime"></param>
+        /// <param name="alertTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="email"></param>
+        /// <param name="id"></param>
+        private void ScheduleAlert(string name, DateTime startTime, DateTime alertTime, DateTime endTime, string email,
+            int id)
+        {
+            var job = JobBuilder.Create<EmailJob>()
+                .UsingJobData("Name", name)
+                .UsingJobData("StartTime", startTime.ToString("dd-MM-yyyy HH:mm"))
+                .UsingJobData("EndTime", endTime.ToString("dd-MM-yyyy HH:mm"))
+                .UsingJobData("Email", email)
+                .UsingJobData("Id", id)
+                .Build();
+
+            var trigger = TriggerBuilder.Create().StartAt(alertTime).Build();
+
+            StdSchedulerFactory.GetDefaultScheduler().ScheduleJob(job, trigger);
         }
     }
 }

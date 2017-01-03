@@ -60,25 +60,28 @@
                             office = val.Name;
                             floor = val.Floor;
                         });
+                    console.log(value.Teacher);
                     startTime = value.StartTime;
                     name = value.Teacher.Name;
                     email = value.Teacher.Email;
+                    courses = [];
 
                     $.each(value.Teacher.Courses,
                         function(chave, valor) {
                             course = valor.Name;
+                            courses.push(course);
                         });
                     iteration += 1;
+                    renderTeacher(iteration, endTime, startTime, office, floor, email, name, courses);
                 });
-            renderTeacher(iteration, endTime, startTime, office, floor, email, name, course);
+            if (iteration == 0) {
+                $('.showTeachers').html("There are no office hours this week");
+            }
         }
 
         //Presents officehours of week
         function renderTeacher(officeHoursAvailable, endTime, startTime, office, floor, email, name, course) {
-            if (officeHoursAvailable == 0) {
-                $('.showTeachers').html("There are no office hours this week");
-            } else {
-                $('.showTeachers').append(
+            $('.showTeachers').append(
                     '<div class="col-md-6">' +
                     '<div class="teacherContainer">' +
                     '<div class="classname">' +
@@ -107,7 +110,7 @@
                     '</div>' +
                     '</div>' +
                     '</div>');
-            }
+            
         };
     </script>
 }

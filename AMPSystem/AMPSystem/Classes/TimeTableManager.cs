@@ -2,6 +2,7 @@
 using AMPSystem.Classes.LoadData;
 using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.Interfaces;
+using System.Collections.Generic;
 
 namespace AMPSystem.Classes
 {
@@ -9,30 +10,42 @@ namespace AMPSystem.Classes
     {
         public Timetable TimeTable { get; set; }
         public Repository Repository { get; set; }
-        
+
+        #region Singleton
+        private static TimeTableManager _instance;
+
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="startDateTime"></param>
         /// <param name="endDateTime"></param>
-        public TimeTableManager(Repository repository, DateTime startDateTime, DateTime endDateTime, User currentUser)
+        private TimeTableManager()
+        {
+            Repository = Repository.Instance;
+        }
+
+        public static TimeTableManager Instance => _instance ?? (_instance = new TimeTableManager());
+        #endregion
+
+        public void CreateTimeTable(DateTime startDateTime, DateTime endDateTime, User currentUser)
         {
             TimeTable = new Timetable(startDateTime, endDateTime, currentUser);
-            Repository = repository;
             //Adds Value to our data class whcih is TimeTable
             foreach (var item in Repository.Items)
             {
-                if (startDateTime.Date.CompareTo(item.StartTime) <= 0 &&
-                    endDateTime.Date.CompareTo(item.StartTime) >= 0)
+                //if (startDateTime.Date.CompareTo(item.StartTime) <= 0 &&
+                //    endDateTime.Date.CompareTo(item.StartTime) >= 0)
+                if (DateTime.Compare(startDateTime, item.StartTime) <= 0 &&
+                    DateTime.Compare(endDateTime, item.StartTime) >= 0)
                 {
                     if (item is Lesson)
                     {
                         // If the lesson belongs to one of the courses that the student assists
                         // then add it to the timetable
-                        foreach (var course in ((Lesson) item).Courses)
+                        foreach (var course in ((Lesson)item).Courses)
                         {
-                            if (repository.UserCourses.Contains(course))
+                            if (Repository.UserCourses.Contains(course))
                             {
                                 AddTimetableItem(item);
                             }
@@ -42,9 +55,9 @@ namespace AMPSystem.Classes
                     {
                         // If the evaluation belongs to one of the courses that the student assists
                         // then add it to the timetable
-                        foreach (var course in ((EvaluationMoment) item).Courses)
+                        foreach (var course in ((EvaluationMoment)item).Courses)
                         {
-                            if (repository.UserCourses.Contains(course))
+                            if (Repository.UserCourses.Contains(course))
                             {
                                 AddTimetableItem(item);
                             }
@@ -54,23 +67,23 @@ namespace AMPSystem.Classes
                     {
                         // If the office hours belongs to one of the teaches that teach one of 
                         // courses that the student assists then add it to the timetable
-                        foreach (var course in ((OfficeHours) item).Teacher.Courses)
+                        foreach (var course in ((OfficeHours)item).Teacher.Courses)
                         {
-                            if (repository.UserCourses.Contains(course))
+                            if (Repository.UserCourses.Contains(course))
                             {
-                                AddTimetableItem(item);
+                                if (
+                                    !((List<ITimeTableItem>) TimeTable.ItemList).Exists(
+                                        i =>
+                                            i.StartTime == item.StartTime && i.EndTime == item.EndTime &&
+                                            i.Name == item.Name))
+                                {
+                                    AddTimetableItem(item);
+                                }
                             }
                         }
                     }
                 }
             }
-
-        }
-
-        //This will only be used to get teachers information don't course data to be added to timetable.
-        public TimeTableManager(Repository repository)
-        {
-            Repository = repository;
         }
 
         /// <summary>

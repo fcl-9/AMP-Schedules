@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using AMPSchedules.Helpers;
-using AMPSchedules.Models;
 using AMPSystem.Classes;
-using Microsoft.Graph;
 using Newtonsoft.Json;
 using Resources;
-using User = Microsoft.Graph.User;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class CoursesController : TemplateController
     {
-        GraphService _graphService = new GraphService();
-
         // GET: Courses
         public async Task<ActionResult> Index()
         {
@@ -25,18 +16,17 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
                 return await TemplateMethod();
             }
-            catch (ServiceException se)
+            catch (Exception e)
             {
-                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction($"Index", $"Error",
-                    new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
+                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error",
+                    new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             return Content(JsonConvert.SerializeObject(CurrentUser.Courses), "application/json");
-            
         }
     }
 }

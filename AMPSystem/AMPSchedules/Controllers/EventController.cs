@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using AMPSystem.Classes;
-using AMPSystem.Classes.Filters;
-using AMPSystem.Interfaces;
-using Microsoft.Graph;
-using Resources;
 using Newtonsoft.Json;
+using Resources;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class EventController : TemplateController
     {
         // GET: Event
         public ActionResult Index()
         {
-           return View($"Events");
+            return View($"Events");
         }
 
         public async Task<ActionResult> ReturnEvents()
@@ -27,18 +22,21 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
                 return await TemplateMethod();
             }
-            catch (ServiceException se)
+            catch (Exception e)
             {
-                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction($"Index", $"Error",
-                    new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
+                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error",
+                    new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
-            return Content(JsonConvert.SerializeObject(manager.TimeTable.ItemList.ToArray(), new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
-
+            return
+                Content(
+                    JsonConvert.SerializeObject(TimeTableManager.Instance.TimeTable.ItemList.ToArray(),
+                        new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
+                    "application/json");
         }
     }
 }

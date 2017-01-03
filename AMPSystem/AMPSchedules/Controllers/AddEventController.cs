@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -7,10 +8,11 @@ using AMPSystem.Classes;
 using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
-using Microsoft.Graph;
+using Quartz.Xml;
 using Resources;
+using AMPSystem.Classes.LoadData;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
+namespace AMPSchedules.Controllers
 {
     public class AddEventController : TemplateController
     {
@@ -22,16 +24,17 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
                 return await TemplateMethod();
             }
-            catch (ServiceException se)
+            catch (Exception e)
             {
-                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction($"Index", $"Error",
-                    new {message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message});
+                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error",
+                    new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
+            Validate();
             //Get the room
             var roomFullName = Request.QueryString["room"];
             var stringSeparators = new[] {" - "};
@@ -39,7 +42,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             var roomName = roomFullName.Split(stringSeparators, StringSplitOptions.None)[1];
             ICollection<Room> rooms = new List<Room>();
             ICollection<AMPSystem.Models.Room> mRooms = new List<AMPSystem.Models.Room>();
-            foreach (var building in manager.Repository.Buildings)
+            foreach (var building in TimeTableManager.Instance.Repository.Buildings)
                 if (building.Name == buildingName)
                     foreach (var room in building.Rooms)
                         if (room.Name == roomName)
@@ -48,12 +51,20 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                             var mBulding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
                             mRooms.Add(DbManager.Instance.CreateRoomIfNotExists(mBulding, room.Floor, room.Name));
                         }
+            if (rooms.Count == 0 || mRooms.Count == 0)
+                return RedirectToAction("Index", "Error",
+                    new { message = "There is a problem with the selected room." });
 
             //Get The course
             ICollection<Course> courses = new List<Course>();
-            foreach (var course in manager.Repository.Courses)
+            foreach (var course in TimeTableManager.Instance.Repository.Courses)
                 if (course.Name == Request.QueryString["course"])
                     courses.Add(course);
+
+            if (courses.Count == 0)
+                return RedirectToAction("Index", "Error",
+                    new { message = "There is a problem with the selected course." });
+
             var startTime = Convert.ToDateTime(Request.QueryString["beginsAt"]);
             var endTime = Convert.ToDateTime(Request.QueryString["endsAt"]);
             var name = Request.QueryString["title"];
@@ -71,12 +82,37 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             );
             newEvent.Editable = true;
             //Add new Event
-            manager.AddTimetableItem(newEvent);
+            Repository.Instance.Items.Add(newEvent);
+            TimeTableManager.Instance.AddTimetableItem(newEvent);
             var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
             DbManager.Instance.CreateEvaluationMoment(name, mRooms, mUser, null, startTime, endTime, description,
                 courses.First().Name);
             DbManager.Instance.SaveChanges();
-            return base.Hook(manager);
+            return base.Hook();
+        }
+
+        private void Validate()
+        {
+            if (Request.QueryString["room"] == null)
+            {
+                throw new ValidationException("You need to select a room.");
+            }
+            if (Request.QueryString["course"] == null)
+            {
+                throw new ValidationException("You need to select a course"); 
+            }
+            if (Request.QueryString["beginsAt"] == null)
+            {
+                throw new ValidationException("You need to select a date and time to the start of the event");
+            }
+            if (Request.QueryString["endsAt"] == null)
+            {
+                throw new ValidationException("You need to select a date and time to the end of the event");
+            }
+            if (Request.QueryString["title"] == null)
+            {
+                throw new ValidationException("You need to give a name to the event");
+            }
         }
     }
 }

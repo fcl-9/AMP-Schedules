@@ -79,7 +79,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Graph Connect sample for ASP.NET 4.6.
+        ///   Looks up a localized string similar to Academic Management Platform.
         /// </summary>
         internal static string App_Name {
             get {
@@ -281,14 +281,6 @@ namespace Resources {
         internal static string SignOut {
             get {
                 return ResourceManager.GetString("SignOut", resourceCulture);
-            }
-        }
-
-        internal static string Events
-        {
-            get
-            {
-                return ResourceManager.GetString("Event", resourceCulture);
             }
         }
     }

@@ -20,9 +20,9 @@
             <div class="container">
                 <h4 style="text-align: left">Future Events</h4>
                 <select style="text-align: center" onchange="changeFunc(value);">
-                    <option value="1">1 day</option>
-                    <option value="2">2 days</option>
-                    <option value="3">3 days</option>
+                    <option value="1">Tomorrow</option>
+                    <option value="2">in 2 days</option>
+                    <option value="3">in 3 days</option>
                 </select>
             </div>
             <br/>
@@ -64,7 +64,7 @@
         });
         function addDays(date, days) {
             var result = new Date(date);
-            result.setDate(result.getDate() + parseInt(days));
+            result.setDate(result.getDate() + parseInt(days)+parseInt(1));
             return result;
         }
         //Ajax Request for teachers
@@ -78,10 +78,10 @@
             var DateFinal = new Date();
             DateFinal = moment(addDays(DateInicial, DaysFilter)).format("YYYY-MM-DD");
             DateInicial = moment(DateInicial).format("YYYY-MM-DD");
-     
+            alert(DateInicial + "  " + DateFinal);
             $.ajax({
                 type: "GET",
-                url: '/Event/ReturnEvents?start=' + DateInicial + '&end=' + DateFinal,
+                url: '/Event/ReturnEvents?start=' + DateInicial + '&end=' + DateFinal+'T00:00:00',
                 data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -101,6 +101,8 @@
             var ClassRoom = undefined;
             var Floor = undefined;
             var iteration = 0;
+            var DateInicial = new Date();
+            DateInicial = moment(DateInicial).format("YYYY-MM-DD");
             $.each(sortBy(teachers, { prop: "StartTime" }),
                 function(key, value) { //Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor
 
@@ -115,8 +117,10 @@
                                     Floor = val.Floor;
                                 });
                         });
-                    iteration += 1;
-                    if (iteration == 1) {
+                    
+                  
+                    if (DateInicial == moment(StartingTime).format("YYYY-MM-DD")) {
+   
                         renderNextEvent(ClassName, StartingTime, ClassRoom, Floor);
                     } else
                     {
@@ -127,6 +131,7 @@
         }
 
         function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor) {
+            
             $('.NextEvent').append(
                 '<div class="panel-group">' +
                 '<div class="panel panel-primary">' +

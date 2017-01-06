@@ -60,6 +60,7 @@
                             office = val.Name;
                             floor = val.Floor;
                         });
+                    console.log(value.Teacher);
                     startTime = value.StartTime;
                     name = value.Teacher.Name;
                     email = value.Teacher.Email;
@@ -69,8 +70,8 @@
                             course = valor.Name;
                         });
                     iteration += 1;
+                    renderTeacher(iteration, endTime, startTime, office, floor, email, name, course);
                 });
-            renderTeacher(iteration, endTime, startTime, office, floor, email, name, course);
         }
 
         //Presents officehours of week

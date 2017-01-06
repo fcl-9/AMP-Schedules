@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSystem.Classes;
+using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.Interfaces;
 using Newtonsoft.Json;
 
@@ -29,13 +30,13 @@ namespace AMPSchedules.Controllers
             foreach (var officeHour in manager.TimeTable.ItemList)
             {
                 Debug.Write(officeHour);
-                //if (officeHour == typeof(OfficeHours))
-                //{
+                if (officeHour is OfficeHours)
+                {
                 //officeHour.Teacher
                 //officeHour.Name;
                 //officeHour.Rooms;
                 items.Add(officeHour);
-                //}
+                }
             }
             return
                 Content(

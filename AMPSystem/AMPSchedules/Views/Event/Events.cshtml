@@ -71,17 +71,20 @@
         function requestTeachers(returnFunction, DaysFilter) {
             
             var data = {};
-
-            // data["start"] = moment().isoWeekday(1).format("YYYY-MM-DD");
-            //data["end"] = moment().isoWeekday(7).format("YYYY-MM-DD");
             var DateInicial = new Date();
             var DateFinal = new Date();
+            var hh = DateInicial.getHours();
+            var mm = DateInicial.getMinutes();
+            var ss = DateInicial.getSeconds();
+            if (hh < 10) { hh = "0" + hh; }
+            if (mm < 10) { mm = "0" + mm; }
+            if (ss < 10) { ss = "0" + ss; }
             DateFinal = moment(addDays(DateInicial, DaysFilter)).format("YYYY-MM-DD");
             DateInicial = moment(DateInicial).format("YYYY-MM-DD");
-     
+            alert(hh+":"+mm+":"+ss);
             $.ajax({
                 type: "GET",
-                url: '/Event/ReturnEvents?start=' + DateInicial + '&end=' + DateFinal,
+                url: '/Event/ReturnEvents?start=' + DateInicial + 'T'+hh+':'+mm+':'+ss+'&end=' + DateFinal+'T23:53:53',
                 data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -92,7 +95,6 @@
                 }
             });
         }
-
         //Adds Information to the page
         function printInformation(teachers) {
             console.log(teachers);
@@ -104,7 +106,6 @@
             var iteration = 0;
             $.each(sortBy(teachers, { prop: "StartTime" }),
                 function(key, value) { //Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor
-
                     $.each(value.Courses,
                         function (chave, valor) {
                             console.log(value);
@@ -177,16 +178,13 @@
             );
 
         }
-        //Presents officehours of week
-       
-
+     
         var sortBy = (function() {
 
             const _defaults = {
                 parser: (x) => x,
                 desc: false
             };
-
             const isObject = (o) => o !== null && typeof o === "object";
             const isDefined = (v) => typeof v !== "undefined";
 

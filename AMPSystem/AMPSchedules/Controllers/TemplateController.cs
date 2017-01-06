@@ -44,7 +44,8 @@ namespace AMPSchedules.Controllers
             var user = mail.User;
 
             IDataReader dataReader = new FileData();
-            var loadData = new Repository {DataReader = dataReader};
+            var loadData = Repository.Instance;
+            loadData.DataReader = dataReader;
 
             lock (_lockobject)
             {

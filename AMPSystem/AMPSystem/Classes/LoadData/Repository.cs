@@ -15,7 +15,10 @@ namespace AMPSystem.Classes.LoadData
     {
         private AmpDbContext db = new AmpDbContext();
 
-        public Repository()
+        #region Singleton
+        private static Repository _instance;
+
+        private Repository()
         {
             Courses = new List<Course>();
             Items = new List<ITimeTableItem>();
@@ -23,6 +26,9 @@ namespace AMPSystem.Classes.LoadData
             UserCourses = new List<Course>();
             Teachers = new List<User>();
         }
+
+        public static Repository Instance => _instance ?? (_instance = new Repository());
+        #endregion
 
         public IDataReader DataReader { get; set; }
         public ICollection<Course> Courses { get; set; }

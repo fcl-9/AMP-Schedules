@@ -6,16 +6,14 @@
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AMPSchedules.Helpers;
-using AMPSchedules.Models;
+using AMPSchedules.Services;
+using Microsoft.Graph;
 using Resources;
 
 namespace AMPSchedules.Controllers
 {
     public class HomeController : TemplateController
     {
-        private readonly GraphService graphService = new GraphService();
-
         public ActionResult Index()
         {
             return View($"Graph");
@@ -42,18 +40,14 @@ namespace AMPSchedules.Controllers
         {
             try
             {
-                // Get an access token.
-                var accessToken = await SampleAuthProvider.Instance.GetUserAccessTokenAsync();
-
                 // Get the current user's email address. 
-                ViewBag.Email = await graphService.GetMyEmailAddress(accessToken);
+                ViewBag.Email = await GraphService.Instance.GetMyEmailAddress();
                 return View("Graph");
             }
-            catch (Exception e)
+            catch (ServiceException se)
             {
-                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error",
-                    new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
+                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
         }
 
@@ -67,25 +61,25 @@ namespace AMPSchedules.Controllers
                 return View("Graph");
             }
 
-            // Build the email message.
-            var email = graphService.BuildEmailMessage(Request.Form["recipients"], Request.Form["subject"]);
             try
             {
-                // Get an access token.
-                var accessToken = SampleAuthProvider.Instance.GetUserAccessTokenAsync();
+                // Build the email message.
+                var message = EmailMessageBuilder.Build(
+                    Request.Form["recipients"], Request.Form["subject"], Resource.Graph_SendMail_Body_Content);
 
                 // Send the email.
-                ViewBag.Message = await graphService.SendEmail(accessToken, email);
+                await GraphService.Instance.SendEmail(message);
 
                 // Reset the current user's email address and the status to display when the page reloads.
                 ViewBag.Email = Request.Form["email-address"];
+                ViewBag.Message = Resource.Graph_SendMail_Success_Result;
+
                 return View("Graph");
             }
-            catch (Exception e)
+            catch (ServiceException se)
             {
-                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error",
-                    new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
+                if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
             }
         }
     }

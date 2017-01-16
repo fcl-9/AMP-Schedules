@@ -13,10 +13,7 @@ namespace AMPSystem.Classes.LoadData
 {
     public class Repository
     {
-        private AmpDbContext _db = new AmpDbContext();
-       
-        #region Singleton
-        private static Repository _instance;
+        private AmpDbContext db = new AmpDbContext();
 
         private Repository()
         {
@@ -27,45 +24,17 @@ namespace AMPSystem.Classes.LoadData
             Teachers = new List<User>();
         }
 
-
-        public static Repository Instance => _instance ?? (_instance = new Repository());
-        #endregion
-
         public IDataReader DataReader { get; set; }
         public ICollection<Course> Courses { get; set; }
         public ICollection<Course> UserCourses { get; set; }
         public ICollection<Building> Buildings { get; set; }
         public ICollection<ITimeTableItem> Items { get; set; }
         public ICollection<User> Teachers { get; set; }
-        public bool DataLoaded { get; private set; }
-
-        public void GetData(string user)
-        {
-            GetCourses();
-            GetRooms();
-            GetTeachers();
-
-            GetUserCourses(user);
-            GetSchedule(user);
-
-            AddCustomEvents();
-            DataLoaded = true;
-        }
-
-        public void CleanRepository()
-        {
-            Courses.Clear();
-            Buildings.Clear();
-            Teachers.Clear();
-            UserCourses.Clear();
-            Items.Clear();
-            DataLoaded = false;
-        }
 
         /// <summary>
         ///     Gets all the teachers from the dataReader and updates the List of teacher
         /// </summary>
-        private void GetTeachers()
+        public void GetTeachers()
         {
             var data = DataReader.RequestTeachers();
             if (string.IsNullOrEmpty(data)) return;
@@ -116,7 +85,7 @@ namespace AMPSystem.Classes.LoadData
         ///     Gets all the courses of a user and updates the correspondent list
         /// </summary>
         /// <param name="username">The username of the user</param>
-        private void GetUserCourses(string username)
+        public void GetUserCourses(string username)
         {
             var data = DataReader.RequestUserCourses(username);
             if (string.IsNullOrEmpty(data)) return;
@@ -131,7 +100,7 @@ namespace AMPSystem.Classes.LoadData
         /// <summary>
         ///     Gets all the courses from the dataReader and updates the List of courses
         /// </summary>
-        private void GetCourses()
+        public void GetCourses()
         {
             var data = DataReader.RequestCourses();
             if (string.IsNullOrEmpty(data)) return;
@@ -150,7 +119,7 @@ namespace AMPSystem.Classes.LoadData
         /// <summary>
         ///     Gets all the rooms and buildings from the dataReader and updates the List of Rooms and Buildings
         /// </summary>
-        private void GetRooms()
+        public void GetRooms()
         {
             var data = DataReader.RequestRooms();
             if (string.IsNullOrEmpty(data)) return;
@@ -176,7 +145,7 @@ namespace AMPSystem.Classes.LoadData
         ///     that compose the schedule.
         /// </summary>
         /// <param name="username"></param>
-        private void GetSchedule(string username)
+        public void GetSchedule(string username)
         {
             var data = DataReader.RequestSchedule(username);
             if (string.IsNullOrEmpty(data)) return;
@@ -244,7 +213,7 @@ namespace AMPSystem.Classes.LoadData
         ///     Checks to DB to see if there is any events that were not load by DataReader.
         ///     If so they are custom events and it adds them to the items collection
         /// </summary>
-        private void AddCustomEvents()
+        public void AddCustomEvents()
         {
             List<ITimeTableItem> knownEvaluations = null;
             try

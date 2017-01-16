@@ -70,14 +70,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Graph, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Graph.1.2.0\lib\portable45-net45+win8+wpa81\Microsoft.Graph.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Graph.Core, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Graph.Core.1.3.0\lib\portable45-net45+win8+wpa81\Microsoft.Graph.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Identity.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Identity.Client.1.0.304142221-alpha\lib\net45\Microsoft.Identity.Client.dll</HintPath>
       <Private>True</Private>
@@ -210,28 +202,21 @@
     <Compile Include="Controllers\FilterController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Helpers\IAuthProvider.cs" />
+    <Compile Include="Helpers\SampleAuthProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\GraphResources.cs" />
+    <Compile Include="Models\GraphService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduledTasks\EmailJob.cs" />
     <Compile Include="ScheduledTasks\JobScheduler.cs" />
-    <Compile Include="Services\EmailMessageBuilder.cs" />
-    <Compile Include="Services\GraphResources.cs" />
-    <Compile Include="Services\GraphService.cs" />
-    <Compile Include="Services\GraphService.Graph.cs" />
-    <Compile Include="Services\GraphService.REST.cs" />
-    <Compile Include="Services\GraphServiceHelper.cs" />
-    <Compile Include="Services\IGraphService.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="TokenStorage\IUserTokenProvider.cs" />
-    <Compile Include="TokenStorage\UserTokenCache.cs" />
-    <Compile Include="TokenStorage\UserTokenCacheDb.cs" />
-    <Compile Include="TokenStorage\UserTokenCacheEntry.cs" />
-    <Compile Include="TokenStorage\UserTokenProvider.cs" />
+    <Compile Include="TokenStorage\SessionTokenCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datetimepicker.css" />
@@ -434,8 +419,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\images\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Models\" />
     <Folder Include="Views\AddAlert\" />
     <Folder Include="Views\AddEvent\" />
     <Folder Include="Views\RemoveAlert\" />

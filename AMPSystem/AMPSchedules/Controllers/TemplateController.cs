@@ -5,6 +5,8 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AMPSchedules.Helpers;
+using AMPSchedules.Models;
 using AMPSystem.Classes;
 using AMPSystem.Classes.LoadData;
 using AMPSystem.Interfaces;
@@ -15,6 +17,8 @@ namespace AMPSchedules.Controllers
     [Authorize]
     public abstract class TemplateController : Controller
     {
+        private readonly GraphService graphService = new GraphService();
+
         private static readonly object _lockobject = new object();
         public User CurrentUser { get; private set; }
 
@@ -38,17 +42,21 @@ namespace AMPSchedules.Controllers
             var mail = new MailAddress(ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value);
 
             var user = mail.User;
+
+            IDataReader dataReader = new FileData();
+            var loadData = new Repository {DataReader = dataReader};
+
             lock (_lockobject)
             {
-                if (!Repository.Instance.DataLoaded)
-                {
-                    IDataReader dataReader = new FileData();
-                    Repository.Instance.DataReader = dataReader;
-                    Repository.Instance.CleanRepository();
-                    Repository.Instance.GetData(user);
-                }
+                loadData.GetCourses();
+                loadData.GetRooms();
+                loadData.GetTeachers();
+                
+                loadData.GetUserCourses(user);
+                loadData.GetSchedule(user);
+                
+                loadData.AddCustomEvents();
             }
-
             var roles = new List<string>();
 
             var domain = mail.Host;
@@ -61,7 +69,7 @@ namespace AMPSchedules.Controllers
                 roles.Add("Teacher");
             }
 
-            CurrentUser = Factory.Instance.CreateUser(user, mail.Address, roles, Repository.Instance.UserCourses);
+            CurrentUser = Factory.Instance.CreateUser(user, mail.Address, roles, loadData.UserCourses);
             var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
             var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
             //The manager will start the timetableitem list with the data read from the repo

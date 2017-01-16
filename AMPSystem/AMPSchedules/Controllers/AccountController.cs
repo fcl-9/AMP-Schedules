@@ -18,27 +18,41 @@ namespace AMPSchedules.Controllers
         public void SignIn()
         {
             if (!Request.IsAuthenticated)
+            {
+                // Signal OWIN to send an authorization request to Azure.
                 HttpContext.GetOwinContext().Authentication.Challenge(
-                    new AuthenticationProperties {RedirectUri = "/"},
-                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                    new AuthenticationProperties { RedirectUri = "/" }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            }
         }
 
-        // Here we clear the token cache and end the session with the web app.  
+        // BUGBUG: Ending a session with the v2.0 endpoint is not yet supported.  Here, we just end the session with the web app
+        // Here we just clear the token cache, sign out the GraphServiceClient, and end the session with the web app.  
         public void SignOut()
         {
             if (Request.IsAuthenticated)
             {
                 // Get the user's token cache and clear it.
-                var userObjectId = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value;
+                string userObjectId = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                var tokenCache = new SessionTokenCache(userObjectId, HttpContext);
+                UserTokenCache tokenCache = new UserTokenCache(userObjectId);
                 tokenCache.Clear(userObjectId);
             }
 
-            // Send an OpenID Connect sign-out request. 
+            string callbackUrl = Url.Action("SignOutCallback", "Account", routeValues: null, protocol: Request.Url.Scheme);
+
             HttpContext.GetOwinContext().Authentication.SignOut(
-                CookieAuthenticationDefaults.AuthenticationType);
-            Response.Redirect("/");
+                    new AuthenticationProperties { RedirectUri = callbackUrl }, OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+        }
+
+        public ActionResult SignOutCallback()
+        {
+            if (Request.IsAuthenticated)
+            {
+                // Redirect to home page if the user is authenticated.
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
         }
     }
 }

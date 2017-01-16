@@ -34,7 +34,7 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             var keys = Request.QueryString.AllKeys;
             for (var i = 0; i < keys.Length - 2; i = i + 5)
@@ -48,7 +48,7 @@ namespace AMPSchedules.Controllers
 
                 Debug.WriteLine(name + " " + startTime + " " + endTime + " " + time + " " + units);
 
-                var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
+                var item = ((List<ITimeTableItem>) TimeTableManager.Instance.TimeTable.ItemList).Find(
                     it =>
                         it.Name == name &&
                         it.StartTime == startTime);
@@ -118,7 +118,7 @@ namespace AMPSchedules.Controllers
                 item.Alerts.Add(alert);
                 ScheduleAlert(item.Name, item.StartTime, alertTime, endTime, CurrentUser.Email, dbAlert.ID);
             }
-            return base.Hook(manager);
+            return base.Hook();
         }
 
         /// <summary>

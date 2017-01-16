@@ -10,9 +10,9 @@
         /// </summary>
         /// <param name="nameFilter"></param>
         /// <param name="manager"></param>
-        public Name(string nameFilter, TimeTableManager manager)
+        public Name(string nameFilter)
         {
-            Manager = manager;
+            Manager = TimeTableManager.Instance;
             FilterAttribute = nameFilter;
         }
         

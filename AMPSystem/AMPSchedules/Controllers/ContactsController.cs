@@ -24,10 +24,10 @@ namespace AMPSchedules.Controllers
         }
 
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             ICollection<ITimeTableItem> items = new List<ITimeTableItem>();
-            foreach (var officeHour in manager.TimeTable.ItemList)
+            foreach (var officeHour in TimeTableManager.Instance.TimeTable.ItemList)
             {
                 Debug.Write(officeHour);
                 if (officeHour is OfficeHours)

@@ -17,19 +17,18 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <div class="container">
                 <h4 style="text-align: left">Future Events</h4>
-                <select style="text-align: center" onchange="changeFunc(value);">
-                    <option value="1">1 day</option>
-                    <option value="2">2 days</option>
-                    <option value="3">3 days</option>
-                </select>
-            </div>
-            <br/>
-            <div class="FutureEvents" id="FutureEvents">
+                <ul id="eventLimit" class="nav nav-tabs">
+                    <li role="presentation" class="active tab"><a href="#1">1 day</a></li>
+                    <li role="presentation" class="tab"><a href="#2">2 days</a></li>
+                    <li role="presentation" class="tab"><a href="#3">3 days</a></li>
+                </ul>
+            <div class="tab-content FutureEvents">
+                <br />
+                    <div class="tab-pane active" id="FutureEvents">
+                    </div>
             </div>
         </div>
-    </div>
 </div> 
 
 @section scripts
@@ -56,11 +55,15 @@
             $("#NextEvent").html("");
             $("#FutureEvents").html("");
            
-            requestTeachers(printInformation, $i);
+            requestEvents(printInformation, $i);
         }
 
         $().ready(function () {   
-            requestTeachers(printInformation,1);
+            requestEvents(printInformation, 1);
+            $("#eventLimit .tab").click(function (e) {
+                $(e.target).tab("show");
+                changeFunc($(e.target).html().replace(/[^\d.]/g, ''));
+            });
         });
         function addDays(date, days) {
             var result = new Date(date);
@@ -68,7 +71,7 @@
             return result;
         }
         //Ajax Request for teachers
-        function requestTeachers(returnFunction, DaysFilter) {
+        function requestEvents(returnFunction, DaysFilter) {
             
             var data = {};
             var DateInicial = new Date();
@@ -79,9 +82,8 @@
             if (hh < 10) { hh = "0" + hh; }
             if (mm < 10) { mm = "0" + mm; }
             if (ss < 10) { ss = "0" + ss; }
-            DateFinal = moment(addDays(DateInicial, DaysFilter)).format("YYYY-MM-DD");
+            DateFinal = moment(addDays(DateInicial, DaysFilter - 1)).format("YYYY-MM-DD");
             DateInicial = moment(DateInicial).format("YYYY-MM-DD");
-            alert(hh+":"+mm+":"+ss);
             $.ajax({
                 type: "GET",
                 url: '/Event/ReturnEvents?start=' + DateInicial + 'T'+hh+':'+mm+':'+ss+'&end=' + DateFinal+'T23:53:53',
@@ -96,16 +98,16 @@
             });
         }
         //Adds Information to the page
-        function printInformation(teachers) {
-            console.log(teachers);
+        function printInformation(events) {
+            console.log(events);
             var ClassName = undefined;
             var StartingTime = undefined;
             var ClassRoom = undefined;
             var Floor = undefined;
             var Color = undefined;
             var iteration = 0;
-            $.each(sortBy(teachers, { prop: "StartTime" }),
-                function(key, value) { //Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor
+            $.each(sortBy(events, { prop: "StartTime" }),
+                function(key, value) { 
                     $.each(value.Courses,
                         function (chave, valor) {
                             console.log(value);
@@ -155,7 +157,7 @@
 
         }
         function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color) {
-            $('.FutureEvents').append(
+            $('#FutureEvents').append(
                 '<div class="panel-group">' +
                 '<div class="panel panel-primary" style="background:' + Color + '">' +
                 '<div class="panel-body">' +
@@ -172,6 +174,8 @@
                 '<p>Piso: ' +
                 Floor +
                 '</p>' +
+                '</div>' +
+                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</div>'

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AMPSchedules.Models;
 using AMPSystem.Classes;
 using Newtonsoft.Json;
 using Resources;
@@ -10,8 +9,6 @@ namespace AMPSchedules.Controllers
 {
     public class RoomsController : TemplateController
     {
-        private GraphService _graphService = new GraphService();
-
         // GET: Courses
         public async Task<ActionResult> Index()
         {
@@ -27,11 +24,11 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             return
                 Content(
-                    JsonConvert.SerializeObject(manager.Repository.Buildings,
+                    JsonConvert.SerializeObject(TimeTableManager.Instance.Repository.Buildings,
                         new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
                     "application/json");
         }

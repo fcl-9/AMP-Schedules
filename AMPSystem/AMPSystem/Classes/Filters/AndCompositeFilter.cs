@@ -14,9 +14,9 @@ namespace AMPSystem.Classes.Filters
         /// Contructer initializes the filters.
         /// </summary>
         /// <param name="manager"></param>
-        public AndCompositeFilter(TimeTableManager manager)
+        public AndCompositeFilter()
         {
-            Manager = manager; 
+            Manager = TimeTableManager.Instance; 
             Filters = new List<IFilter>();
         }
 

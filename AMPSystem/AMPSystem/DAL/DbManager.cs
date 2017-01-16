@@ -368,7 +368,7 @@ namespace AMPSystem.DAL
         /// <returns></returns>
         public ICollection<EvaluationMoment> EvaluationMoments()
         {
-            return db.EvaluationMoments.ToList();
+            return db.EvaluationMoments.Include("Rooms.Building").ToList();
         }
 
         /// <summary>

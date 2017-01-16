@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
-            <h4>Next Event</h4>
+            <h4>Today's Events</h4>
             <br/>
             <div class="NextEvent" id="NextEvent">
             </div>
@@ -19,11 +19,16 @@
         <div class="col-sm-6">
             <div class="container">
                 <h4 style="text-align: left">Future Events</h4>
-                <select style="text-align: center" onchange="changeFunc(value);">
-                    <option value="1">Tomorrow</option>
-                    <option value="2">in 2 days</option>
-                    <option value="3">in 3 days</option>
-                </select>
+                <ul id="eventLimit" class="nav nav-tabs">
+                    <li role="presentation" class="active tab"><a href="#1">1 day</a></li>
+                    <li role="presentation" class="tab"><a href="#2">2 days</a></li>
+                    <li role="presentation" class="tab"><a href="#3">3 days</a></li>
+                </ul>
+                <div class="tab-content FutureEvents">
+                    <br />
+                    <div class="tab-pane active" id="FutureEvents">
+                    </div>
+                </div>
             </div>
             <br/>
             <div class="FutureEvents" id="FutureEvents">
@@ -47,7 +52,6 @@
                 $(this).addClass('active');
                 $(this).find('input').prop('checked', true);
                 return false;
-
             });
 
         });
@@ -56,19 +60,23 @@
             $("#NextEvent").html("");
             $("#FutureEvents").html("");
            
-            requestTeachers(printInformation, $i);
+            requestEvents(printInformation, $i);
         }
 
         $().ready(function () {   
-            requestTeachers(printInformation,1);
+            requestEvents(printInformation, 1);
+            $("#eventLimit .tab").click(function (e) {
+                $(e.target).tab("show");
+                changeFunc($(e.target).html().replace(/[^\d.]/g, ''));
+            });
         });
         function addDays(date, days) {
             var result = new Date(date);
             result.setDate(result.getDate() + parseInt(days));
             return result;
         }
-        //Ajax Request for teachers
-        function requestTeachers(returnFunction, DaysFilter) {
+        //Ajax Request for events
+        function requestEvents(returnFunction, DaysFilter) {
             
             var data = {};
 
@@ -100,8 +108,8 @@
         }
 
         //Adds Information to the page
-        function printInformation(teachers) {
-            console.log(teachers);
+        function printInformation(events) {
+            console.log(events);
             var ClassName = undefined;
             var StartingTime = undefined;
             var ClassRoom = undefined;
@@ -109,7 +117,7 @@
             var iteration = 0;
             var DateInicial = new Date();
             DateInicial = moment(DateInicial).format("YYYY-MM-DD");
-            $.each(sortBy(teachers, { prop: "StartTime" }),
+            $.each(sortBy(events, { prop: "StartTime" }),
                 function(key, value) { //Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor
 
                     $.each(value.Courses,
@@ -123,11 +131,8 @@
                                     Floor = val.Floor;
                                 });
                         });
-                    
-                  
                     if (DateInicial == moment(StartingTime).format("YYYY-MM-DD")) {
-   
-                        renderNextEvent(ClassName, StartingTime, ClassRoom, Floor);
+                        renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor);
                     } else
                     {
                         renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor);
@@ -136,7 +141,7 @@
                 });
         }
 
-        function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor) {
+        function renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor) {
             
             $('.NextEvent').append(
                 '<div class="panel-group">' +

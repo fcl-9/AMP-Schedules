@@ -30,11 +30,11 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             return
                 Content(
-                    JsonConvert.SerializeObject(manager.TimeTable.ItemList.ToArray(),
+                    JsonConvert.SerializeObject(TimeTableManager.Instance.TimeTable.ItemList.ToArray(),
                         new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
                     "application/json");
         }

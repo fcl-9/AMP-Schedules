@@ -27,9 +27,9 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
-            var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
+            var item = ((List<ITimeTableItem>)TimeTableManager.Instance.TimeTable.ItemList).Find(
                 i =>
                     i.Name == Request.QueryString["name"] &&
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startEvent"]) &&
@@ -37,8 +37,8 @@ namespace AMPSchedules.Controllers
             // Remove event
             var dbItem = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime, item.EndTime);
             DbManager.Instance.RemoveEvent(dbItem);
-            manager.RemoveTimeTableItem(item);
-            return base.Hook(manager);
+            TimeTableManager.Instance.RemoveTimeTableItem(item);
+            return base.Hook();
         }
     }
 }

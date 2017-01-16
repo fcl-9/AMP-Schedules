@@ -18,7 +18,7 @@ namespace AMPSystem.Classes.LoadData
         #region Singleton
         private static Repository _instance;
 
-        public Repository()
+        private Repository()
         {
             Courses = new List<Course>();
             Items = new List<ITimeTableItem>();

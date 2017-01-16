@@ -10,6 +10,7 @@ using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Quartz.Xml;
 using Resources;
+using AMPSystem.Classes.LoadData;
 
 namespace AMPSchedules.Controllers
 {
@@ -31,7 +32,7 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             Validate();
             //Get the room
@@ -41,7 +42,7 @@ namespace AMPSchedules.Controllers
             var roomName = roomFullName.Split(stringSeparators, StringSplitOptions.None)[1];
             ICollection<Room> rooms = new List<Room>();
             ICollection<AMPSystem.Models.Room> mRooms = new List<AMPSystem.Models.Room>();
-            foreach (var building in manager.Repository.Buildings)
+            foreach (var building in TimeTableManager.Instance.Repository.Buildings)
                 if (building.Name == buildingName)
                     foreach (var room in building.Rooms)
                         if (room.Name == roomName)
@@ -56,7 +57,7 @@ namespace AMPSchedules.Controllers
 
             //Get The course
             ICollection<Course> courses = new List<Course>();
-            foreach (var course in manager.Repository.Courses)
+            foreach (var course in TimeTableManager.Instance.Repository.Courses)
                 if (course.Name == Request.QueryString["course"])
                     courses.Add(course);
 
@@ -81,12 +82,13 @@ namespace AMPSchedules.Controllers
             );
             newEvent.Editable = true;
             //Add new Event
-            manager.AddTimetableItem(newEvent);
+            Repository.Instance.Items.Add(newEvent);
+            TimeTableManager.Instance.AddTimetableItem(newEvent);
             var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
             DbManager.Instance.CreateEvaluationMoment(name, mRooms, mUser, null, startTime, endTime, description,
                 courses.First().Name);
             DbManager.Instance.SaveChanges();
-            return base.Hook(manager);
+            return base.Hook();
         }
 
         private void Validate()

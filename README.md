@@ -1,2 +1,2 @@
-# SGA---Hor-rios
+# AMP - Schedules
 Sistema de Gestão Académica - Horários -  UMA

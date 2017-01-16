@@ -14,10 +14,10 @@ namespace AMPSystem.Classes.Filters
         /// </summary>
         /// <param name="filterName"></param>
         /// <param name="manager"></param>
-        public TypeF(string filterName, TimeTableManager manager)
+        public TypeF(string filterName)
         {
             GeneratesTypes = new TypeCreator();
-            Manager = manager;
+            Manager = TimeTableManager.Instance;
             FilterAttribute = GeneratesTypes.CreateTypeOf(filterName);
         }
 

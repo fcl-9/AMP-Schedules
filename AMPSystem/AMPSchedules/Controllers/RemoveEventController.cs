@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AMPSystem.Classes;
+using AMPSystem.Classes.LoadData;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
 using Resources;
@@ -38,6 +39,7 @@ namespace AMPSchedules.Controllers
             var dbItem = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime, item.EndTime);
             DbManager.Instance.RemoveEvent(dbItem);
             TimeTableManager.Instance.RemoveTimeTableItem(item);
+            Repository.Instance.Items.Remove(item);
             return base.Hook();
         }
     }

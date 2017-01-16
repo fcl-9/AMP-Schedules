@@ -51,6 +51,7 @@
     @Scripts.Render("~/scripts/javascript/functions.js")
     
     <script>
+        var currentEvent = null;
         var start = new Date();
         var end = new Date();
         updateDateInterval();
@@ -108,7 +109,7 @@
                 $(e.target).tab("show");
                 changeFunc($(e.target).html().replace(/[^\d.]/g, ''));
             });
-            $("body").on("click", ".glyphicon", function (event) {
+            $("body").on("click", ".glyphicon-cog", function (event) {
                 var event = JSON.parse($(this).parent().find("input[type = hidden]").val());
                 renderEventModal(event);
             });

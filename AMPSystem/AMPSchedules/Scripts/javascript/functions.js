@@ -151,7 +151,7 @@ function calendar(urlToRequestData) {
 }
 
 function renderEventModal(event) {
-    console.log(rooms);
+    currentEvent = event;
     if (!event.editable) {
         $("#remove").attr("disabled", "disabled");
     } else {
@@ -253,8 +253,8 @@ function renderFilterCheckBoxes(courses) {
 
 //Removes one alert from the database
 function removeAnAlert(datatoSend, onSuccess) {
-    datatoSend["start"] = $('#calendar').fullCalendar('getView').start.format();
-    datatoSend["end"] = $('#calendar').fullCalendar('getView').end.format();
+    datatoSend["start"] = start;
+    datatoSend["end"] = end;
     $.ajax({
         type: "GET",
         url: "/RemoveAlert/Index",
@@ -516,8 +516,13 @@ function removeUserAddedEvents() {
         var data = {};
         data.id = currentEvent.id;
         data.name = currentEvent.title;
-        data.startEvent = currentEvent.start.format();
-        data.endEvent = currentEvent.end.format();
+        if (viewCalendar) {
+            data.startEvent = currentEvent.start.format();
+            data.endEvent = currentEvent.end.format();
+        } else {
+            data.startEvent = currentEvent.start;
+            data.endEvent = currentEvent.end;
+        }
         console.log(data);
         if (viewCalendar) {
             start = $('#calendar').fullCalendar('getView').start.format();
@@ -616,6 +621,10 @@ function removeActiveAlert() {
             //Removes Everything
             $('#activeAlertForm').html("");
             //Makes ajax request and receives it back
+            if (viewCalendar) {
+                start = $('#calendar').fullCalendar('getView').start.format();
+                end = $('#calendar').fullCalendar('getView').end.format();
+            }
             removeAnAlert(removeAlert, renderActiveAlerts);
         });
 }

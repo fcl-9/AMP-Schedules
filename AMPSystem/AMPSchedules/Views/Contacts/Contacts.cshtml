@@ -6,7 +6,7 @@
 
 @Styles.Render("~/Content/Contacts.css")
    
-<h2 style="text-align: center">Contacts</h2>
+<h2 style="text-align: center">Week Office Hours</h2>
 <div class="showTeachers">
    
 </div>
@@ -26,6 +26,7 @@
             var data = {};
             data["start"] = moment().isoWeekday(1).format("YYYY-MM-DD");
             data["end"] = moment().isoWeekday(7).format("YYYY-MM-DD");
+            //console.log(data);
             $.ajax({
                 type: "GET",
                 url: '/Contacts/ReturnOfficeHours',
@@ -51,6 +52,7 @@
             var name = undefined;
             var course = undefined;
             var iteration = 0;
+            var numberTuples = teachers.length;
             $.each(teachers,
                 function(key, value) { //Teacher -> Name Email, StartTime, EndTime, Rooms.Name Rooms Floor 
                     endTime = value.EndTime;
@@ -60,11 +62,11 @@
                             office = val.Name;
                             floor = val.Floor;
                         });
-                    console.log(value.Teacher);
+                    //console.log(value.Teacher);
                     startTime = value.StartTime;
                     name = value.Teacher.Name;
                     email = value.Teacher.Email;
-                    courses = [];
+                    var courses = [];
 
                     $.each(value.Teacher.Courses,
                         function(chave, valor) {
@@ -72,16 +74,39 @@
                             courses.push(course);
                         });
                     iteration += 1;
-                    renderTeacher(iteration, endTime, startTime, office, floor, email, name, courses);
+                    var checkRepeated = $('a[href="mailto:' + email + '"]').length;
+                    if (checkRepeated === 0) {
+                        if (iteration % 2 === 0) {
+                            renderTeacher(iteration, endTime, startTime, office, floor, email, name, courses);
+                            $('.showTeachers').append("</div>");
+
+                        } else {
+                            if (iteration === numberTuples) {
+                                //Par logo fecho a row
+                                renderTeacher(iteration, endTime, startTime, office, floor, email, name, courses);
+                                $('.showTeachers').append("</div>");
+                            } else {
+                                $('.showTeachers').append("<div class='row'>");
+                                renderTeacher(iteration, endTime, startTime, office, floor, email, name, courses);
+                            }
+                        }
+                    } else {
+                        renderTeacher(iteration, endTime, startTime, office, floor, email, name, courses);
+                        iteration -= 1;
+                    }
                 });
-            if (iteration == 0) {
+            if (iteration === 0) {
                 $('.showTeachers').html("There are no office hours this week");
             }
         }
 
+
         //Presents officehours of week
         function renderTeacher(officeHoursAvailable, endTime, startTime, office, floor, email, name, course) {
-            $('.showTeachers').append(
+            var checkRepeated = $('a[href="mailto:' + email + '"]').length;
+            //console.log(checkRepeated);
+            if (checkRepeated === 0) {
+                $('.showTeachers').append(
                     '<div class="col-md-6">' +
                     '<div class="teacherContainer">' +
                     '<div class="classname">' +
@@ -93,24 +118,36 @@
                     '</div>' +
                     '</div>' +
                     '<div class="information col-md-6 col-lg-6">' +
-                    '<p>Nome: <span id="name">' +
+                    '<p>Nome: <span class=name>' +
                     name +
                     '</span></p>' +
-                    '<p>E-mail: <span id="Email">' +
+                    '<p>E-mail:' +
+                    '<a href=mailto:' +
                     email +
-                    '</span></p>' +
-                    '<p>Gabinete: <span id="Gabinete">' +
+                    '>' +
+                    email +
+                    '</a></p>' +
+                    '<p>Gabinete: <span class="Gabinete">' +
                     office +
                     '</span></p>' +
-                    '<p>Horário Atendimento: <span id="officeHour">' +
-                    startTime +
+                    '<p>Horário Atendimento: <span class="officeHour">' +
+                    "<br>" +
+                    moment(startTime).format("ddd Do MMM H:mm") +
                     ' - ' +
-                    endTime +
+                    moment(endTime).format("H:mm") +
                     '</span></p>' +
                     '</div>' +
                     '</div>' +
                     '</div>');
-            
+            } else {
+                //If the teacher has more than one attendance hour/w do not print it two times
+                $('a[href="mailto:' + email + '"]').parent().next().next()
+                    .append("<br>" +
+                        moment(startTime).format("ddd Do MMM H:mm") +
+                        " - " +
+                        moment(endTime).format("H:mm"));
+            }
+
         };
     </script>
 }

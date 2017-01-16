@@ -8,7 +8,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li class="navbar-text">
                 @*The 'preferred_username' claim can be used for showing the user's primary way of identifying themselves.*@
-                Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("name")?.Value)
+                <span style="color: white;  font-weight: bold;">Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("name")?.Value)</span>
             </li>
             <li>
                 @Html.ActionLink(Resource.SignOut, "SignOut", "Account")

@@ -21,8 +21,8 @@ function configureValidator() {
 
 //Makes Request to the server - Generic
 function requestGetType(requesturl, data) {
-    data["start"] = $('#calendar').fullCalendar('getView').start.format();
-    data["end"] = $('#calendar').fullCalendar('getView').end.format();
+    data["start"] = start;//$('#calendar').fullCalendar('getView').start.format();
+    data["end"] = end;//$('#calendar').fullCalendar('getView').end.format();
     //console.log("dentro do");
     $.ajax({
         type: "GET",
@@ -31,9 +31,11 @@ function requestGetType(requesturl, data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (events) {
+            /*
             $('#calendar').fullCalendar('removeEvents'); //Removes Everything
             $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
-            $('#calendar').fullCalendar('rerenderEvents');
+            $('#calendar').fullCalendar('rerenderEvents');*/
+            location.reload();
         },
         failure: function (response) {
             console.log("Fail");
@@ -72,8 +74,8 @@ function getRooms(functionRender) {
 
 //Return a Json with active alerts
 function getActiveAlerts(item, funtionSucess) {
-    item["start"] = $('#calendar').fullCalendar('getView').start.format();
-    item["end"] = $('#calendar').fullCalendar('getView').end.format();
+    item["start"] = start;//$('#calendar').fullCalendar('getView').start.format();
+    item["end"] = end;//$('#calendar').fullCalendar('getView').end.format();
     //console.log(item);
     $.ajax({
         type: "GET",
@@ -149,32 +151,30 @@ function calendar(urlToRequestData) {
 }
 
 function renderEventModal(event) {
-    currentEvent = event;
-    if (!currentEvent.editable) {
+    console.log(rooms);
+    if (!event.editable) {
         $("#remove").attr("disabled", "disabled");
     } else {
         $("#remove").removeAttr("disabled");
     }
-    console.log(event);
-    console.log(moment(event.start).format("MMM Do H:mm"));
     $('#modalTitle').html(event.title);
     $('#startTime').html(moment(event.start).format("Do MMM YYYY H:mm"));
     $('#endTime').html(moment(event.end).format("Do MMM YYYY H:mm"));
     $("#rooms")
         .html(function () {
-            var rooms = "Room(s): <br><ul>";
+            var mRooms = "Room(s): <br><ul>";
             $.each(event.rooms,
-                function (key, room) {
-                    rooms += "<li>" +
+                function(key, room) {
+                    mRooms += "<li>" +
                         room.Name +
                         "<ul><li> Floor: " +
                         room.Floor +
                         "</li><li>Building: " +
                         room.Building.Name +
                         "</li></ul>";
-                })
-            rooms += "</ul>";
-            return rooms;
+                });
+            mRooms += "</ul>";
+            return mRooms;
         });
     if (event.teacher != null) {
 
@@ -182,7 +182,6 @@ function renderEventModal(event) {
         $("#lessonType").html("Lesson: " + event.lessonType);
     }
     $('#description').html(event.description);
-    $('#eventUrl').attr('href', event.url);
     $('#fullCalModal').modal();
 }
 
@@ -221,6 +220,10 @@ function applyFilters() {
 
         }
         //Ajax Request
+        if (viewCalendar) {
+            start = $('#calendar').fullCalendar('getView').start.format();
+            end = $('#calendar').fullCalendar('getView').end.format();
+        }
         requestGetType("/Filter/AddFilter", FilterToApply);
     });
 
@@ -361,6 +364,10 @@ function AlertModalFunctions() {
             //                  Event Name                  Color Picked for the event Selected.
             colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
             //Request Data
+            if (viewCalendar) {
+                start = $('#calendar').fullCalendar('getView').start.format();
+                end = $('#calendar').fullCalendar('getView').end.format();
+            }
             requestGetType("/Color/EventColor", colorApplyer);
             $('#fullCalModal').modal('hide');
         } else if ($("#3").hasClass('active')) {
@@ -371,8 +378,12 @@ function AlertModalFunctions() {
             var alerts = {};
             $error = false;
             //This is for the time calendar
-            alerts["start"] = $('#calendar').fullCalendar('getView').start.format();
-            alerts["end"] = $('#calendar').fullCalendar('getView').end.format();
+            if (viewCalendar) {
+                start = $('#calendar').fullCalendar('getView').start.format();
+                end = $('#calendar').fullCalendar('getView').end.format();
+            }
+            alerts["start"] = start;
+            alerts["end"] = end;
             for (var i = 0; i < times.length; i++) {
                 var alert = {}
                 if ($.isNumeric($(times[i]).val()) && $(times[i]).val() !== "") {
@@ -401,9 +412,12 @@ function AlertModalFunctions() {
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (events) {
+                        /*
                         $('#calendar').fullCalendar('removeEvents'); //Removes Everything
                         $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
                         $('#calendar').fullCalendar('rerenderEvents');
+                        */
+                        location.reload();
                     },
                     failure: function (response) {
                         console.log("Fail");
@@ -489,6 +503,10 @@ function eventAddRequester() {
     $('#addEventModal').modal('hide');
     sanitizeModalFields();
     //Request Ajax Send to Database.
+    if (viewCalendar) {
+        start = $('#calendar').fullCalendar('getView').start.format();
+        end = $('#calendar').fullCalendar('getView').end.format();
+    }
     requestGetType("/AddEvent/AddEvent", newEvent);
 }
 
@@ -501,6 +519,10 @@ function removeUserAddedEvents() {
         data.startEvent = currentEvent.start.format();
         data.endEvent = currentEvent.end.format();
         console.log(data);
+        if (viewCalendar) {
+            start = $('#calendar').fullCalendar('getView').start.format();
+            end = $('#calendar').fullCalendar('getView').end.format();
+        }
         requestGetType("/RemoveEvent/", data);
         $("#fullCalModal").modal("hide");
     });
@@ -520,6 +542,10 @@ function clickTabFour() {
             .format("YYYY-MM-DD HH:mm:ss");
         selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
             .format("YYYY-MM-DD HH:mm:ss");
+        if (viewCalendar) {
+            start = $('#calendar').fullCalendar('getView').start.format();
+            end = $('#calendar').fullCalendar('getView').end.format();
+        }
         getActiveAlerts(selectedItem, renderActiveAlerts);
     });
 }

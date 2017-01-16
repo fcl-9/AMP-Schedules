@@ -62,9 +62,11 @@
     @Scripts.Render("~/scripts/javascript/functions.js")
 
     <script>
-        var currentEvent = null;
+        
+        var start = new Date();
+        var end = new Date();
+        var viewCalendar = true;
         var minDate = ""; //GlobalVar Stores the datepicker data 
-
 
         //Show the model for a new event addtion
         $()

@@ -115,6 +115,7 @@ namespace AMPSchedules.Controllers
                     dbAlert = DbManager.Instance.AddAlertToOfficeH(alertTime, mOfficeHour);
                     DbManager.Instance.SaveChanges();
                 }
+                alert.Id = dbAlert.ID;
                 item.Alerts.Add(alert);
                 ScheduleAlert(item.Name, item.StartTime, alertTime, endTime, CurrentUser.Email, dbAlert.ID);
             }

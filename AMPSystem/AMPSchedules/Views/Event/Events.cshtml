@@ -26,9 +26,9 @@
         <div class="col-sm-6">
                 <h4 style="text-align: left">Future Events</h4>
                 <ul id="eventLimit" class="nav nav-tabs">
-                    <li role="presentation" class="active tab"><a href="#1">1 day</a></li>
-                    <li role="presentation" class="tab"><a href="#2">2 days</a></li>
-                    <li role="presentation" class="tab"><a href="#3">3 days</a></li>
+                    <li role="presentation" class="active tab"><a>1 day</a></li>
+                    <li role="presentation" class="tab"><a>2 days</a></li>
+                    <li role="presentation" class="tab"><a>3 days</a></li>
                 </ul>
             <div class="tab-content FutureEvents">
                 <br />
@@ -45,9 +45,18 @@
 @section scripts
 {
     @Scripts.Render("~/Scripts/moment-with-locales.min.js")
+    @Scripts.Render("~/Scripts/ColorPicker/jquery.simplecolorpicker.js")
+    @Scripts.Render("~/scripts/bootstrap-datetimepicker.js")
+    @Scripts.Render("~/scripts/jquery.validate.js")
     @Scripts.Render("~/scripts/javascript/functions.js")
+    
     <script>
-        var currentEvent = null;
+        var start = new Date();
+        var end = new Date();
+        updateDateInterval();
+
+        var viewCalendar = false;
+
         $(function () {
 
             $('div.segmented-control a').on('click', function () {
@@ -67,19 +76,40 @@
         function changeFunc($i) {
             $("#NextEvent").html("");
             $("#FutureEvents").html("");
-           
-            requestEvents(printInformation, $i);
+            updateDateInterval($i);
+            requestEvents(printInformation);
         }
 
-        $().ready(function () {   
+        $().ready(function () {
+            //Add the Color Picker that's inside alerts modal
+            $('select[name="colorpicker"]').simplecolorpicker();
+            // Configures validator
+            configureValidator();
+            //Ajax Request
+            getCourses(renderFilterCheckBoxes);
+            //Binds Events to Alerts Modal
+            AlertModalFunctions();
+            // Binds Event to Add Event Button
+            bindAddEventButton();
+            //Renders the DatePickers
+            renderDatePickers();
+            //Removes User Added Events
+            removeUserAddedEvents();
+            //Adds Validator to New Event Submission Form
+            addJqueryValidator();
+            //Submit the Data of a new event
+            saveNewEventBtt();
+            //Request for active events that belong to a user
+            clickTabFour();
+            //Removes Active Alert From the Database
+            removeActiveAlert();
             requestEvents(printInformation, 1);
             $("#eventLimit .tab").click(function (e) {
                 $(e.target).tab("show");
                 changeFunc($(e.target).html().replace(/[^\d.]/g, ''));
             });
-            requestTeachers(printInformation, 1);
-            $("body").on("click", ".glyphicon", function () {
-                var event = $(this).parent.find("input[type = hidden]").val();
+            $("body").on("click", ".glyphicon", function (event) {
+                var event = JSON.parse($(this).parent().find("input[type = hidden]").val());
                 renderEventModal(event);
             });
         });
@@ -89,23 +119,10 @@
             return result;
         }
         //Ajax Request for teachers
-        function requestEvents(returnFunction, DaysFilter) {
-            
-            var data = {};
-            var DateInicial = new Date();
-            var DateFinal = new Date();
-            var hh = DateInicial.getHours();
-            var mm = DateInicial.getMinutes();
-            var ss = DateInicial.getSeconds();
-            if (hh < 10) { hh = "0" + hh; }
-            if (mm < 10) { mm = "0" + mm; }
-            if (ss < 10) { ss = "0" + ss; }
-            DateFinal = moment(addDays(DateInicial, DaysFilter - 1)).format("YYYY-MM-DD");
-            DateInicial = moment(DateInicial).format("YYYY-MM-DD");
+        function requestEvents(returnFunction) {
             $.ajax({
                 type: "GET",
-                url: '/Event/ReturnEvents?start=' + DateInicial + 'T'+hh+':'+mm+':'+ss+'&end=' + DateFinal+'T23:53:53',
-                data,
+                url: '/Event/ReturnEvents?start=' + start + '&end=' + end,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: returnFunction,
@@ -124,33 +141,30 @@
             var Floor = undefined;
             var Color = undefined;
             var iteration = 0;
-            $.each(sortBy(events, { prop: "StartTime" }),
+            $.each(sortBy(events, { prop: "start" }),
                 function(key, value) { 
-                    $.each(value.Courses,
-                        function (chave, valor) {
-                            console.log(value);
-                            ClassName = value.Name;
-                            StartingTime = value.StartTime;
-                            Color = value.Color;
+                    console.log(value);
+                    ClassName = value.title;
+                    StartingTime = value.start;
+                    Color = value.color;
 
-                            $.each(value.Rooms,
-                                function(property, val) {
-                                    ClassRoom = val.Name;
-                                    Floor = val.Floor;
-                                });
+                    $.each(value.rooms,
+                        function(property, val) {
+                            ClassRoom = val.Name;
+                            Floor = val.Floor;
                         });
                     iteration += 1;
                     if (iteration == 1) {
-                        renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color);
+                        renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value));
                     } else
                     {
-                        renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color);
+                        renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value));
                     }
 
                 });
         }
 
-        function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color) {
+        function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo) {
             $('.NextEvent').append(
                 '<div class="panel-group">' +
                 '<div class="panel panel-primary" style="background:'+Color+'">' +
@@ -174,12 +188,13 @@
             );
 
         }
-        function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color) {
+        function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo) {
             $('#FutureEvents').append(
                 '<div class="panel-group">' +
                 '<div class="panel panel-primary" style="background:' + Color + '">' +
                 '<div class="panel-body">' +
-                '<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>' +
+                '<input type="hidden" value=\''+EventInfo+'\'>'+
+                '<span style="float:right"  class="glyphicon glyphicon-cog" aria-hidden="true"></span>' +
                 '<h5>' +
                 ClassName +
                 '</h5>' +
@@ -200,6 +215,20 @@
                 '</div>'
             );
 
+        }
+
+        function updateDateInterval(DayInterval) {
+            var mStart = new Date();
+            var hh = mStart.getHours();
+            var mm = mStart.getMinutes();
+            var ss = mStart.getSeconds();
+            if (hh < 10) { hh = "0" + hh; }
+            if (mm < 10) { mm = "0" + mm; }
+            if (ss < 10) { ss = "0" + ss; }
+            end = moment(addDays(mStart, DayInterval - 1)).format("YYYY-MM-DD");
+            start = moment(mStart).format("YYYY-MM-DD");
+            start += 'T' + hh + ':' + mm + ':' + ss;
+            end += 'T23:53:53';
         }
      
         var sortBy = (function() {

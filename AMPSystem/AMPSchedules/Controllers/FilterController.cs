@@ -10,22 +10,22 @@ namespace AMPSchedules.Controllers
 {
     public class FilterController : TemplateController
     {
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
-            var filters = new AndCompositeFilter(manager);
+            var filters = new AndCompositeFilter();
             foreach (var filter in Request.QueryString)
                 if (Request.QueryString[(string) filter] == "ClassName")
                 {
-                    IFilter nameFilter = new Name((string) filter, manager);
+                    IFilter nameFilter = new Name((string) filter);
                     filters.Add(nameFilter);
                 }
                 else if (Request.QueryString[(string) filter] == "Type")
                 {
-                    IFilter typeFilter = new TypeF((string) filter, manager);
+                    IFilter typeFilter = new TypeF((string) filter);
                     filters.Add(typeFilter);
                 }
             filters.ApplyFilter();
-            return base.Hook(manager);
+            return base.Hook();
         }
 
         //Handles every request that was made by a user to filter activities.

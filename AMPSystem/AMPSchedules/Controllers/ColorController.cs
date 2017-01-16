@@ -14,7 +14,7 @@ namespace AMPSchedules.Controllers
 {
     public class ColorController : TemplateController
     {
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             //Read The Color that was sent
             string color = null;
@@ -29,7 +29,7 @@ namespace AMPSchedules.Controllers
                 }
 
             //Change the color on the items 
-            foreach (var item in manager.TimeTable.ItemList)
+            foreach (var item in TimeTableManager.Instance.TimeTable.ItemList)
                 if (item.Name == itemName)
                 {
                     if (color != null)
@@ -90,7 +90,7 @@ namespace AMPSchedules.Controllers
                     }
                     DbManager.Instance.SaveChanges();
                 }
-            return base.Hook(manager);
+            return base.Hook();
         }
 
         [HttpGet]

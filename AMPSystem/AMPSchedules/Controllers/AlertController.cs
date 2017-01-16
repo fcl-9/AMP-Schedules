@@ -30,12 +30,12 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        public override ActionResult Hook(TimeTableManager manager)
+        public override ActionResult Hook()
         {
             foreach (var key in Request.QueryString)
                 Debug.WriteLine(Request.QueryString[(string) key]);
 
-            var item = ((List<ITimeTableItem>) manager.TimeTable.ItemList).Find(
+            var item = ((List<ITimeTableItem>)TimeTableManager.Instance.TimeTable.ItemList).Find(
                 i =>
                     i.Name == Request.QueryString["name"] &&
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));

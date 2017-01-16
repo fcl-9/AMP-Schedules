@@ -18,9 +18,9 @@ namespace AMPSchedules.Controllers
         private static readonly object _lockobject = new object();
         public User CurrentUser { get; private set; }
 
-        public virtual ActionResult Hook(TimeTableManager manager)
+        public virtual ActionResult Hook()
         {
-            var parsedItems = ParseData(manager);
+            var parsedItems = ParseData(TimeTableManager.Instance);
             return
                 Content(
                     JsonConvert.SerializeObject(parsedItems.ToArray(),
@@ -29,11 +29,11 @@ namespace AMPSchedules.Controllers
         }
         public async Task<ActionResult> TemplateMethod()
         {
-            var manager = await LoadData();
-            return Hook(manager);
+            LoadData();
+            return Hook();
         }
 
-        private async Task<TimeTableManager> LoadData()
+        private void LoadData()
         {
             var mail = new MailAddress(ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value);
 
@@ -65,8 +65,7 @@ namespace AMPSchedules.Controllers
             var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
             var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
             //The manager will start the timetableitem list with the data read from the repo
-            var manager = new TimeTableManager(startDateTime, endDateTime, CurrentUser);
-            return manager;
+            TimeTableManager.Instance.CreateTimeTable(startDateTime, endDateTime, CurrentUser);
         }
 
         private IList<CalendarItem> ParseData(TimeTableManager manager)

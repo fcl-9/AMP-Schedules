@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AMPSchedules.Services
+namespace AMPSchedules.Models
 {
     public class UserInfo
     {
@@ -14,7 +14,7 @@ namespace AMPSchedules.Services
         public List<Recipient> ToRecipients { get; set; }
     }
 
-  public class Recipient
+    public class Recipient
     {
         public UserInfo EmailAddress { get; set; }
     }
@@ -25,12 +25,7 @@ namespace AMPSchedules.Services
         public string Content { get; set; }
     }
 
-    public interface IMessageRequest {
-        Message Message { get; set; }
-        bool SaveToSentItems { get; set; }
-    }
-
-    public class MessageRequest : IMessageRequest
+    public class MessageRequest
     {
         public Message Message { get; set; }
         public bool SaveToSentItems { get; set; }

@@ -16,10 +16,10 @@ namespace AMPSystem.Classes
         /// <param name="repository"></param>
         /// <param name="startDateTime"></param>
         /// <param name="endDateTime"></param>
-        public TimeTableManager(DateTime startDateTime, DateTime endDateTime, User currentUser)
+        public TimeTableManager(Repository repository, DateTime startDateTime, DateTime endDateTime, User currentUser)
         {
             TimeTable = new Timetable(startDateTime, endDateTime, currentUser);
-            Repository = Repository.Instance;
+            Repository = repository;
             //Adds Value to our data class whcih is TimeTable
             foreach (var item in Repository.Items)
             {
@@ -34,7 +34,7 @@ namespace AMPSystem.Classes
                         // then add it to the timetable
                         foreach (var course in ((Lesson) item).Courses)
                         {
-                            if (Repository.UserCourses.Contains(course))
+                            if (repository.UserCourses.Contains(course))
                             {
                                 AddTimetableItem(item);
                             }
@@ -46,7 +46,7 @@ namespace AMPSystem.Classes
                         // then add it to the timetable
                         foreach (var course in ((EvaluationMoment) item).Courses)
                         {
-                            if (Repository.UserCourses.Contains(course))
+                            if (repository.UserCourses.Contains(course))
                             {
                                 AddTimetableItem(item);
                             }
@@ -58,7 +58,7 @@ namespace AMPSystem.Classes
                         // courses that the student assists then add it to the timetable
                         foreach (var course in ((OfficeHours) item).Teacher.Courses)
                         {
-                            if (Repository.UserCourses.Contains(course))
+                            if (repository.UserCourses.Contains(course))
                             {
                                 AddTimetableItem(item);
                             }
@@ -70,9 +70,9 @@ namespace AMPSystem.Classes
         }
 
         //This will only be used to get teachers information don't course data to be added to timetable.
-        public TimeTableManager()
+        public TimeTableManager(Repository repository)
         {
-            Repository = Repository.Instance;
+            Repository = repository;
         }
 
         /// <summary>

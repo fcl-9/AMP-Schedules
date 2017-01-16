@@ -27,9 +27,9 @@
             <div class="container">
                 <h4 style="text-align: left">Future Events</h4>
                 <ul id="eventLimit" class="nav nav-tabs">
-                    <li role="presentation" class="active tab"><a>1 day</a></li>
-                    <li role="presentation" class="tab"><a>2 days</a></li>
-                    <li role="presentation" class="tab"><a>3 days</a></li>
+                    <li role="presentation" class="active tab"><a>Tomorrow</a></li>
+                    <li role="presentation" class="tab"><a>In 2 days</a></li>
+                    <li role="presentation" class="tab"><a>In 3 days</a></li>
                 </ul>
                 <div class="tab-content FutureEvents">
                     <br />
@@ -60,7 +60,7 @@
         var currentEvent = null;
         var start = new Date();
         var end = new Date();
-        updateDateInterval();
+        updateDateInterval(1);
 
         var viewCalendar = false;
 
@@ -112,7 +112,11 @@
             requestEvents(printInformation, 1);
             $("#eventLimit .tab").click(function (e) {
                 $(e.target).tab("show");
-                changeFunc($(e.target).html().replace(/[^\d.]/g, ''));
+                if ($(e.target).html() == "Tomorrow") {
+                    changeFunc(1);
+                } else {
+                    changeFunc($(e.target).html().replace(/[^\d.]/g, ''));
+                }
             });
             $("body").on("click", ".glyphicon-cog", function (event) {
                 var event = JSON.parse($(this).parent().find("input[type = hidden]").val());
@@ -198,7 +202,7 @@
         function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo) {
             $('#FutureEvents').append(
                 '<div class="panel-group">' +
-                '<div class="panel panel-primary">' +
+                '<div class="panel panel-primary" style="background:' + Color + '">' +
                 '<div class="panel-body">' +
                 '<input type="hidden" value=\''+EventInfo+'\'>'+
                 '<span style="float:right"  class="glyphicon glyphicon-cog" aria-hidden="true"></span>' +
@@ -230,7 +234,7 @@
             if (hh < 10) { hh = "0" + hh; }
             if (mm < 10) { mm = "0" + mm; }
             if (ss < 10) { ss = "0" + ss; }
-            end = moment(addDays(mStart, DayInterval - 1)).format("YYYY-MM-DD");
+            end = moment(addDays(mStart, DayInterval)).format("YYYY-MM-DD");
             start = moment(mStart).format("YYYY-MM-DD");
             start += 'T' + hh + ':' + mm + ':' + ss;
             end += 'T23:53:53';

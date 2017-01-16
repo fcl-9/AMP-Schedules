@@ -144,44 +144,46 @@ function calendar(urlToRequestData) {
             editable: true,
             eventLimit: true, // allow "more" link when too many events
             events: '' + urlToRequestData + '',
-            eventClick: function (event, jsEvent, view) {
-                currentEvent = event;
-                if (!currentEvent.editable) {
-                    $("#remove").attr("disabled", "disabled");
-                } else {
-                    $("#remove").removeAttr("disabled");
-                }
-                console.log(event);
-                console.log(moment(event.start).format("MMM Do H:mm"));
-                $('#modalTitle').html(event.title);
-                $('#startTime').html(moment(event.start).format("Do MMM YYYY H:mm"));
-                $('#endTime').html(moment(event.end).format("Do MMM YYYY H:mm"));
-                $("#rooms")
-                    .html(function () {
-                        var rooms = "Room(s): <br><ul>";
-                        $.each(event.rooms,
-                            function (key, room) {
-                                rooms += "<li>" +
-                                    room.Name +
-                                    "<ul><li> Floor: " +
-                                    room.Floor +
-                                    "</li><li>Building: " +
-                                    room.Building.Name +
-                                    "</li></ul>";
-                            })
-                        rooms += "</ul>";
-                        return rooms;
-                    });
-                if (event.teacher != null) {
-
-                    $("#teacher").html("Teacher: " + event.teacher.Name);
-                    $("#lessonType").html("Lesson: " + event.lessonType);
-                }
-                $('#description').html(event.description);
-                $('#eventUrl').attr('href', event.url);
-                $('#fullCalModal').modal();
-            }
+            eventClick: renderEventModal
         });
+}
+
+function renderEventModal(event) {
+    currentEvent = event;
+    if (!currentEvent.editable) {
+        $("#remove").attr("disabled", "disabled");
+    } else {
+        $("#remove").removeAttr("disabled");
+    }
+    console.log(event);
+    console.log(moment(event.start).format("MMM Do H:mm"));
+    $('#modalTitle').html(event.title);
+    $('#startTime').html(moment(event.start).format("Do MMM YYYY H:mm"));
+    $('#endTime').html(moment(event.end).format("Do MMM YYYY H:mm"));
+    $("#rooms")
+        .html(function () {
+            var rooms = "Room(s): <br><ul>";
+            $.each(event.rooms,
+                function (key, room) {
+                    rooms += "<li>" +
+                        room.Name +
+                        "<ul><li> Floor: " +
+                        room.Floor +
+                        "</li><li>Building: " +
+                        room.Building.Name +
+                        "</li></ul>";
+                })
+            rooms += "</ul>";
+            return rooms;
+        });
+    if (event.teacher != null) {
+
+        $("#teacher").html("Teacher: " + event.teacher.Name);
+        $("#lessonType").html("Lesson: " + event.lessonType);
+    }
+    $('#description').html(event.description);
+    $('#eventUrl').attr('href', event.url);
+    $('#fullCalModal').modal();
 }
 
 //Apply Filters

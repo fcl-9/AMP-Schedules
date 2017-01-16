@@ -3,8 +3,8 @@
     {
       "ID":  1,
       "Courses": [ 2 ],
-      "StartTime": "2017 - 01 - 02 T18: 00: 00",
-      "EndTime": "2017 - 01 - 02 T19: 59: 59",
+      "StartTime": "2017 - 01 - 16 T18: 00: 00",
+      "EndTime": "2017 - 01 - 16 T19: 59: 59",
       "LessonType": "T",
       "ClassRoom": [
         {
@@ -17,8 +17,8 @@
     {
       "ID":  2,
       "Courses": [ 1 ],
-      "StartTime": "2017 - 01 - 02 T14: 00: 00",
-      "EndTime": "2017 - 01 - 02 T15: 59: 59",
+      "StartTime": "2017 - 01 - 17 T14: 00: 00",
+      "EndTime": "2017 - 01 - 17 T15: 59: 59",
       "LessonType": "T",
       "ClassRoom": [
         {
@@ -31,8 +31,8 @@
     {
       "ID":  3,
       "Courses": [ 4 ],
-      "StartTime": "2017 - 01 - 02 T16: 00: 00",
-      "EndTime": "2017 - 01 - 02 T17: 59: 59",
+      "StartTime": "2017 - 01 - 17 T16: 00: 00",
+      "EndTime": "2017 - 01 - 17 T17: 59: 59",
       "LessonType": "T",
       "ClassRoom": [
         {
@@ -45,8 +45,8 @@
     {
       "ID": 4,
       "Courses": [ 4 ],
-      "StartTime": "2017 - 01 - 03 T14: 00: 00",
-      "EndTime": "2017 - 01 - 03 T16: 59: 59",
+      "StartTime": "2017 - 01 - 18 T14: 00: 00",
+      "EndTime": "2017 - 01 - 18 T16: 59: 59",
       "LessonType": "PL",
       "ClassRoom": [
         {

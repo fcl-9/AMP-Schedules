@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "_AddEventPartial";
+}
+
+<div class="addEventButton">
+    <button type="button" class="btn-circle btn-lg" id="addEvent">
+        <i class="glyphicon glyphicon-plus iconPlus"></i>
+    </button>
+</div>
+
+<div id="addEventModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title-addEvent"></h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <form id="new_event-add-form" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="new_event_name" class="col-sm-2 control-label">Event Name: </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="new_event_name" name="new_event_name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="datetimepicker_starttime" class="col-sm-2 control-label">Start Time: </label>
+                        <div class="col-sm-10">
+                            <div class='input-group date' id='datetimepicker_starttime'>
+                                <input type='text' class="form-control" name="datetimepicker_starttime" onkeydown="return false" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="datetimepicker_endtime" class="col-sm-2 control-label">End Time: </label>
+                        <div class="col-sm-10">
+                            <div class='input-group date' id='datetimepicker_endtime'>
+                                <input type='text' class="form-control" name="datetimepicker_endtime" onkeydown="return false" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_event_room" class="col-sm-2 control-label">Room: </label>
+                        <div class="col-sm-10">
+                            <select id="new_event_room" class="form-control" name="new_event_room"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new_event_room" class="col-sm-2 control-label">Course: </label>
+                        <div class="col-sm-10">
+                            <select id="new_event_course" name="new_event_course" class="form-control"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new_event_room" class="col-sm-2 control-label">Description: </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="description" id="new_event_description">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" id="saveNewEvent">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+

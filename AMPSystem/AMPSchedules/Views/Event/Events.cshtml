@@ -5,6 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+
+@section style
+{
+    @Styles.Render("~/Content/ColorPicker/jquery.simplecolorpicker.css")
+    @Styles.Render("~/Content/button.css")
+    @Styles.Render("~/Content/bootstrap-datetimepicker.css")
+}
 <h2 style="text-align: center">Events</h2>
 <br/>
 <br/>
@@ -32,10 +39,16 @@
     </div>
 </div> 
 
+
+@Html.Partial($"_EventModalPartial")
+@Html.Partial($"_AddEventPartial")
+
 @section scripts
 {
     @Scripts.Render("~/Scripts/moment-with-locales.min.js")
+    @Scripts.Render("~/scripts/javascript/functions.js")
     <script>
+        var currentEvent = null;
         $(function () {
 
             $('div.segmented-control a').on('click', function () {
@@ -60,7 +73,11 @@
         }
 
         $().ready(function () {   
-            requestTeachers(printInformation,1);
+            requestTeachers(printInformation, 1);
+            $("body").on("click", ".glyphicon", function () {
+                var event = $(this).parent.find("input[type = hidden]").val();
+                renderEventModal(event);
+            });
         });
         function addDays(date, days) {
             var result = new Date(date);
@@ -159,6 +176,7 @@
                 '<div class="panel-group">' +
                 '<div class="panel panel-primary" style="background:' + Color + '">' +
                 '<div class="panel-body">' +
+                '<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>' +
                 '<h5>' +
                 ClassName +
                 '</h5>' +

@@ -1,9 +1,6 @@
-﻿@using Resources
-
-@{
+﻿@{
     ViewBag.Title = "Events";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
 
 @section style
@@ -24,17 +21,21 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <div class="container">
-                <h4 style="text-align: left">Future Events</h4>
-                <ul id="eventLimit" class="nav nav-tabs">
-                    <li role="presentation" class="active tab"><a>Tomorrow</a></li>
-                    <li role="presentation" class="tab"><a>In 2 days</a></li>
-                    <li role="presentation" class="tab"><a>In 3 days</a></li>
-                </ul>
-                <div class="tab-content FutureEvents">
-                    <br />
-                    <div class="tab-pane active" id="FutureEvents">
-                    </div>
+            <h4 style="text-align: left">Future Events</h4>
+            <ul id="eventLimit" class="nav nav-tabs">
+                <li role="presentation" class="active tab">
+                    <a>Tomorrow</a>
+                </li>
+                <li role="presentation" class="tab">
+                    <a>In 2 days</a>
+                </li>
+                <li role="presentation" class="tab">
+                    <a>In 3 days</a>
+                </li>
+            </ul>
+            <div class="tab-content FutureEvents">
+                <br/>
+                <div class="tab-pane active" id="FutureEvents">
                 </div>
             </div>
             <br/>
@@ -42,7 +43,7 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
 
 
 @Html.Partial($"_EventModalPartial")
@@ -55,7 +56,7 @@
     @Scripts.Render("~/scripts/bootstrap-datetimepicker.js")
     @Scripts.Render("~/scripts/jquery.validate.js")
     @Scripts.Render("~/scripts/javascript/functions.js")
-    
+
     <script>
         var currentEvent = null;
         var start = new Date();
@@ -64,18 +65,19 @@
 
         var viewCalendar = false;
 
-        $(function () {
+        $(function() {
 
-            $('div.segmented-control a').on('click', function () {
+            $('div.segmented-control a').on('click',
+                function() {
 
-                $('div.segmented-control a').each(function (i, e) {
-                    $(e).removeClass('active');
+                    $('div.segmented-control a').each(function(i, e) {
+                        $(e).removeClass('active');
+                    });
+
+                    $(this).addClass('active');
+                    $(this).find('input').prop('checked', true);
+                    return false;
                 });
-
-                $(this).addClass('active');
-                $(this).find('input').prop('checked', true);
-                return false;
-            });
 
         });
 
@@ -86,7 +88,7 @@
             requestEvents(printInformation);
         }
 
-        $().ready(function () {
+        $().ready(function() {
             //Add the Color Picker that's inside alerts modal
             $('select[name="colorpicker"]').simplecolorpicker();
             // Configures validator
@@ -110,7 +112,7 @@
             //Removes Active Alert From the Database
             removeActiveAlert();
             requestEvents(printInformation, 1);
-            $("#eventLimit .tab").click(function (e) {
+            $("#eventLimit .tab").click(function(e) {
                 $(e.target).tab("show");
                 if ($(e.target).html() == "Tomorrow") {
                     changeFunc(1);
@@ -118,16 +120,20 @@
                     changeFunc($(e.target).html().replace(/[^\d.]/g, ''));
                 }
             });
-            $("body").on("click", ".glyphicon-cog", function (event) {
-                var event = JSON.parse($(this).parent().find("input[type = hidden]").val());
-                renderEventModal(event);
-            });
+            $("body").on("click",
+                ".glyphicon-cog",
+                function(event) {
+                    var event = JSON.parse($(this).parent().find("input[type = hidden]").val());
+                    renderEventModal(event);
+                });
         });
+
         function addDays(date, days) {
             var result = new Date(date);
             result.setDate(result.getDate() + parseInt(days));
             return result;
         }
+
         //Ajax Request for teachers
         function requestEvents(returnFunction) {
             $.ajax({
@@ -167,8 +173,7 @@
                         });
                     if (DateInicial == moment(StartingTime).format("YYYY-MM-DD")) {
                         renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value));
-                    } else
-                    {
+                    } else {
                         renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value));
                     }
 
@@ -178,7 +183,9 @@
         function renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo) {
             $('.NextEvent').append(
                 '<div class="panel-group">' +
-                '<div class="panel panel-primary" style="background:'+Color+'">' +
+                '<div class="panel panel-primary" style="background:' +
+                Color +
+                '">' +
                 '<div class="panel-body">' +
                 '<h5>' +
                 ClassName +
@@ -199,12 +206,17 @@
             );
 
         }
+
         function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo) {
             $('#FutureEvents').append(
                 '<div class="panel-group">' +
-                '<div class="panel panel-primary" style="background:' + Color + '">' +
+                '<div class="panel panel-primary" style="background:' +
+                Color +
+                '">' +
                 '<div class="panel-body">' +
-                '<input type="hidden" value=\''+EventInfo+'\'>'+
+                '<input type="hidden" value=\'' +
+                EventInfo +
+                '\'>' +
                 '<span style="float:right"  class="glyphicon glyphicon-cog" aria-hidden="true"></span>' +
                 '<h5>' +
                 ClassName +
@@ -231,9 +243,15 @@
             var hh = mStart.getHours();
             var mm = mStart.getMinutes();
             var ss = mStart.getSeconds();
-            if (hh < 10) { hh = "0" + hh; }
-            if (mm < 10) { mm = "0" + mm; }
-            if (ss < 10) { ss = "0" + ss; }
+            if (hh < 10) {
+                hh = "0" + hh;
+            }
+            if (mm < 10) {
+                mm = "0" + mm;
+            }
+            if (ss < 10) {
+                ss = "0" + ss;
+            }
             end = moment(addDays(mStart, DayInterval)).format("YYYY-MM-DD");
             start = moment(mStart).format("YYYY-MM-DD");
             start += 'T' + hh + ':' + mm + ':' + ss;
@@ -274,5 +292,3 @@
     </script>
 
 }
-   
-

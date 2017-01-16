@@ -18,24 +18,30 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
-            <h4>Next Event</h4>
+            <h4>Today's Events</h4>
             <br/>
             <div class="NextEvent" id="NextEvent">
             </div>
         </div>
         <div class="col-sm-6">
+            <div class="container">
                 <h4 style="text-align: left">Future Events</h4>
                 <ul id="eventLimit" class="nav nav-tabs">
                     <li role="presentation" class="active tab"><a>1 day</a></li>
                     <li role="presentation" class="tab"><a>2 days</a></li>
                     <li role="presentation" class="tab"><a>3 days</a></li>
                 </ul>
-            <div class="tab-content FutureEvents">
-                <br />
+                <div class="tab-content FutureEvents">
+                    <br />
                     <div class="tab-pane active" id="FutureEvents">
                     </div>
+                </div>
+            </div>
+            <br/>
+            <div class="FutureEvents" id="FutureEvents">
             </div>
         </div>
+    </div>
 </div> 
 
 
@@ -69,7 +75,6 @@
                 $(this).addClass('active');
                 $(this).find('input').prop('checked', true);
                 return false;
-
             });
 
         });
@@ -133,6 +138,7 @@
                 }
             });
         }
+
         //Adds Information to the page
         function printInformation(events) {
             console.log(events);
@@ -140,10 +146,11 @@
             var StartingTime = undefined;
             var ClassRoom = undefined;
             var Floor = undefined;
-            var Color = undefined;
             var iteration = 0;
+            var DateInicial = new Date();
+            DateInicial = moment(DateInicial).format("YYYY-MM-DD");
             $.each(sortBy(events, { prop: "start" }),
-                function(key, value) { 
+                function(key, value) {
                     console.log(value);
                     ClassName = value.title;
                     StartingTime = value.start;
@@ -154,9 +161,8 @@
                             ClassRoom = val.Name;
                             Floor = val.Floor;
                         });
-                    iteration += 1;
-                    if (iteration == 1) {
-                        renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value));
+                    if (DateInicial == moment(StartingTime).format("YYYY-MM-DD")) {
+                        renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value));
                     } else
                     {
                         renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value));
@@ -165,7 +171,7 @@
                 });
         }
 
-        function renderNextEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo) {
+        function renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo) {
             $('.NextEvent').append(
                 '<div class="panel-group">' +
                 '<div class="panel panel-primary" style="background:'+Color+'">' +
@@ -192,7 +198,7 @@
         function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo) {
             $('#FutureEvents').append(
                 '<div class="panel-group">' +
-                '<div class="panel panel-primary" style="background:' + Color + '">' +
+                '<div class="panel panel-primary">' +
                 '<div class="panel-body">' +
                 '<input type="hidden" value=\''+EventInfo+'\'>'+
                 '<span style="float:right"  class="glyphicon glyphicon-cog" aria-hidden="true"></span>' +
@@ -209,8 +215,6 @@
                 '<p>Piso: ' +
                 Floor +
                 '</p>' +
-                '</div>' +
-                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</div>'
@@ -231,13 +235,16 @@
             start += 'T' + hh + ':' + mm + ':' + ss;
             end += 'T23:53:53';
         }
-     
+        //Presents officehours of week
+
+
         var sortBy = (function() {
 
             const _defaults = {
                 parser: (x) => x,
                 desc: false
             };
+
             const isObject = (o) => o !== null && typeof o === "object";
             const isDefined = (v) => typeof v !== "undefined";
 

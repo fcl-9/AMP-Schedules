@@ -42,167 +42,14 @@
     </div>
 
     <div class="col-sm-9" id='calendar'></div>
-    <div class="addEventButton">
-        <button type="button" class="btn-circle btn-lg" id="addEvent">
-            <i class="glyphicon glyphicon-plus iconPlus"></i>
-        </button>
-    </div>
 </div>
 
 
-<div id="fullCalModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
-                <h4 id="modalTitle" class="modal-title"></h4>
-            </div>
-            <div id="modalBody" class="modal-body">
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#1" data-toggle="tab">Info</a>
-                    </li>
-                    <li>
-                        <a href="#2" data-toggle="tab">Color</a>
-                    </li>
-                    <li>
-                        <a href="#3" data-toggle="tab">Alert</a>
-                    </li>
-                    <li>
-                        <a href="#4" data-toggle="tab">Active Alerts</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content ">
-                    <div class="tab-pane active" id="1">
-                        <p>
-                            Start: <span id="startTime"></span>
-                        </p>
-                        <p>
-                            End: <span id="endTime"></span>
-                        </p>
-                        <div id="rooms"></div>
-                        <div id="lessonType"></div>
-                        <div id="teacher"></div>
-                        <div id="description"></div>
-                    </div>
-                    <div class="tab-pane" id="2">
-                        <p>You can change the color of each occurence of the item you selected.</p>
-                        <select name="colorpicker">
-                            <option value="#337ab7">Default Blue</option>
-                            <option value="#7bd148">Green</option>
-                            <option value="#5484ed">Bold blue</option>
-                            <option value="#a4bdfc">Blue</option>
-                            <option value="#46d6db">Turquoise</option>
-                            <option value="#7ae7bf">Light green</option>
-                            <option value="#51b749">Bold green</option>
-                            <option value="#fbd75b">Yellow</option>
-                            <option value="#ffb878">Orange</option>
-                            <option value="#ff887c">Red</option>
-                            <option value="#dc2127">Bold red</option>
-                            <option value="#dbadff">Purple</option>
-                            <option value="#e1e1e1">Gray</option>
-                        </select>
-                    </div>
-                    <div class="tab-pane" id="3">
-                        <form id="alertForm">
-                            <label class="control-label">Configure Alerts</label>
-                            
-                        </form>
-                        <button id="addAlert" class="btn btn-default">Add new alert</button>
-                    </div>
-                    <div class="tab-pane" id="4">
-                        <div class="row">
-                            <label class="control-label col-md-12"> Active Alerts</label>
-                            <div id="activeAlertForm" class="col-md-12">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                  
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button class="btn btn-danger" id="remove">Remove Event</button>
-                <button class="btn btn-primary" id="submit">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
+@Html.Partial($"_EventModalPartial")
+@Html.Partial($"_AddEventPartial")
           
 
-<div id="addEventModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
-                <h4 id="modalTitle" class="modal-title-addEvent"></h4>
-            </div>
-            <div id="modalBody" class="modal-body">
-                <form id="new_event-add-form"class="form-horizontal">
-                    <div class="form-group">
-                        <label for="new_event_name" class="col-sm-2 control-label">Event Name: </label>
-                        <div class="col-sm-10">
-                            <input class="form-control" id="new_event_name" name="new_event_name">
-                        </div>
-                     </div>
 
-                    <div class="form-group">
-                        <label for="datetimepicker_starttime" class="col-sm-2 control-label">Start Time: </label>
-                        <div class="col-sm-10">
-                            <div class='input-group date' id='datetimepicker_starttime'>
-                                <input type='text' class="form-control" name="datetimepicker_starttime"  onkeydown="return false"/>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="datetimepicker_endtime" class="col-sm-2 control-label">End Time: </label>
-                        <div class="col-sm-10">
-                            <div class='input-group date' id='datetimepicker_endtime'>
-                                <input type='text' class="form-control" name="datetimepicker_endtime" onkeydown="return false"/>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="new_event_room" class="col-sm-2 control-label">Room: </label>
-                        <div class="col-sm-10">
-                            <select id="new_event_room" class="form-control" name="new_event_room">
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="new_event_room" class="col-sm-2 control-label">Course: </label>
-                        <div class="col-sm-10">
-                            <select id="new_event_course" name="new_event_course" class="form-control">
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="new_event_room" class="col-sm-2 control-label">Description: </label>
-                        <div class="col-sm-10">
-                            <input class="form-control" name="description" id="new_event_description">
-                        </div>
-                    </div>
-                </form>
-</div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button class="btn btn-primary" id="saveNewEvent">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 @section scripts
@@ -216,8 +63,10 @@
 
     <script>
         var currentEvent = null;
+        var start = new Date();
+        var end = new Date();
+        var viewCalendar = true;
         var minDate = ""; //GlobalVar Stores the datepicker data 
-
 
         //Show the model for a new event addtion
         $()

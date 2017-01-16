@@ -30,13 +30,13 @@ namespace AMPSchedules.Controllers
             }
         }
 
-        public override ActionResult Hook()
-        {
-            return
-                Content(
-                    JsonConvert.SerializeObject(TimeTableManager.Instance.TimeTable.ItemList.ToArray(),
-                        new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
-                    "application/json");
-        }
+        //public override ActionResult Hook()
+        //{
+        //    return
+        //        Content(
+        //            JsonConvert.SerializeObject(TimeTableManager.Instance.TimeTable.ItemList.ToArray(),
+        //                new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
+        //            "application/json");
+        //}
     }
 }

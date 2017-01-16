@@ -29,7 +29,7 @@ namespace AMPSchedules.Controllers
                 }
 
             //Change the color on the items 
-            foreach (var item in TimeTableManager.Instance.TimeTable.ItemList)
+            foreach (var item in TimeTableManager.Instance.Repository.Items)
                 if (item.Name == itemName)
                 {
                     if (color != null)

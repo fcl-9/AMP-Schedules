@@ -64,7 +64,7 @@
         });
         function addDays(date, days) {
             var result = new Date(date);
-            result.setDate(result.getDate() + parseInt(days)+parseInt(1));
+            result.setDate(result.getDate() + parseInt(days));
             return result;
         }
         //Ajax Request for teachers
@@ -76,12 +76,18 @@
             //data["end"] = moment().isoWeekday(7).format("YYYY-MM-DD");
             var DateInicial = new Date();
             var DateFinal = new Date();
+            var hh = DateInicial.getHours();
+            var mm = DateInicial.getMinutes();
+            var ss = DateInicial.getSeconds();
+            if (hh < 10) { hh = "0" + hh; }
+            if (mm < 10) { mm = "0" + mm; }
+            if (ss < 10) { ss = "0" + ss; }
             DateFinal = moment(addDays(DateInicial, DaysFilter)).format("YYYY-MM-DD");
             DateInicial = moment(DateInicial).format("YYYY-MM-DD");
             alert(DateInicial + "  " + DateFinal);
             $.ajax({
                 type: "GET",
-                url: '/Event/ReturnEvents?start=' + DateInicial + '&end=' + DateFinal+'T00:00:00',
+                url: '/Event/ReturnEvents?start=' + DateInicial + 'T' + hh + ':' + mm + ':' + ss + '&end=' + DateFinal + 'T23:53:53',
                 data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

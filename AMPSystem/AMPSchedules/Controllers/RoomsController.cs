@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AMPSchedules.Models;
 using AMPSystem.Classes;
 using Newtonsoft.Json;
 using Resources;
@@ -9,6 +10,8 @@ namespace AMPSchedules.Controllers
 {
     public class RoomsController : TemplateController
     {
+        private GraphService _graphService = new GraphService();
+
         // GET: Courses
         public async Task<ActionResult> Index()
         {

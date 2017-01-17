@@ -48,7 +48,7 @@ namespace AMPSystem.Classes.TimeTableItems
         }
 
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string description, bool editable)
+            ICollection<Course> courses, string name, string description, bool editable, string reminder)
         {
             StartTime = startTime;
             EndTime = endTime;
@@ -58,6 +58,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Description = description;
             Alerts = new List<Alert>();
             Editable = editable;
+            Reminder = reminder;
         }
 
         public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms,

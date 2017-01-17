@@ -83,7 +83,7 @@ namespace AMPSchedules.Controllers
                         if (mEvaluation == null)
                             DbManager.Instance.CreateEvaluationMoment(item.Name, mRooms, mUser, item.Color,
                                     item.StartTime,
-                                    item.EndTime, item.Description, null);
+                                    item.EndTime, item.Description, null, item.Reminder);
                                 // Courses could be null since this is an event that came from the API
                         else
                             DbManager.Instance.SaveEvaluationColorChange(mEvaluation, item.Color);

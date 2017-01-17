@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace AMPSchedules.Controllers
 {
     [Authorize]
-    public abstract class TemplateController : Controller
+    public abstract class OldTemplateController : Controller
     {
         private static readonly object _lockobject = new object();
         public User CurrentUser { get; private set; }

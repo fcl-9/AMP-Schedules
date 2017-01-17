@@ -1,32 +1,17 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
-using AMPSystem.Classes;
-using Newtonsoft.Json;
-using Resources;
 
 namespace AMPSchedules.Controllers
 {
-    public class CoursesController : TemplateController
+    public class AlertsController : Controller
     {
-        // GET: Courses
-        public async Task<ActionResult> Index()
+        // GET: Alerts
+        public ActionResult Index()
         {
-            try
-            {
-                return await TemplateMethod();
-            }
-            catch (Exception e)
-            {
-                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error",
-                    new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
-            }
-        }
-
-        public override ActionResult Hook()
-        {
-            return Content(JsonConvert.SerializeObject(CurrentUser.Courses), "application/json");
+            return View();
         }
     }
 }

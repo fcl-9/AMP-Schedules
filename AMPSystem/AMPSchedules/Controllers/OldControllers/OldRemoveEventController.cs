@@ -10,7 +10,7 @@ using Resources;
 
 namespace AMPSchedules.Controllers
 {
-    public class RemoveEventController : TemplateController
+    public class OldRemoveEventController : OldTemplateController
     {
         // GET: AddEvent
         [HttpGet]

@@ -6,10 +6,10 @@ using System.Web.Mvc;
 
 namespace AMPSchedules.Controllers
 {
-    public class ContactsController : Controller
+    public class FiltersController : Controller
     {
-        // GET: Contacts
-        public ActionResult Index()
+        // GET: Filters/Add
+        public ActionResult Add()
         {
             return View();
         }

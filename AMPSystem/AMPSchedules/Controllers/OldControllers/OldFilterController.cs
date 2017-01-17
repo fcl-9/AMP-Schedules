@@ -8,7 +8,7 @@ using Resources;
 
 namespace AMPSchedules.Controllers
 {
-    public class FilterController : TemplateController
+    public class OldFilterController : OldTemplateController
     {
         public override ActionResult Hook()
         {

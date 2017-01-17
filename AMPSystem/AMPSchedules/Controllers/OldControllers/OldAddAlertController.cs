@@ -16,7 +16,7 @@ using Room = AMPSystem.Models.Room;
 
 namespace AMPSchedules.Controllers
 {
-    public class AddAlertController : TemplateController
+    public class OldAddAlertController : OldTemplateController
     {
         // GET: AddAlert
         [HttpGet]

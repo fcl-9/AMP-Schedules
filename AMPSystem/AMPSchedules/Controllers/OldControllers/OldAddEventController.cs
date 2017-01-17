@@ -14,7 +14,7 @@ using AMPSystem.Classes.LoadData;
 
 namespace AMPSchedules.Controllers
 {
-    public class AddEventController : TemplateController
+    public class OldAddEventController : OldTemplateController
     {
         // GET: AddEvent
         [HttpGet]

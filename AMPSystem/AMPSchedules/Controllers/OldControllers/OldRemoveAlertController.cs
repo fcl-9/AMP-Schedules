@@ -11,7 +11,7 @@ using Resources;
 
 namespace AMPSchedules.Controllers
 {
-    public class RemoveAlertController : TemplateController
+    public class OldRemoveAlertController : OldTemplateController
     {
         // GET: RemoveAlert
         [HttpGet]

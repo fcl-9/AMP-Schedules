@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AMPSystem;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace AMPSchedules.Controllers
 {
-    public class ColorController : Controller
+    public class EventsController : Controller
     {
-        public AMPSystemFacade Facade { get; set; }
+        // GET: Events
+        public ActionResult Index()
+        {
+            return View();
+        }
 
-        // GET: Color/Add
         public void Add()
         {
+
+        }
+
+        public void Remove()
+        {
+
         }
     }
 }

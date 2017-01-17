@@ -11,7 +11,7 @@ using Resources;
 
 namespace AMPSchedules.Controllers
 {
-    public class AlertController : TemplateController
+    public class OldAlertController : OldTemplateController
     {
         // GET: Alert
         // GET: AddAlert

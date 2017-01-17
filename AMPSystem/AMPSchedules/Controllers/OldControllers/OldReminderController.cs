@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,11 +18,11 @@ using Room = AMPSystem.Models.Room;
 
 namespace AMPSchedules.Controllers
 {
-    public class OldReminderController : Controller
+    public class ReminderController : Controller
     {
         private static readonly object _lockobject = new object();
         public User CurrentUser { get; private set; }
-   
+
         public ActionResult Index()
         {
             LoadData();
@@ -35,13 +36,16 @@ namespace AMPSchedules.Controllers
             }
             return Json(new { Success = true, Message = item.Reminder }, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Adds a new reminder to the database
+        /// </summary>
         public void Add()
         {
-            LoadData();
             var item = ((List<ITimeTableItem>)TimeTableManager.Instance.TimeTable.ItemList).Find(
-                i =>
-                    i.Name == Request.QueryString["name"] &&
-                    i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
+             i =>
+                 i.Name == Request.QueryString["name"] &&
+                 i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
 
             item.Reminder = Request.QueryString["reminder"];
             var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
@@ -92,43 +96,20 @@ namespace AMPSchedules.Controllers
             DbManager.Instance.SaveChanges();
         }
 
-        public void Remove()
-        {
-            LoadData();
-            var item = ((List<ITimeTableItem>)TimeTableManager.Instance.TimeTable.ItemList).Find(
-                i =>
-                    i.Name == Request.QueryString["name"] &&
-                    i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
-            var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
-            if (item is Lesson)
-            {
-                var mLesson = DbManager.Instance.ReturnLessonIfExists(item.Name, item.StartTime, item.EndTime, mUser);
-                DbManager.Instance.RemoveLessonReminder(mLesson);
-            }
-            else if (item is OfficeHours)
-            {
-                var mOfficeHours = DbManager.Instance.ReturnOfficeHourIfExists(item.Name, item.StartTime,
-                    item.EndTime, mUser);
-                DbManager.Instance.RemoveOfficeHourReminder(mOfficeHours);
-            }
-            else if (item is EvaluationMoment)
-            {
-                var mEvaluation = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime,
-                    item.EndTime, mUser);
-                DbManager.Instance.RemoveEvaluationReminder(mEvaluation);
-            }
-            DbManager.Instance.SaveChanges();
-        }
-
+        /// <summary>
+        /// Updates the current reminder in te database
+        /// </summary>
         public void Update()
         {
             LoadData();
-            Remove();
             Add();
         }
 
-        
+
         // THIS METHOD IS A COPY FROM THE TEMPLATE CONTROLLER
+        /// <summary>
+        /// Loads Data 
+        /// </summary>
         private void LoadData()
         {
             var mail = new MailAddress(ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value);

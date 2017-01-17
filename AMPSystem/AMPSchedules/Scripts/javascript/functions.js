@@ -638,7 +638,7 @@ function getActiveReminders(item, renderReminder) {
     //console.log(item);
     $.ajax({
         type: "GET",
-        url: "/Remider",
+        url: "/Reminder",
         data: item,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -672,26 +672,29 @@ function clickTabFive() {
 function renderReminder(activeReminders) {
         if (activeReminders.length === 0) {
             //There are no active reminders events
-            $("#activeAlertForm").html("There are no active reminders for this event");
+            $("#activeReminderMessages").html("There are no active reminders for this event");
         } else {
+            $("#activeReminderMessages").html("There are  active reminders for this event   " + "<br>" + activeReminders );
 
-        //    $.each(activeAlerts,
-        //        function (key, value) {
-        //            $("#activeAlertForm").append(
-        //                '' +
-        //                '<div class="col-sm-12 form-group">' +
-        //                '<div class="col-sm-10">' +
-        //                '<input class="form-control" value="' +
-        //                value.Value +
-        //                '" readonly=""/>' +
-        //                '</div>' +
-        //                '<div class="col-sm-2">' +
-        //                '<button class="rm-active-alert btn btn-danger" id="' +
-        //                value.Key +
-        //                '">Remove</button>' +
-        //                '</div>' +
-        //                '</div>'
-        //            );
+
+
+            //$.each(activeAlerts,
+            //    function (key, value) {
+            //        $("#activeAlertForm").append(
+            //            '' +
+            //            '<div class="col-sm-12 form-group">' +
+            //            '<div class="col-sm-10">' +
+            //            '<input class="form-control" value="' +
+            //            value.Value +
+            //            '" readonly=""/>' +
+            //            '</div>' +
+            //            '<div class="col-sm-2">' +
+            //            '<button class="rm-active-alert btn btn-danger" id="' +
+            //            value.Key +
+            //            '">Remove</button>' +
+            //            '</div>' +
+            //            '</div>'
+            //        );
             //        });
             console.log("There are active reminders");
         }

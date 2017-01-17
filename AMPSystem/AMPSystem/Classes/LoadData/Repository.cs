@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
@@ -39,16 +40,20 @@ namespace AMPSystem.Classes.LoadData
         public ICollection<User> Teachers { get; set; }
         public bool DataLoaded { get; private set; }
 
-        public void GetData(string user)
+        public void GetData(MailAddress user)
         {
+            var dbUser = DbManager.Instance.ReturnUserIfExists(user.Address);
             GetCourses();
             GetRooms();
-            GetTeachers();
+            GetTeachers(dbUser);
 
-            GetUserCourses(user);
-            GetSchedule(user);
+            GetUserCourses(user.User);
+            GetSchedule(user.User, dbUser);
 
-            AddCustomEvents();
+            if (dbUser != null)
+            {
+                AddCustomEvents(dbUser);
+            }
             DataLoaded = true;
         }
 
@@ -65,7 +70,7 @@ namespace AMPSystem.Classes.LoadData
         /// <summary>
         ///     Gets all the teachers from the dataReader and updates the List of teacher
         /// </summary>
-        private void GetTeachers()
+        private void GetTeachers(Models.User dbUser)
         {
             var data = DataReader.RequestTeachers();
             if (string.IsNullOrEmpty(data)) return;
@@ -95,7 +100,8 @@ namespace AMPSystem.Classes.LoadData
                     var endTime = officeHour["EndTime"].Value<DateTime>();
 
                     var mName = GenerateOfficeHourName(teacher.Name);
-                    var mOfficeHour = DbManager.Instance.ReturnOfficeHourIfExists(mName, startTime, endTime);
+
+                    var mOfficeHour = DbManager.Instance.ReturnOfficeHourIfExists(mName, startTime, endTime, dbUser);
                     if (mOfficeHour == null)
                     {
                         Items.Add(CreateOfficeHours(officeHourId, mName, startTime, endTime, rooms, teacher));
@@ -176,7 +182,7 @@ namespace AMPSystem.Classes.LoadData
         ///     that compose the schedule.
         /// </summary>
         /// <param name="username"></param>
-        private void GetSchedule(string username)
+        private void GetSchedule(string username, Models.User dbUser)
         {
             var data = DataReader.RequestSchedule(username);
             if (string.IsNullOrEmpty(data)) return;
@@ -208,7 +214,7 @@ namespace AMPSystem.Classes.LoadData
                 {
                     var teacher = ((List<User>) Teachers).Find(t => t.ExternId == item["Teacher"].Value<int>());
                     var name = GenerateLessonName(courses);
-                    var mLesson = DbManager.Instance.ReturnLessonIfExists(name, startTime, endTime);
+                    var mLesson = DbManager.Instance.ReturnLessonIfExists(name, startTime, endTime, dbUser);
                     if (mLesson == null)
                     {
                         Items.Add(CreateLesson(itemId, name, startTime, endTime, rooms, courses, lessonType, teacher));
@@ -224,7 +230,7 @@ namespace AMPSystem.Classes.LoadData
                 else
                 {
                     var name = GenerateEvaluationName(courses);
-                    var mEvaluation = DbManager.Instance.ReturnEvaluationMomentIfExists(name, startTime, endTime);
+                    var mEvaluation = DbManager.Instance.ReturnEvaluationMomentIfExists(name, startTime, endTime, dbUser);
                     if (mEvaluation == null)
                     {
                         Items.Add(CreateEvaluationMoment(itemId, startTime, endTime, rooms, courses, name));
@@ -244,7 +250,7 @@ namespace AMPSystem.Classes.LoadData
         ///     Checks to DB to see if there is any events that were not load by DataReader.
         ///     If so they are custom events and it adds them to the items collection
         /// </summary>
-        private void AddCustomEvents()
+        private void AddCustomEvents(Models.User user)
         {
             List<ITimeTableItem> knownEvaluations = null;
             try
@@ -257,7 +263,7 @@ namespace AMPSystem.Classes.LoadData
                 // If it returns null it means that there aren't any evaluation moments in the API/File. This is not a problem
                 // so we don't need to treat this exception
             }
-            foreach (var dbEvMoment in DbManager.Instance.EvaluationMoments())
+            foreach (var dbEvMoment in DbManager.Instance.EvaluationMoments(user))
             {
                 if (knownEvaluations != null)
                 {

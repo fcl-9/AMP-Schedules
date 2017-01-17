@@ -49,7 +49,7 @@ namespace AMPSchedules.Controllers
                         var room = item.Rooms.First();
                         var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
                         var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name);
-                        var mLesson = DbManager.Instance.ReturnLessonIfExists(item.Name, item.StartTime, item.EndTime);
+                        var mLesson = DbManager.Instance.ReturnLessonIfExists(item.Name, item.StartTime, item.EndTime, mUser);
                         if (mLesson == null)
                             DbManager.Instance.CreateLesson(item.Name, mRoom, mUser, item.Color, item.StartTime,
                                 item.EndTime);
@@ -62,7 +62,7 @@ namespace AMPSchedules.Controllers
                         var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
                         var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name);
                         var mOfficeHours = DbManager.Instance.ReturnOfficeHourIfExists(item.Name, item.StartTime,
-                            item.EndTime);
+                            item.EndTime, mUser);
                         if (mOfficeHours == null)
                             DbManager.Instance.CreateOfficeHour(item.Name, mRoom, mUser, item.Color, item.StartTime,
                                 item.EndTime);
@@ -79,7 +79,7 @@ namespace AMPSchedules.Controllers
                         }
 
                         var mEvaluation = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime,
-                            item.EndTime);
+                            item.EndTime, mUser);
                         if (mEvaluation == null)
                             DbManager.Instance.CreateEvaluationMoment(item.Name, mRooms, mUser, item.Color,
                                     item.StartTime,

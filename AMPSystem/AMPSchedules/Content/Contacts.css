@@ -1,10 +1,17 @@
-﻿.teacherContainer {
-    border: solid gray 2px;
+﻿.teacherWrapper {
+    border: solid thin gray;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 10px;
+}
+.teacherContainer {
+    border-bottom: solid thin gray ;
 }
 
 .teacherContainer .classname {
     text-align: center;
     background-color: #337ab7;
+    color: white;
 }
 
 .teacherPic img {

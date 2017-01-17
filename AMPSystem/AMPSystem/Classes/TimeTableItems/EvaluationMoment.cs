@@ -33,7 +33,7 @@ namespace AMPSystem.Classes.TimeTableItems
         }
 
         public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, string color,
-            ICollection<Course> courses, string name)
+            ICollection<Course> courses, string name, string reminder)
         {
             StartTime = startTime;
             EndTime = endTime;
@@ -42,10 +42,11 @@ namespace AMPSystem.Classes.TimeTableItems
             Name = name;
             Color = color;
             Alerts = new List<Alert>();
+            Reminder = reminder;
         }
 
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string color, string description, bool editable)
+            ICollection<Course> courses, string name, string color, string description, bool editable, string reminder)
         {
             StartTime = startTime;
             EndTime = endTime;
@@ -56,6 +57,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Description = description;
             Editable = editable;
             Alerts = new List<Alert>();
+            Reminder = reminder;
         }
 
         public int ExternId { get; set; }

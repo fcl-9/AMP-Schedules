@@ -22,9 +22,9 @@ namespace AMPSystem.Classes.LoadData
             return new Lesson(id, startTime, endTime, rooms, courses, type, name, teacher);
         }
         public ITimeTableItem Create(int id, string name, string color, DateTime startTime, DateTime endTime,
-            ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
+            ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher, string reminder)
         {
-            return new Lesson(id, startTime, endTime, color, rooms, courses, type, name, teacher);
+            return new Lesson(id, startTime, endTime, color, rooms, courses, type, name, teacher, reminder);
         }
 
         //Creates OfficeHours
@@ -34,9 +34,9 @@ namespace AMPSystem.Classes.LoadData
             return new OfficeHours(id, name, startTime, endTime, rooms, teacher);
         }
         public ITimeTableItem Create(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, User teacher,
-            string name, string color)
+            string name, string color, string reminder)
         {
-            return new OfficeHours(id, name, startTime, endTime, rooms, teacher, color);
+            return new OfficeHours(id, name, startTime, endTime, rooms, teacher, color, reminder);
         }
 
         // Creates EvaluationMoment
@@ -46,14 +46,14 @@ namespace AMPSystem.Classes.LoadData
             return new EvaluationMoment(id, startTime, endTime, rooms, courses, name);
         }
         public ITimeTableItem Create(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string color)
+            ICollection<Course> courses, string name, string color, string reminder)
         {
-            return new EvaluationMoment(id, startTime, endTime, rooms, color, courses, name);
+            return new EvaluationMoment(id, startTime, endTime, rooms, color, courses, name, reminder);
         }
         public ITimeTableItem Create(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string color, string description, bool editable)
+            ICollection<Course> courses, string name, string color, string description, bool editable, string reminder)
         {
-            return new EvaluationMoment(startTime, endTime, rooms, courses, name, color, description, editable);
+            return new EvaluationMoment(startTime, endTime, rooms, courses, name, color, description, editable, reminder);
         }
 
         public Room CreateRoom(int id, string name, int floor)

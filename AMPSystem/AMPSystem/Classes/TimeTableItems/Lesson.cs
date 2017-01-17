@@ -21,7 +21,7 @@ namespace AMPSystem.Classes.TimeTableItems
         }
 
         public Lesson(int id, DateTime startTime, DateTime endTime, string color, ICollection<Room> rooms,
-            ICollection<Course> courses, string type, string name, User teacher)
+            ICollection<Course> courses, string type, string name, User teacher, string reminder)
         {
             Name = name;
             StartTime = startTime;
@@ -33,6 +33,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Teacher = teacher;
             Color = color;
             Alerts = new List<Alert>();
+            Reminder = reminder;
         }
 
         public int ExternId { get; set; }

@@ -12,7 +12,7 @@
     @Styles.Render("~/Content/button.css")
     @Styles.Render("~/Content/bootstrap-datetimepicker.css")
 }
-<h1 style="text-align: center">Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value)</h1>
+<h1 style="text-align: center">Hello, @(System.Security.Claims.ClaimsPrincipal.Current.FindFirst("name")?.Value)</h1>
 
     <br/>
     <br/>

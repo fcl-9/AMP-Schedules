@@ -19,7 +19,7 @@ namespace AMPSystem.Classes.TimeTableItems
         }
 
         public OfficeHours(int id, string name, DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            User teacher, string color)
+            User teacher, string color, string reminder)
         {
             ExternId = id;
             StartTime = startTime;
@@ -29,6 +29,7 @@ namespace AMPSystem.Classes.TimeTableItems
             Name = name;
             Color = color;
             Alerts = new List<Alert>();
+            Reminder = reminder;
         }
 
         public int ExternId { get; set; }

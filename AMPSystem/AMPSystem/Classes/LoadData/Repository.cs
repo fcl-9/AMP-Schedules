@@ -85,7 +85,7 @@ namespace AMPSystem.Classes.LoadData
                 if (office != null)
                 {
                     var mItem = CreateOfficeHours(officeHourId, officeHourName, startTime, endTime, rooms, teacher,
-                        office.Color);
+                        office.Color, office.Reminder);
                     Items.Add(mItem);
                     AddAlertsToOfficeHour(office, (OfficeHours) mItem);
                     continue;
@@ -223,7 +223,7 @@ namespace AMPSystem.Classes.LoadData
             if (mLesson != null)
             {
                 var mItem = CreateLesson(id, name, startTime, endTime, rooms, courses, type, teacher,
-                    mLesson.Color);
+                    mLesson.Color, mLesson.Reminder);
                 Items.Add(mItem);
                 AddAlertsToLesson(mLesson, (TimeTableItems.Lesson) mItem);
                 return;
@@ -248,7 +248,7 @@ namespace AMPSystem.Classes.LoadData
             if (mEvaluation != null)
             {
                 var mItem = CreateEvaluationMoment(id, startTime, endTime, rooms, courses, name,
-                    mEvaluation.Color);
+                    mEvaluation.Color, mEvaluation.Reminder);
                 Items.Add(mItem);
                 AddAlertsToEvaluation(mEvaluation, (TimeTableItems.EvaluationMoment) mItem);
                 return;
@@ -293,7 +293,7 @@ namespace AMPSystem.Classes.LoadData
                         r => (r.Name == room.Name) && (r.Floor == room.Floor))).ToList();
                 var courses = new List<Course> {Courses.FirstOrDefault(c => c.Name == dbEvMoment.Course)};
                 var mItem = CreateEvaluationMoment(dbEvMoment.StartTime, dbEvMoment.EndTime, rooms, courses,
-                    dbEvMoment.Name, dbEvMoment.Color, dbEvMoment.Description, true);
+                    dbEvMoment.Name, dbEvMoment.Color, dbEvMoment.Description, true, dbEvMoment.Reminder);
                 Items.Add(mItem);
                 AddAlertsToEvaluation(dbEvMoment, (TimeTableItems.EvaluationMoment) mItem);
             }
@@ -341,9 +341,9 @@ namespace AMPSystem.Classes.LoadData
         //Factory calls.
         private static ITimeTableItem CreateEvaluationMoment(DateTime startTime, DateTime endTime,
             ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string color, string description, bool editable)
+            ICollection<Course> courses, string name, string color, string description, bool editable, string reminder)
         {
-            return Factory.Instance.Create(startTime, endTime, rooms, courses, name, color, description, editable);
+            return Factory.Instance.Create(startTime, endTime, rooms, courses, name, color, description, editable, reminder);
         }
 
         private static Course CreateCourse(int id, string name, ICollection<int> years)
@@ -374,9 +374,9 @@ namespace AMPSystem.Classes.LoadData
         }
 
         private static ITimeTableItem CreateLesson(int id, string name, DateTime startTime, DateTime endTime,
-            ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher, string color)
+            ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher, string color, string reminder)
         {
-            return Factory.Instance.Create(id, name, color, startTime, endTime, rooms, courses, type, teacher);
+            return Factory.Instance.Create(id, name, color, startTime, endTime, rooms, courses, type, teacher, reminder);
         }
 
         private static ITimeTableItem CreateOfficeHours(int id, string name, DateTime startTime, DateTime endTime,
@@ -386,9 +386,9 @@ namespace AMPSystem.Classes.LoadData
         }
 
         private static ITimeTableItem CreateOfficeHours(int id, string name, DateTime startTime, DateTime endTime,
-            ICollection<Room> rooms, User teacher, string color)
+            ICollection<Room> rooms, User teacher, string color, string reminder)
         {
-            return Factory.Instance.Create(id, startTime, endTime, rooms, teacher, name, color);
+            return Factory.Instance.Create(id, startTime, endTime, rooms, teacher, name, color, reminder);
         }
 
         private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime,
@@ -398,9 +398,9 @@ namespace AMPSystem.Classes.LoadData
         }
 
         private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime,
-            ICollection<Room> rooms, ICollection<Course> courses, string name, string color)
+            ICollection<Room> rooms, ICollection<Course> courses, string name, string color, string reminder)
         {
-            return Factory.Instance.Create(id, startTime, endTime, rooms, courses, name, color);
+            return Factory.Instance.Create(id, startTime, endTime, rooms, courses, name, color, reminder);
         }
 
         #region Singleton

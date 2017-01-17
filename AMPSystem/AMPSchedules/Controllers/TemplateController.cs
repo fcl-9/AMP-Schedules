@@ -46,7 +46,7 @@ namespace AMPSchedules.Controllers
                     IDataReader dataReader = new FileData();
                     Repository.Instance.DataReader = dataReader;
                     Repository.Instance.CleanRepository();
-                    Repository.Instance.GetData(mail);
+                    Repository.Instance.LoadData(mail);
                 }
             }
 

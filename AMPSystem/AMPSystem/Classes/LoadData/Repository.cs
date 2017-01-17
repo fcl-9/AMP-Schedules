@@ -22,7 +22,11 @@ namespace AMPSystem.Classes.LoadData
         public ICollection<User> Teachers { get; set; }
         public bool DataLoaded { get; private set; }
 
-        public void GetData(MailAddress user)
+        /// <summary>
+        /// Load all data.
+        /// </summary>
+        /// <param name="user"></param>
+        public void LoadData(MailAddress user)
         {
             var dbUser = DbManager.Instance.ReturnUserIfExists(user.Address);
             LoadAllCourses();
@@ -35,6 +39,9 @@ namespace AMPSystem.Classes.LoadData
             DataLoaded = true;
         }
 
+        /// <summary>
+        /// Clean Repository.
+        /// </summary>
         public void CleanRepository()
         {
             Courses.Clear();
@@ -45,6 +52,11 @@ namespace AMPSystem.Classes.LoadData
             DataLoaded = false;
         }
 
+        /// <summary>
+        /// Load courses from JToken.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private ICollection<Course> LoadCourses(JToken item)
         {
             return
@@ -52,6 +64,13 @@ namespace AMPSystem.Classes.LoadData
                     .ToList();
         }
 
+        /// <summary>
+        /// Load all office hours from JToken.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="dbUser"></param>
+        /// <param name="rooms"></param>
+        /// <param name="teacher"></param>
         private void LoadOfficeHours(JToken item, Models.User dbUser, ICollection<Room> rooms, User teacher)
         {
             foreach (var officeHour in item["OfficeHours"])
@@ -74,6 +93,10 @@ namespace AMPSystem.Classes.LoadData
             }
         }
 
+        /// <summary>
+        /// Load user courses from DataReader.
+        /// </summary>
+        /// <param name="userName"></param>
         private void LoadUserCourses(string userName)
         {
             var data = DataReader.RequestUserCourses(userName);
@@ -87,6 +110,9 @@ namespace AMPSystem.Classes.LoadData
             }
         }
 
+        /// <summary>
+        /// Load all courses from DataReader.
+        /// </summary>
         private void LoadAllCourses()
         {
             var data = DataReader.RequestCourses();
@@ -101,6 +127,9 @@ namespace AMPSystem.Classes.LoadData
             }
         }
 
+        /// <summary>
+        /// Load Rooms from DataReader.
+        /// </summary>
         private void LoadRooms()
         {
             var data = DataReader.RequestRooms();
@@ -119,6 +148,10 @@ namespace AMPSystem.Classes.LoadData
             }
         }
 
+        /// <summary>
+        /// Load Teachers from DataReader.
+        /// </summary>
+        /// <param name="dbUser"></param>
         private void LoadTeachers(Models.User dbUser)
         {
             var data = DataReader.RequestTeachers();
@@ -141,6 +174,11 @@ namespace AMPSystem.Classes.LoadData
             }
         }
 
+        /// <summary>
+        /// Load Schedule.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="dbUser"></param>
         private void LoadSchedule(string username, Models.User dbUser)
         {
             var data = DataReader.RequestSchedule(username);
@@ -164,6 +202,17 @@ namespace AMPSystem.Classes.LoadData
             }
         }
 
+        /// <summary>
+        /// Load Lesson from JToken.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="courses"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="dbUser"></param>
+        /// <param name="id"></param>
+        /// <param name="type"></param>
+        /// <param name="rooms"></param>
         private void LoadLesson(JToken item, IList<Course> courses, DateTime startTime, DateTime endTime,
             Models.User dbUser, int id, string type, ICollection<Room> rooms)
         {
@@ -181,6 +230,15 @@ namespace AMPSystem.Classes.LoadData
             Items.Add(CreateLesson(id, name, startTime, endTime, rooms, courses, type, teacher));
         }
 
+        /// <summary>
+        /// Check if evaluationmoment exists in the DB; if not create and add it.
+        /// </summary>
+        /// <param name="courses"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="dbUser"></param>
+        /// <param name="id"></param>
+        /// <param name="rooms"></param>
         private void LoadEvaluation(IList<Course> courses, DateTime startTime, DateTime endTime, Models.User dbUser,
             int id, ICollection<Room> rooms)
         {
@@ -234,24 +292,24 @@ namespace AMPSystem.Classes.LoadData
             }
         }
 
+        //Add alerts.
         private static void AddAlertsToLesson(Lesson dbLesson, ITimeTableItem lesson)
         {
             foreach (var alert in dbLesson.Alerts)
                 new Alert(alert.ID, alert.AlertTime, lesson);
         }
-
         private static void AddAlertsToOfficeHour(OfficeHour dbOfficeHour, ITimeTableItem officeHours)
         {
             foreach (var alert in dbOfficeHour.Alerts)
                 new Alert(alert.ID, alert.AlertTime, officeHours);
         }
-
         private static void AddAlertsToEvaluation(EvaluationMoment dbEvaluation, ITimeTableItem evaluation)
         {
             foreach (var alert in dbEvaluation.Alerts)
                 new Alert(alert.ID, alert.AlertTime, evaluation);
         }
 
+        //Generate Names.
         private static string GenerateLessonName(IList<Course> courses)
         {
             var name = "";
@@ -259,7 +317,6 @@ namespace AMPSystem.Classes.LoadData
                 name += courses[i].Name + "/";
             return name += courses[courses.Count - 1];
         }
-
         private static string GenerateEvaluationName(IList<Course> courses)
         {
             var name = "Avaliação de ";
@@ -267,70 +324,60 @@ namespace AMPSystem.Classes.LoadData
                 name += courses[i].Name + "/";
             return name += courses[courses.Count - 1];
         }
-
         private static string GenerateOfficeHourName(string teacherName)
         {
             return "Horário de Atendimento de " + teacherName;
         }
 
+        //Factory calls.
         private static ITimeTableItem CreateEvaluationMoment(DateTime startTime, DateTime endTime,
             ICollection<Room> rooms,
             ICollection<Course> courses, string name, string color, string description, bool editable)
         {
             return Factory.Instance.Create(startTime, endTime, rooms, courses, name, color, description, editable);
         }
-
         private static Course CreateCourse(int id, string name, ICollection<int> years)
         {
             return Factory.Instance.CreateCourse(id, name, years);
         }
-
         private static Building CreateBuilding(int id, string name, string address, ICollection<Room> rooms)
         {
             return Factory.Instance.CreateBuilding(id, name, address, rooms);
         }
-
         private static Room CreateRoom(int id, string name, int floor)
         {
             return Factory.Instance.CreateRoom(id, name, floor);
         }
-
         private static User CreateUser(int id, string name, string email, ICollection<string> roles,
             ICollection<Course> courses)
         {
             return Factory.Instance.CreateUser(id, name, email, roles, courses);
         }
-
         private static ITimeTableItem CreateLesson(int id, string name, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
             return Factory.Instance.Create(id, name, startTime, endTime, rooms, courses, type, teacher);
         }
-
         private static ITimeTableItem CreateLesson(int id, string name, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher, string color)
         {
             return Factory.Instance.Create(id, name, color, startTime, endTime, rooms, courses, type, teacher);
         }
-
         private static ITimeTableItem CreateOfficeHours(int id, string name, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, User teacher)
         {
             return Factory.Instance.Create(id, startTime, endTime, rooms, teacher, name);
         }
-
         private static ITimeTableItem CreateOfficeHours(int id, string name, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, User teacher, string color)
         {
             return Factory.Instance.Create(id, startTime, endTime, rooms, teacher, name, color);
         }
-
         private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, ICollection<Course> courses, string name)
         {
             return Factory.Instance.Create(id, startTime, endTime, rooms, courses, name);
         }
-
         private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, ICollection<Course> courses, string name, string color)
         {

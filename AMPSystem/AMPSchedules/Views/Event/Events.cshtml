@@ -112,6 +112,9 @@
             clickTabFour();
             //Removes Active Alert From the Database
             removeActiveAlert();
+            //Request the active reminders
+            clickTabFive();
+
             requestEvents(printInformation, 1);
             $("#eventLimit .tab").click(function(e) {
                 $(e.target).tab("show");

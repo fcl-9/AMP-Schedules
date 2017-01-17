@@ -642,7 +642,7 @@ function getActiveReminders(item, renderReminder) {
         data: item,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: funtionSucess,
+        success: renderReminder,
         failure: function (response) {
             console.log("Fail");
             alert(response.d);
@@ -674,6 +674,7 @@ function renderReminder(activeReminders) {
             //There are no active reminders events
             $("#activeAlertForm").html("There are no active reminders for this event");
         } else {
+
         //    $.each(activeAlerts,
         //        function (key, value) {
         //            $("#activeAlertForm").append(

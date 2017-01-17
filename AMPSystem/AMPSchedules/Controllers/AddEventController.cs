@@ -69,6 +69,7 @@ namespace AMPSchedules.Controllers
             var endTime = Convert.ToDateTime(Request.QueryString["endsAt"]);
             var name = Request.QueryString["title"];
             var description = Request.QueryString["description"];
+            var reminder = Request.QueryString["reminder"];
             var editable = true;
             //Get the course
             ITimeTableItem newEvent = new EvaluationMoment(
@@ -78,7 +79,8 @@ namespace AMPSchedules.Controllers
                 courses,
                 name,
                 description,
-                editable
+                editable,
+                reminder
             );
             newEvent.Editable = true;
             //Add new Event
@@ -86,7 +88,7 @@ namespace AMPSchedules.Controllers
             TimeTableManager.Instance.AddTimetableItem(newEvent);
             var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
             DbManager.Instance.CreateEvaluationMoment(name, mRooms, mUser, null, startTime, endTime, description,
-                courses.First().Name);
+                courses.First().Name, reminder);
             DbManager.Instance.SaveChanges();
             return base.Hook();
         }

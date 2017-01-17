@@ -1,17 +1,12 @@
 ﻿using System;
 using AMPSystem.Interfaces;
 
-
 namespace AMPSystem.Classes
 {
     public class Alert
     {
-        public int Id { get; set; }
-        public DateTime AlertTime { get; set; }
-        public ITimeTableItem Item { get; set; }
-
         /// <summary>
-        /// Construtor for database.
+        ///     Construtor for database.
         /// </summary>
         /// <param name="alertTime"></param>
         /// <param name="tableItem"></param>
@@ -23,7 +18,7 @@ namespace AMPSystem.Classes
         }
 
         /// <summary>
-        /// Construtor.
+        ///     Construtor.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="alertTime"></param>
@@ -35,6 +30,10 @@ namespace AMPSystem.Classes
             Item = tableItem;
             AddItem();
         }
+
+        public int Id { get; set; }
+        public DateTime AlertTime { get; set; }
+        public ITimeTableItem Item { get; set; }
 
         private void AddItem()
         {

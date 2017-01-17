@@ -18,7 +18,6 @@ namespace AMPSystem.Models
         public virtual User User { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }
-
         public virtual ICollection<Alert> Alerts { get; set; }
     }
 }

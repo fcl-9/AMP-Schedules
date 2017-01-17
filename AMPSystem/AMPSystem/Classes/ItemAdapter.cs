@@ -7,52 +7,36 @@ namespace AMPSystem.Classes
 {
     public class ItemAdapter : CalendarItem
     {
-        // This class adapts the TimeTableItems to CalendarItems that have the structure
-        // needed to be used by the JS callendar used on the Web Interface
-
-        private ITimeTableItem Item { get; set; }
-        public override int id { get { return Item.ID; } }
-        public override DateTime end { get { return Item.EndTime; } }
-        public override DateTime start { get { return Item.StartTime; } }
-        public override string title { get { return Item.Name; } }
-        public override string color { get { return Item.Color; } }
-        public override ICollection<Room> rooms { get { return Item.Rooms; } }
-        public override string description { get { return Item.Description; } }
-        public override string reminder { get { return Item.Reminder; } }
-        public override bool editable { get { return Item.Editable; } }
-
-        public override User teacher
-        {
-            get
-            {
-                if (Item is Lesson)
-                {
-                    return ((Lesson) Item).Teacher;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-        public override string lessonType
-        {
-            get
-            {
-                if (Item is Lesson)
-                {
-                    return ((Lesson)Item).Type;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
+        /// <summary>
+        ///     Item adapter.
+        /// </summary>
+        /// <param name="item"></param>
         public ItemAdapter(ITimeTableItem item)
         {
             Item = item;
         }
+
+        /// <summary>
+        ///     This class adapts the TimeTableItems to CalendarItems that have the structure
+        ///     needed to be used by the JS callendar used on the Web Interface
+        /// </summary>
+        private ITimeTableItem Item { get; }
+
+        public override int id => Item.ID;
+
+        public override DateTime end => Item.EndTime;
+        public override DateTime start => Item.StartTime;
+
+        public override string title => Item.Name;
+        public override string color => Item.Color;
+        public override string description => Item.Description;
+        public override string reminder => Item.Reminder;
+        public override string lessonType => (Item as Lesson)?.Type;
+
+        public override bool editable => Item.Editable;
+
+        public override ICollection<Room> rooms => Item.Rooms;
+
+        public override User teacher => (Item as Lesson)?.Teacher;
     }
 }

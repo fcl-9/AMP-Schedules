@@ -488,6 +488,7 @@ function eventAddRequester() {
     var room = $("#new_event_room").val();
     var course = $("#new_event_course").val();
     var description = $("#new_event_description").val();
+    var reminder = $("#new_reminder").val();
     // Parses Data
     beginsAt = moment(beginsAt, "M/D/YYYY HH:mm");
     endsAt = moment(endsAt, "M/D/YYYY HH:mm");
@@ -499,6 +500,7 @@ function eventAddRequester() {
     newEvent['room'] = room;
     newEvent['course'] = course;
     newEvent['description'] = description;
+    newEvent['reminder'] = reminder;
     console.log(newEvent);
     $('#addEventModal').modal('hide');
     sanitizeModalFields();
@@ -601,7 +603,7 @@ function saveNewEventBtt() {
         if ($("#new_event-add-form").valid() === true) {
             eventAddRequester();
         } else {
-            console.log("Error Ocurred");
+            console.log("Error Ocurred Submiting");
         }
     });
 }

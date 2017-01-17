@@ -38,7 +38,13 @@ function requestGetType(requesturl, data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (events) {
-            location.reload();
+            if (viewCalendar) {
+                $('#calendar').fullCalendar('removeEvents'); //Removes Everything
+                $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
+                $('#calendar').fullCalendar('rerenderEvents')
+            } else {
+                location.reload();
+            }
         },
         failure: function (response) {
             console.log("Fail");
@@ -401,7 +407,13 @@ function AlertModalFunctions() {
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (events) {
-                        location.reload();
+                        if (viewCalendar) {
+                            $('#calendar').fullCalendar('removeEvents'); //Removes Everything
+                            $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
+                            $('#calendar').fullCalendar('rerenderEvents')
+                        } else {
+                            location.reload();
+                        }
                     },
                     failure: function (response) {
                         console.log("Fail");
@@ -510,7 +522,13 @@ function requestEvent(requesturl, data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (events) {
-            location.reload();
+            if (viewCalendar) {
+                $('#calendar').fullCalendar('removeEvents'); //Removes Everything
+                $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
+                $('#calendar').fullCalendar('rerenderEvents')
+            } else {
+                location.reload();
+            }
         },
         failure: function (response) {
             console.log("Fail");

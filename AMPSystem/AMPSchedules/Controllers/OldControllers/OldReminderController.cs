@@ -18,7 +18,7 @@ using Room = AMPSystem.Models.Room;
 
 namespace AMPSchedules.Controllers
 {
-    public class ReminderController : Controller
+    public class OldReminderController : Controller
     {
         private static readonly object _lockobject = new object();
         public User CurrentUser { get; private set; }

@@ -66,7 +66,7 @@ namespace AMPSchedules.Controllers
             var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
             var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
             //The manager will start the timetableitem list with the data read from the repo
-            TimeTableManager.Instance.CreateTimeTable(startDateTime, endDateTime, CurrentUser);
+            TimeTableManager.Instance.CreateTimeTable(startDateTime, endDateTime);
         }
 
         private IList<CalendarItem> ParseData(TimeTableManager manager)

@@ -99,7 +99,7 @@ namespace AMPSchedules.Controllers
                     }
                     var mEvMoment = DbManager.Instance.CreateEvaluationMomentIfNotExists(item.Name, mRooms, mUser,
                             item.Color,
-                            item.StartTime, item.EndTime, item.Description, null);
+                            item.StartTime, item.EndTime, item.Description, null, item.Reminder);
                         // Courses could be null since this is an event that came from the API
                     dbAlert = DbManager.Instance.AddAlertToEvaluation(alertTime, mEvMoment);
                     DbManager.Instance.SaveChanges();

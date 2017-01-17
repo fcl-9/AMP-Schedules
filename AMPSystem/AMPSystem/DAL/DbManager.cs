@@ -361,10 +361,10 @@ namespace AMPSystem.DAL
         /// <param name="description"></param>
         /// <returns></returns>
         public EvaluationMoment CreateEvaluationMomentIfNotExists(string name, ICollection<Room> rooms, User user,
-            string color, DateTime startTime, DateTime endTime, string description, string course)
+            string color, DateTime startTime, DateTime endTime, string description, string course, string reminder)
         {
             var evMoment = ReturnEvaluationMomentIfExists(name, startTime, endTime, user);
-            return evMoment ?? CreateEvaluationMoment(name, rooms, user, color, startTime, endTime, description, course);
+            return evMoment ?? CreateEvaluationMoment(name, rooms, user, color, startTime, endTime, description, course, reminder);
         }
 
         /// <summary>

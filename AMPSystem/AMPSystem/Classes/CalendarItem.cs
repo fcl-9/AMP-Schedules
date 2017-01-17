@@ -26,6 +26,7 @@ namespace AMPSystem.Classes
         public virtual string borderColor { get; set; }
         public virtual string textColor { get; set; }
         public virtual string description { get; set; }
+        public virtual string reminder { get; set; }
         public virtual ICollection<Room> rooms { get; set; }
         public virtual string lessonType { get; set; }
         public virtual User teacher { get; set; }

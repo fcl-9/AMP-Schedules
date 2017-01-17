@@ -35,8 +35,8 @@ namespace AMPSchedules.Controllers
             //TODO: MOCKOBJ
             foreach (var item in TimeTableManager.Instance.TimeTable.ItemList)
             {
-                Random random = new Random();
-                item.Reminder = "REMEMBER" + random.Next(0, 100);
+                var random = new Random();
+                item.Reminder = "REMIMDER " + random.Next(0, 100);
             }
             
             return

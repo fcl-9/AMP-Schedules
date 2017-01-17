@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using AMPSystem;
@@ -14,8 +17,25 @@ namespace AMPSchedules.Controllers
         public AMPSystemFacade Facade { get; set; }
 
         // GET: Color/Add
-        public void Add()
+        public ActionResult Add()
         {
+            var mail = ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value;
+            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
+            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
+            var facade = new AMPSystemFacade(mail, startDateTime, endDateTime);
+            
+            //Read The Color that was sent
+            string color = null;
+            string itemName = null;
+            foreach (var eventName in Request.QueryString)
+                if ((string)eventName != "start" && (string)eventName != "end")
+                {
+                    itemName = (string)eventName;
+                    color = Request.QueryString[itemName];
+                }
+            return Content(JsonConvert.SerializeObject(facade.ChangeColor(itemName,color),
+                        new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
+                    "application/json");
         }
     }
 }

@@ -153,9 +153,9 @@ function calendar(urlToRequestData) {
 function renderEventModal(event) {
     currentEvent = event;
     if (!event.editable) {
-        $("#remove").attr("disabled", "disabled");
+        $("#removeEvent").attr("disabled", "disabled");
     } else {
-        $("#remove").removeAttr("disabled");
+        $("#removeEvent").removeAttr("disabled");
     }
     $('#modalTitle').html(event.title);
     $('#startTime').html(moment(event.start).format("Do MMM YYYY H:mm"));
@@ -224,7 +224,7 @@ function applyFilters() {
             start = $('#calendar').fullCalendar('getView').start.format();
             end = $('#calendar').fullCalendar('getView').end.format();
         }
-        requestGetType("/Filter/AddFilter", FilterToApply);
+        requestGetType("/Filters/Add", FilterToApply);
     });
 
 }
@@ -368,7 +368,7 @@ function AlertModalFunctions() {
                 start = $('#calendar').fullCalendar('getView').start.format();
                 end = $('#calendar').fullCalendar('getView').end.format();
             }
-            requestGetType("/Color/EventColor", colorApplyer);
+            requestGetType("/Color/Add", colorApplyer);
             $('#fullCalModal').modal('hide');
         } else if ($("#3").hasClass('active')) {
             $("#alertForm").valid();

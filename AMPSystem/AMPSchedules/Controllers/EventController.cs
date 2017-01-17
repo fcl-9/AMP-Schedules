@@ -30,6 +30,7 @@ namespace AMPSchedules.Controllers
             }
         }
 
+        //TODO DELETE
         public override ActionResult Hook()
         {
             //TODO: MOCKOBJ
@@ -38,12 +39,8 @@ namespace AMPSchedules.Controllers
                 var random = new Random();
                 item.Reminder = "REMIMDER " + random.Next(0, 100);
             }
-            
-            return
-                Content(
-                    JsonConvert.SerializeObject(TimeTableManager.Instance.TimeTable.ItemList.ToArray(),
-                        new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
-                    "application/json");
+
+            return base.Hook();
         }
     }
 }

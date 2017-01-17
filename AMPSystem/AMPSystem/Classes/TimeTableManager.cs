@@ -33,9 +33,9 @@ namespace AMPSystem.Classes
         /// <param name="startDateTime"></param>
         /// <param name="endDateTime"></param>
         /// <param name="currentUser"></param>
-        public void CreateTimeTable(DateTime startDateTime, DateTime endDateTime, User currentUser)
+        public void CreateTimeTable(DateTime startDateTime, DateTime endDateTime)
         {
-            TimeTable = new Timetable(startDateTime, endDateTime, currentUser);
+            TimeTable = new Timetable(startDateTime, endDateTime);
             foreach (var item in Repository.Items)
             {
                 if ((DateTime.Compare(startDateTime, item.StartTime) > 0) ||

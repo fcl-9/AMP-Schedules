@@ -281,6 +281,84 @@ namespace AMPSystem.DAL
         }
 
         /// <summary>
+        ///     Changes the reminder of a lesson in the database
+        /// </summary>
+        /// <param name="lesson"></param>
+        /// <param name="reminder"></param>
+        /// <returns></returns>
+        public Lesson SaveLessonReminderChange(Lesson lesson, string reminder)
+        {
+            lesson.Reminder = reminder;
+            db.Entry(lesson).State = EntityState.Modified;
+            return lesson;
+        }
+
+        /// <summary>
+        ///     Changes the reminder of an evaluation in the database
+        /// </summary>
+        /// <param name="evaluation"></param>
+        /// <param name="reminder"></param>
+        /// <returns></returns>
+        public EvaluationMoment SaveEvaluationReminderChange(EvaluationMoment evaluation, string reminder)
+        {
+            evaluation.Reminder = reminder;
+            db.Entry(evaluation).State = EntityState.Modified;
+            return evaluation;
+        }
+
+        /// <summary>
+        ///     Changes the reminder of an office hour in the database
+        /// </summary>
+        /// <param name="officeHour"></param>
+        /// <param name="reminder"></param>
+        /// <returns></returns>
+        public OfficeHour SaveOfficeHourReminderChange(OfficeHour officeHour, string reminder)
+        {
+            officeHour.Reminder = reminder;
+            db.Entry(officeHour).State = EntityState.Modified;
+            return officeHour;
+        }
+
+        /// <summary>
+        ///     Remove the reminder of a lesson in the database
+        /// </summary>
+        /// <param name="lesson"></param>
+        /// <param name="reminder"></param>
+        /// <returns></returns>
+        public Lesson RemoveLessonReminder(Lesson lesson)
+        {
+            lesson.Reminder = null;
+            db.Entry(lesson).State = EntityState.Modified;
+            return lesson;
+        }
+
+        /// <summary>
+        ///     Remove the reminder of an evaluation in the database
+        /// </summary>
+        /// <param name="evaluation"></param>
+        /// <param name="reminder"></param>
+        /// <returns></returns>
+        public EvaluationMoment RemoveEvaluationReminder(EvaluationMoment evaluation)
+        {
+            evaluation.Reminder = null;
+            db.Entry(evaluation).State = EntityState.Modified;
+            return evaluation;
+        }
+
+        /// <summary>
+        ///     Remove the reminder of an office hour in the database
+        /// </summary>
+        /// <param name="officeHour"></param>
+        /// <param name="reminder"></param>
+        /// <returns></returns>
+        public OfficeHour RemoveOfficeHourReminder(OfficeHour officeHour)
+        {
+            officeHour.Reminder = null;
+            db.Entry(officeHour).State = EntityState.Modified;
+            return officeHour;
+        }
+
+        /// <summary>
         ///     Returns an existing user or creates one if it doesn't exist yet ond the DB
         /// </summary>
         /// <param name="email"></param>

@@ -631,3 +631,49 @@ function removeActiveAlert() {
         });
 }
 
+//Ajax request to get a reminder that is associated to an item
+function getActiveReminders(item, renderReminder) {
+    item["start"] = start;//$('#calendar').fullCalendar('getView').start.format();
+    item["end"] = end;//$('#calendar').fullCalendar('getView').end.format();
+    //console.log(item);
+    $.ajax({
+        type: "GET",
+        url: "/Reminder",
+        data: item,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: renderReminder,
+        failure: function (response) {
+            console.log("Fail");
+            alert(response.d);
+        }
+    });
+
+}
+
+//Check for a click in tab of reminders
+function clickTabFive() {
+    $('a[href="#5"]').click(function () {
+        var selectedItem = {};
+        selectedItem["name"] = $('#modalTitle').text();
+        selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
+            .format("YYYY-MM-DD HH:mm:ss");
+        selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
+            .format("YYYY-MM-DD HH:mm:ss");
+        if (viewCalendar) {
+            start = $('#calendar').fullCalendar('getView').start.format();
+            end = $('#calendar').fullCalendar('getView').end.format();
+        }
+        getActiveReminders(selectedItem, renderReminder);
+    });
+}
+
+//Gets the json and renders it's information on the interface
+function renderReminder(activeReminder) {
+        if (activeReminder === "") {
+            //There are no active reminders events
+            $("#display_reminder").html("There are no active reminders for this event");
+        } else {
+            $("#display_reminder").val(activeReminder);
+        }
+}

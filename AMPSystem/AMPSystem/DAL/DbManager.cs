@@ -21,11 +21,15 @@ namespace AMPSystem.DAL
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public Lesson ReturnLessonIfExists(string name, DateTime startTime, DateTime endTime)
+        public Lesson ReturnLessonIfExists(string name, DateTime startTime, DateTime endTime, User user)
         {
-            return
+            if (user != null)
+            {
+                return
                 db.Lessons.Include("Room.Building")
-                    .FirstOrDefault(l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
+                    .FirstOrDefault(l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime && l.UserID == user.ID);
+            }
+            return null;
         }
 
         /// <summary>
@@ -37,11 +41,15 @@ namespace AMPSystem.DAL
         /// <param name="endTime"></param>
         /// <returns></returns>
         public EvaluationMoment ReturnEvaluationMomentIfExists(string name, DateTime startTime,
-            DateTime endTime)
+            DateTime endTime, User user)
         {
-            return
+            if (user != null)
+            {
+                return
                 db.EvaluationMoments.Include("Rooms.Building").FirstOrDefault(
-                    l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
+                    l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime && l.UserID == user.ID);
+            }
+            return null;
         }
 
         /// <summary>
@@ -51,11 +59,15 @@ namespace AMPSystem.DAL
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public OfficeHour ReturnOfficeHourIfExists(string name, DateTime startTime, DateTime endTime)
+        public OfficeHour ReturnOfficeHourIfExists(string name, DateTime startTime, DateTime endTime, User user)
         {
-            return
-                db.OfficeHours.Include("Room.Building")
-                    .FirstOrDefault(l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime);
+            if (user != null)
+            {
+                return
+                    db.OfficeHours.Include("Room.Building")
+                        .FirstOrDefault(l => l.Name == name && l.StartTime == startTime && l.EndTime == endTime && l.UserID == user.ID);
+            }
+            return null;
         }
 
         /// <summary>
@@ -315,7 +327,7 @@ namespace AMPSystem.DAL
         public Lesson CreateLessonIfNotExists(string name, Room room, User user, string color, DateTime startTime,
             DateTime endTime)
         {
-            var lesson = ReturnLessonIfExists(name, startTime, endTime);
+            var lesson = ReturnLessonIfExists(name, startTime, endTime,user);
             return lesson ?? CreateLesson(name, room, user, color, startTime, endTime);
         }
 
@@ -332,7 +344,7 @@ namespace AMPSystem.DAL
         public OfficeHour CreateOfficeHourIfNotExists(string name, Room room, User user, string color,
             DateTime startTime, DateTime endTime)
         {
-            var officeHour = ReturnOfficeHourIfExists(name, startTime, endTime);
+            var officeHour = ReturnOfficeHourIfExists(name, startTime, endTime, user);
             return officeHour ?? CreateOfficeHour(name, room, user, color, startTime, endTime);
         }
 
@@ -350,7 +362,7 @@ namespace AMPSystem.DAL
         public EvaluationMoment CreateEvaluationMomentIfNotExists(string name, ICollection<Room> rooms, User user,
             string color, DateTime startTime, DateTime endTime, string description, string course)
         {
-            var evMoment = ReturnEvaluationMomentIfExists(name, startTime, endTime);
+            var evMoment = ReturnEvaluationMomentIfExists(name, startTime, endTime, user);
             return evMoment ?? CreateEvaluationMoment(name, rooms, user, color, startTime, endTime, description, course);
         }
 
@@ -363,12 +375,12 @@ namespace AMPSystem.DAL
         }
 
         /// <summary>
-        ///     Returns all the evaluation moments in the DB
+        ///     Returns all the evaluation moments from user in the DB
         /// </summary>
         /// <returns></returns>
-        public ICollection<EvaluationMoment> EvaluationMoments()
+        public ICollection<EvaluationMoment> EvaluationMoments(User user)
         {
-            return db.EvaluationMoments.Include("Rooms.Building").ToList();
+            return db.EvaluationMoments.Where(e => e.UserID == user.ID).Include("Rooms.Building").ToList();
         }
 
         /// <summary>

@@ -6,17 +6,12 @@ namespace AMPSystem.Classes
 {
     public class Timetable
     {
-        public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
-        public User CurrentUser { get; set; }
-
-        public IList<ITimeTableItem> ItemList { get; set; }
-        
         /// <summary>
-        /// Constructor.
+        ///     Constructor.
         /// </summary>
         /// <param name="startDateTime"></param>
         /// <param name="endDateTime"></param>
+        /// <param name="currentUser"></param>
         public Timetable(DateTime startDateTime, DateTime endDateTime, User currentUser)
         {
             StartDateTime = startDateTime;
@@ -24,5 +19,11 @@ namespace AMPSystem.Classes
             CurrentUser = currentUser;
             ItemList = new List<ITimeTableItem>();
         }
+
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
+        public User CurrentUser { get; set; }
+
+        public IList<ITimeTableItem> ItemList { get; set; }
     }
 }

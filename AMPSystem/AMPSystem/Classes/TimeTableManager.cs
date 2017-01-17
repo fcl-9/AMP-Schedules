@@ -1,93 +1,70 @@
 ﻿using System;
+using System.Collections.Generic;
 using AMPSystem.Classes.LoadData;
 using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.Interfaces;
-using System.Collections.Generic;
 
 namespace AMPSystem.Classes
 {
     public class TimeTableManager
     {
-        public Timetable TimeTable { get; set; }
-        public Repository Repository { get; set; }
-
         #region Singleton
         private static TimeTableManager _instance;
 
         /// <summary>
-        /// Constructor.
+        ///     Constructor.
         /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="startDateTime"></param>
-        /// <param name="endDateTime"></param>
         private TimeTableManager()
         {
             Repository = Repository.Instance;
         }
-
-        public static TimeTableManager Instance => _instance ?? (_instance = new TimeTableManager());
         #endregion
 
+        public Timetable TimeTable { get; set; }
+        public Repository Repository { get; set; }
+
+        public static TimeTableManager Instance => _instance ?? (_instance = new TimeTableManager());
+
+        /// <summary>
+        ///     Create the time table.
+        /// </summary>
+        /// <param name="startDateTime"></param>
+        /// <param name="endDateTime"></param>
+        /// <param name="currentUser"></param>
         public void CreateTimeTable(DateTime startDateTime, DateTime endDateTime, User currentUser)
         {
             TimeTable = new Timetable(startDateTime, endDateTime, currentUser);
-            //Adds Value to our data class whcih is TimeTable
             foreach (var item in Repository.Items)
             {
-                //if (startDateTime.Date.CompareTo(item.StartTime) <= 0 &&
-                //    endDateTime.Date.CompareTo(item.StartTime) >= 0)
-                if (DateTime.Compare(startDateTime, item.StartTime) <= 0 &&
-                    DateTime.Compare(endDateTime, item.StartTime) >= 0)
+                if ((DateTime.Compare(startDateTime, item.StartTime) > 0) ||
+                    (DateTime.Compare(endDateTime, item.StartTime) < 0)) continue;
+
+                foreach (var course in GetCourses(item))
                 {
-                    if (item is Lesson)
-                    {
-                        // If the lesson belongs to one of the courses that the student assists
-                        // then add it to the timetable
-                        foreach (var course in ((Lesson)item).Courses)
-                        {
-                            if (Repository.UserCourses.Contains(course))
-                            {
-                                AddTimetableItem(item);
-                            }
-                        }
-                    }
-                    else if (item is EvaluationMoment)
-                    {
-                        // If the evaluation belongs to one of the courses that the student assists
-                        // then add it to the timetable
-                        foreach (var course in ((EvaluationMoment)item).Courses)
-                        {
-                            if (Repository.UserCourses.Contains(course))
-                            {
-                                AddTimetableItem(item);
-                            }
-                        }
-                    }
-                    else if (item is OfficeHours)
-                    {
-                        // If the office hours belongs to one of the teaches that teach one of 
-                        // courses that the student assists then add it to the timetable
-                        foreach (var course in ((OfficeHours)item).Teacher.Courses)
-                        {
-                            if (Repository.UserCourses.Contains(course))
-                            {
-                                if (
-                                    !((List<ITimeTableItem>) TimeTable.ItemList).Exists(
-                                        i =>
-                                            i.StartTime == item.StartTime && i.EndTime == item.EndTime &&
-                                            i.Name == item.Name))
-                                {
-                                    AddTimetableItem(item);
-                                }
-                            }
-                        }
-                    }
+                    if (!Repository.UserCourses.Contains(course)) continue;
+                    if (!((List<ITimeTableItem>) TimeTable.ItemList).Exists(
+                        i =>
+                            (i.StartTime == item.StartTime) && (i.EndTime == item.EndTime) &&
+                            (i.Name == item.Name)))
+                        AddTimetableItem(item);
                 }
             }
         }
 
         /// <summary>
-        /// Add a time table item to the list. (Add events)
+        ///     Return courses list in accordance with the type.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private static ICollection<Course> GetCourses(ITimeTableItem item)
+        {
+            if (item is Lesson) return ((Lesson) item).Courses;
+            if (item is EvaluationMoment) return ((EvaluationMoment) item).Courses;
+            return ((OfficeHours) item).Teacher.Courses;
+        }
+
+        /// <summary>
+        ///     Add a time table item to the list. (Add events)
         /// </summary>
         /// <param name="item"></param>
         public void AddTimetableItem(ITimeTableItem item)
@@ -96,7 +73,7 @@ namespace AMPSystem.Classes
         }
 
         /// <summary>
-        /// Remove a given Time table item from the list.
+        ///     Remove a given Time table item from the list.
         /// </summary>
         /// <param name="item"></param>
         public void RemoveTimeTableItem(ITimeTableItem item)
@@ -105,7 +82,7 @@ namespace AMPSystem.Classes
         }
 
         /// <summary>
-        /// Remove a Time table item given a position from the list.
+        ///     Remove a Time table item given a position from the list.
         /// </summary>
         /// <param name="position"></param>
         public void RemoveTimeTableItem(int position)
@@ -114,7 +91,7 @@ namespace AMPSystem.Classes
         }
 
         /// <summary>
-        /// Returns the lenght of the itemList.
+        ///     Returns the lenght of the itemList.
         /// </summary>
         /// <returns></returns>
         public int CountTimeTableItems()

@@ -4,16 +4,8 @@ namespace AMPSystem.Classes
 {
     public class Building
     {
-        public int Id { get; set; }
-        public int ExternId { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public ICollection<Room> Rooms { get; set; }
-
-        private static int _id;
-
         /// <summary>
-        /// Construtor.
+        ///     Construtor.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
@@ -28,12 +20,19 @@ namespace AMPSystem.Classes
             InformRooms();
         }
 
+        public int Id { get; set; }
+        public int ExternId { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public ICollection<Room> Rooms { get; set; }
+
+        /// <summary>
+        ///     Inform the rooms that belong to this building
+        /// </summary>
         private void InformRooms()
         {
             foreach (var room in Rooms)
-            {
                 room.Building = this;
-            }
         }
     }
 }

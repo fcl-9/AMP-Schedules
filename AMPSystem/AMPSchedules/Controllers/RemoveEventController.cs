@@ -36,7 +36,8 @@ namespace AMPSchedules.Controllers
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startEvent"]) &&
                     i.EndTime == Convert.ToDateTime(Request.QueryString["endEvent"]));
             // Remove event
-            var dbItem = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime, item.EndTime);
+            var dbUser = DbManager.Instance.ReturnUserIfExists(CurrentUser.Email);
+            var dbItem = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime, item.EndTime, dbUser);
             DbManager.Instance.RemoveEvent(dbItem);
             TimeTableManager.Instance.RemoveTimeTableItem(item);
             Repository.Instance.Items.Remove(item);

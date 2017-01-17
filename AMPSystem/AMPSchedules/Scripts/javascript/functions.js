@@ -176,7 +176,7 @@ function renderEventModal(event) {
             mRooms += "</ul>";
             return mRooms;
         });
-    if (event.teacher != null) {
+    if (event.teacher !== null) {
 
         $("#teacher").html("Teacher: " + event.teacher.Name);
         $("#lessonType").html("Lesson: " + event.lessonType);
@@ -198,8 +198,8 @@ function applyFilters() {
 
             //All filters from the same type will be bocked
             selectedFilter.each(function () {
-                if ($(this).attr('name') == selectedElement.attr('name') &&
-                    $(this).val() != selectedElement.val()) {
+                if ($(this).attr('name') === selectedElement.attr('name') &&
+                    $(this).val() !== selectedElement.val()) {
                     $(this).attr("disabled", true);
                 }
             });
@@ -211,8 +211,8 @@ function applyFilters() {
             console.log(FilterToApply);
 
             selectedFilter.each(function () {
-                if ($(this).attr('name') == selectedElement.attr('name') &&
-                    $(this).val() != selectedElement.val()) {
+                if ($(this).attr('name') === selectedElement.attr('name') &&
+                    $(this).val() !== selectedElement.val()) {
                     $(this).removeAttr('disabled');
                 }
             });
@@ -357,7 +357,6 @@ function AlertModalFunctions() {
 
     $("#submit").click(function () {
         if ($("#1").hasClass('active')) {
-            //console.log("Do Stuff 1");
             $('#fullCalModal').modal('hide');
         } else if ($("#2").hasClass('active')) {
             var colorApplyer = {};
@@ -385,7 +384,7 @@ function AlertModalFunctions() {
             alerts["start"] = start;
             alerts["end"] = end;
             for (var i = 0; i < times.length; i++) {
-                var alert = {}
+                var alert = {};
                 if ($.isNumeric($(times[i]).val()) && $(times[i]).val() !== "") {
                     alert['name'] = $('#modalTitle').text();
                     alert['startTime'] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
@@ -403,7 +402,7 @@ function AlertModalFunctions() {
                 }
             }
             console.log(alerts);
-            if ($error == false) {
+            if ($error === false) {
 
                 $.ajax({
                     type: "GET",
@@ -429,6 +428,8 @@ function AlertModalFunctions() {
             } else {
                 console.log("Check the data you inputed.");
             }
+        }else if ($("#5").hasClass('active')) {
+            AddorEditReminder();
         }
     });
 
@@ -588,7 +589,7 @@ function addJqueryValidator() {
         },
         messages: {
             number: "Please enter a number",
-            timeUnit: "Please select a time unit",
+            timeUnit: "Please select a time unit"
         },
         submitHandler: function (form) {
             return false;
@@ -643,10 +644,7 @@ function getActiveReminders(item, renderReminder) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: renderReminder,
-        failure: function (response) {
-            console.log("Fail");
-            alert(response.d);
-        }
+        failure: renderReminder
     });
 
 }
@@ -664,16 +662,51 @@ function clickTabFive() {
             start = $('#calendar').fullCalendar('getView').start.format();
             end = $('#calendar').fullCalendar('getView').end.format();
         }
-        getActiveReminders(selectedItem, renderReminder);
+        getActiveReminders(selectedItem, renderReminderSuccess);
     });
 }
 
 //Gets the json and renders it's information on the interface
-function renderReminder(activeReminder) {
-        if (activeReminder === "") {
-            //There are no active reminders events
-            $("#display_reminder").html("There are no active reminders for this event");
-        } else {
-            $("#display_reminder").val(activeReminder);
+function renderReminderSuccess(activeReminder) {
+        $("#display_reminder").val(activeReminder['Message']);
+}
+
+//Updates Reminders Message or Adds a New One.
+function AddorEditReminder() {
+            newReminder = {};
+            newReminder["name"] = $('#modalTitle').text();
+            newReminder["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
+                .format("YYYY-MM-DD HH:mm:ss");
+            newReminder["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
+                .format("YYYY-MM-DD HH:mm:ss");
+
+            if (viewCalendar) {
+                start = $('#calendar').fullCalendar('getView').start.format();
+                end = $('#calendar').fullCalendar('getView').end.format();
+                newReminder['start'] = start;
+                newReminder['end'] = end;
+            }
+            newReminder['reminder'] = $("#display_reminder").val();
+            console.log(newReminder);
+            updateReminder(newReminder);
+}
+
+//Ajax Request for Reminder
+function updateReminder(json) {
+    $.ajax({
+        type: "GET",
+        url: "/Reminder/Update",
+        data: json,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (events) {
+            console.log("Sucesso");
+        },
+        failure: function (response) {
+            console.log("Fail");
+            alert(response.d);
         }
+    });
+
+
 }

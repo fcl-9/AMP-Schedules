@@ -13,6 +13,7 @@ namespace AMPSystem.Classes.TimeTableItems
         public string Name { get; set; }
         public string Color { get; set; }
         public string Description { get; set; }
+        public string Reminder { get; set; }
         public User Teacher { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

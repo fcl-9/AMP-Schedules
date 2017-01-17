@@ -10,24 +10,33 @@ namespace AMPSystem.Classes
         public DateTime AlertTime { get; set; }
         public ITimeTableItem Item { get; set; }
 
-        private static int _id;
-
+        /// <summary>
+        /// Construtor for database.
+        /// </summary>
+        /// <param name="alertTime"></param>
+        /// <param name="tableItem"></param>
         public Alert(DateTime alertTime, ITimeTableItem tableItem)
         {
             AlertTime = alertTime;
             Item = tableItem;
-            InformItem();
+            AddItem();
         }
 
+        /// <summary>
+        /// Construtor.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="alertTime"></param>
+        /// <param name="tableItem"></param>
         public Alert(int id, DateTime alertTime, ITimeTableItem tableItem)
         {
             Id = id;
             AlertTime = alertTime;
             Item = tableItem;
-            InformItem();
+            AddItem();
         }
 
-        private void InformItem()
+        private void AddItem()
         {
             Item.Alerts.Add(this);
         }

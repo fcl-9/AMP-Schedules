@@ -8,6 +8,7 @@ namespace AMPSystem.Models
         public int ID { get; set; }
         public string Color { get; set; }
         public string Name { get; set; }
+        public string Reminder { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace AMPSchedules.Controllers
 {
-    public class CoursesController : Controller
+    public class AlertsController : Controller
     {
         // GET: Courses
         public ActionResult Index()

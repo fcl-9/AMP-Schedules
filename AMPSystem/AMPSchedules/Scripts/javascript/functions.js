@@ -63,7 +63,7 @@ function getCourses(functionRender) {
 function getRooms(functionRender) {
     $.ajax({
         type: "GET",
-        url: "/Rooms",
+        url: "/Buildings",
         success: functionRender,
         failure: function (response) {
             console.log("Fail");

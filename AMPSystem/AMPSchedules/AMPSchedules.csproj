@@ -197,6 +197,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\OldControllers\OldAddAlertController.cs" />
     <Compile Include="Controllers\AlertsCourses.cs" />
     <Compile Include="Controllers\ColorController.cs" />
@@ -218,7 +219,7 @@
     <Compile Include="Controllers\OldControllers\OldFilterController.cs" />
     <Compile Include="Controllers\OldControllers\OldContactsController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
-    <Compile Include="Controllers\RoomsController.cs" />
+    <Compile Include="Controllers\BuildingsController.cs" />
     <Compile Include="Controllers\OldControllers\OldTemplateController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -459,13 +460,14 @@
     <Folder Include="Models\" />
     <Folder Include="Views\AddAlert\" />
     <Folder Include="Views\AddEvent\" />
+    <Folder Include="Views\Buildings\" />
     <Folder Include="Views\Color\" />
     <Folder Include="Views\Events\" />
     <Folder Include="Views\Event\" />
     <Folder Include="Views\Filters\" />
+    <Folder Include="Views\Items\" />
     <Folder Include="Views\Reminder\" />
     <Folder Include="Views\RemoveAlert\" />
-    <Folder Include="Views\Rooms\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

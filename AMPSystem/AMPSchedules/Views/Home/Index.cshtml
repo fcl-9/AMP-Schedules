@@ -142,7 +142,7 @@
         function requestEvents(returnFunction) {
             $.ajax({
                 type: "GET",
-                url: '/Event/ReturnEvents?start=' + start + '&end=' + end,
+                url: '/Items?start=' + start + '&end=' + end,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: returnFunction,

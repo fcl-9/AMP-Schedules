@@ -322,14 +322,16 @@ namespace AMPSystem.Classes.LoadData
             var name = "";
             for (var i = 0; i < courses.Count - 1; i++)
                 name += courses[i].Name + "/";
-            return name += courses[courses.Count - 1];
+            name += courses[courses.Count - 1].Name;
+            return name;
         }
         private static string GenerateEvaluationName(IList<Course> courses)
         {
             var name = "Avaliação de ";
             for (var i = 0; i < courses.Count - 1; i++)
                 name += courses[i].Name + "/";
-            return name += courses[courses.Count - 1];
+            name += courses[courses.Count - 1].Name;
+            return name;
         }
         private static string GenerateOfficeHourName(string teacherName)
         {

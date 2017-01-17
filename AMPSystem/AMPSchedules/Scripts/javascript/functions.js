@@ -716,7 +716,7 @@ function AddorEditReminder() {
 function updateReminder(json) {
     $.ajax({
         type: "GET",
-        url: "/Reminder/Update",
+        url: "/Reminder/Add",
         data: json,
         contentType: "application/json; charset=utf-8",
         dataType: "json",

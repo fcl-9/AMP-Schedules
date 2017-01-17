@@ -136,7 +136,7 @@ namespace AMPSystem.DAL
         /// <returns></returns>
         public EvaluationMoment CreateEvaluationMoment(string name, ICollection<Room> rooms, User user, string color,
             DateTime startTime,
-            DateTime endTime, string description, string course)
+            DateTime endTime, string description, string course, string reminder)
         {
             var mEvaluationMoment = new EvaluationMoment
             {
@@ -148,7 +148,8 @@ namespace AMPSystem.DAL
                 User = user,
                 Description = description,
                 Course = course,
-                Alerts = new List<Alert>()
+                Alerts = new List<Alert>(),
+                Reminder = reminder
             };
             db.EvaluationMoments.Add(mEvaluationMoment);
             return mEvaluationMoment;
@@ -360,10 +361,10 @@ namespace AMPSystem.DAL
         /// <param name="description"></param>
         /// <returns></returns>
         public EvaluationMoment CreateEvaluationMomentIfNotExists(string name, ICollection<Room> rooms, User user,
-            string color, DateTime startTime, DateTime endTime, string description, string course)
+            string color, DateTime startTime, DateTime endTime, string description, string course, string reminder)
         {
             var evMoment = ReturnEvaluationMomentIfExists(name, startTime, endTime, user);
-            return evMoment ?? CreateEvaluationMoment(name, rooms, user, color, startTime, endTime, description, course);
+            return evMoment ?? CreateEvaluationMoment(name, rooms, user, color, startTime, endTime, description, course, reminder);
         }
 
         /// <summary>

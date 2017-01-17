@@ -1,11 +1,12 @@
-﻿using AMPSystem.Classes.TimeTableItems;
+﻿using System;
+using AMPSystem.Classes.TimeTableItems;
 
 namespace AMPSystem.Classes.Filters
 {
     public class TypeCreator
     {
         /// <summary>
-        /// Ensures that as you add new TimeTableItems you can add them here without changing the TypeF class.
+        ///     TypeF class doesn't change.
         /// </summary>
         /// <param name="typeToReturn"></param>
         /// <returns></returns>
@@ -20,7 +21,7 @@ namespace AMPSystem.Classes.Filters
                 case "OfficeHours":
                     return typeof(OfficeHours);
                 default:
-                    throw new System.InvalidOperationException("Your trying get type of an object tha doesn't exist");
+                    throw new InvalidOperationException("You are trying to get a type of an object tha doesn't exist");
             }
         }
     }

@@ -96,7 +96,7 @@
     <Compile Include="Classes\TimeTableItems\OfficeHours.cs" />
     <Compile Include="Classes\LoadData\Repository.cs" />
     <Compile Include="Classes\Room.cs" />
-    <Compile Include="Classes\Filters\SimpleFilter.cs" />
+    <Compile Include="Interfaces\ISimpleFilter.cs" />
     <Compile Include="Classes\Summary.cs" />
     <Compile Include="Classes\LoadData\FileData.cs" />
     <Compile Include="Classes\Timetable.cs" />

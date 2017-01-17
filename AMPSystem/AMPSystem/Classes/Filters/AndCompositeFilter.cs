@@ -5,23 +5,29 @@ namespace AMPSystem.Classes.Filters
 {
     public class AndCompositeFilter : IFilter
     {
-        //List of filters you can apply to time table items
-        public ICollection<IFilter> Filters { get; set; } 
-        //Allow you to access to all timetableitems
-        public TimeTableManager Manager { get; set; }
-
         /// <summary>
-        /// Contructer initializes the filters.
+        ///     Contructor.
         /// </summary>
-        /// <param name="manager"></param>
         public AndCompositeFilter()
         {
-            Manager = TimeTableManager.Instance; 
+            Manager = TimeTableManager.Instance;
             Filters = new List<IFilter>();
         }
 
+        public ICollection<IFilter> Filters { get; set; }
+        public TimeTableManager Manager { get; set; }
+
         /// <summary>
-        /// Changes when a user selects a filter.
+        ///     Applies all filters to the timetable items
+        /// </summary>
+        public void ApplyFilter()
+        {
+            foreach (var filter in Filters)
+                filter.ApplyFilter();
+        }
+
+        /// <summary>
+        ///     Changes when a user selects a filter.
         /// </summary>
         /// <param name="aFilter"></param>
         public void Add(IFilter aFilter)
@@ -30,23 +36,12 @@ namespace AMPSystem.Classes.Filters
         }
 
         /// <summary>
-        /// Changes when a user removes a filter
+        ///     Changes when a user removes a filter
         /// </summary>
         /// <param name="aFilter"></param>
         public void Remove(IFilter aFilter)
         {
             Filters.Remove(aFilter);
-        }
-
-        /// <summary>
-        /// Applies all filters to the timetable items
-        /// </summary>
-        public void ApplyFilter()
-        {
-            foreach (var filter in Filters)
-            {
-               filter.ApplyFilter();
-            }    
         }
     }
 }

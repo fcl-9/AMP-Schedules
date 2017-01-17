@@ -1,7 +1,4 @@
-﻿using System;
-using AMPSystem.Interfaces;
-
-namespace AMPSystem.Classes
+﻿namespace AMPSystem.Interfaces
 {
     internal interface ISimpleFilter<T> : IFilter
     {

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AMPSystem.Classes;
@@ -18,7 +21,7 @@ namespace AMPSchedules.Controllers
     {
         private static readonly object _lockobject = new object();
         public User CurrentUser { get; private set; }
-
+   
         public ActionResult Index()
         {
             LoadData();
@@ -26,7 +29,11 @@ namespace AMPSchedules.Controllers
                 i =>
                     i.Name == Request.QueryString["name"] &&
                     i.StartTime == Convert.ToDateTime(Request.QueryString["startTime"]));
-            return Content(item.Reminder);
+            if (item.Reminder == null)
+            {
+                return Json(new { Success = false, Message = "There is no Reminder" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { Success = true, Message = item.Reminder }, JsonRequestBehavior.AllowGet);
         }
         public void Add()
         {

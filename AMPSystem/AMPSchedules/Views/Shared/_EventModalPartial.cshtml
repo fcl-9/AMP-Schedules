@@ -78,10 +78,15 @@
                     
                     <div class="tab-pane" id="5">
                         <div class="row">
-                            <label class="control-label col-md-12">Reminder Message: </label>
-                            <div id="activeReminderMessages" class="col-md-12">
-
+                            
+                            <div class="col-md-12">
+                                <div style="display: inline; margin-top: 5px;">
+                                    <button type="button" class="btn btn-sm" data-dismiss="modal">Edit Reminder</button>
+                                    <button class="btn btn-sm btn-danger" id="remove">Remove Reminder</button>
+                                </div>
                             </div>
+                            <label class="control-label col-md-12"> Reminder:  </label>
+                            <textarea class="form-control" name="reminder" id="display_reminder" rows="3" style="resize: vertical;"></textarea>
                         </div>
                     </div>
                 </div>

@@ -669,33 +669,11 @@ function clickTabFive() {
 }
 
 //Gets the json and renders it's information on the interface
-function renderReminder(activeReminders) {
-        if (activeReminders.length === 0) {
+function renderReminder(activeReminder) {
+        if (activeReminder === "") {
             //There are no active reminders events
-            $("#activeReminderMessages").html("There are no active reminders for this event");
+            $("#display_reminder").html("There are no active reminders for this event");
         } else {
-            $("#activeReminderMessages").html("There are  active reminders for this event   " + "<br>" + activeReminders );
-
-
-
-            //$.each(activeAlerts,
-            //    function (key, value) {
-            //        $("#activeAlertForm").append(
-            //            '' +
-            //            '<div class="col-sm-12 form-group">' +
-            //            '<div class="col-sm-10">' +
-            //            '<input class="form-control" value="' +
-            //            value.Value +
-            //            '" readonly=""/>' +
-            //            '</div>' +
-            //            '<div class="col-sm-2">' +
-            //            '<button class="rm-active-alert btn btn-danger" id="' +
-            //            value.Key +
-            //            '">Remove</button>' +
-            //            '</div>' +
-            //            '</div>'
-            //        );
-            //        });
-            console.log("There are active reminders");
+            $("#display_reminder").val(activeReminder);
         }
 }

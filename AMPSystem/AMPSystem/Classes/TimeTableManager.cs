@@ -9,6 +9,7 @@ namespace AMPSystem.Classes
     public class TimeTableManager
     {
         #region Singleton
+
         private static TimeTableManager _instance;
 
         /// <summary>
@@ -18,6 +19,7 @@ namespace AMPSystem.Classes
         {
             Repository = Repository.Instance;
         }
+
         #endregion
 
         public Timetable TimeTable { get; set; }
@@ -98,5 +100,6 @@ namespace AMPSystem.Classes
         {
             return TimeTable.ItemList.Count;
         }
+        
     }
 }

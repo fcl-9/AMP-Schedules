@@ -14,7 +14,7 @@ namespace AMPSystem.Models
         public string Reminder { get; set; }
         public string Course { get; set; }
 
-        public int UserId { get; set; }
+        public int UserID { get; set; }
         public virtual User User { get; set; }
 
         public virtual ICollection<Room> Rooms { get; set; }

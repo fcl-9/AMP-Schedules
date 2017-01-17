@@ -66,12 +66,10 @@ namespace AMPSchedules
                             AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
                             var mail = new MailAddress(result.User.DisplayableId);
 
-                            var user = mail.User;
-
                             IDataReader dataReader = new FileData();
                             Repository.Instance.DataReader = dataReader;
                             Repository.Instance.CleanRepository();
-                            Repository.Instance.GetData(user);
+                            Repository.Instance.GetData(mail);
                         },
                         AuthenticationFailed = (context) =>
                         {

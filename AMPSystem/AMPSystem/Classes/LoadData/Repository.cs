@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
 using AMPSystem.Classes.TimeTableItems;
@@ -23,7 +24,7 @@ namespace AMPSystem.Classes.LoadData
         public bool DataLoaded { get; private set; }
 
         /// <summary>
-        /// Load all data.
+        ///     Load all data.
         /// </summary>
         /// <param name="user"></param>
         public void LoadData(MailAddress user)
@@ -35,12 +36,12 @@ namespace AMPSystem.Classes.LoadData
             LoadUserCourses(user.User);
             LoadSchedule(user.User, dbUser);
 
-            if (dbUser != null) AddCustomEvents(dbUser);
+            if (dbUser != null) CustomEvents(dbUser);
             DataLoaded = true;
         }
 
         /// <summary>
-        /// Clean Repository.
+        ///     Clean Repository.
         /// </summary>
         public void CleanRepository()
         {
@@ -53,7 +54,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Load courses from JToken.
+        ///     Load courses from JToken.
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -65,7 +66,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Load all office hours from JToken.
+        ///     Load all office hours from JToken.
         /// </summary>
         /// <param name="item"></param>
         /// <param name="dbUser"></param>
@@ -94,7 +95,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Load user courses from DataReader.
+        ///     Load user courses from DataReader.
         /// </summary>
         /// <param name="userName"></param>
         private void LoadUserCourses(string userName)
@@ -111,7 +112,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Load all courses from DataReader.
+        ///     Load all courses from DataReader.
         /// </summary>
         private void LoadAllCourses()
         {
@@ -128,7 +129,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Load Rooms from DataReader.
+        ///     Load Rooms from DataReader.
         /// </summary>
         private void LoadRooms()
         {
@@ -149,7 +150,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Load Teachers from DataReader.
+        ///     Load Teachers from DataReader.
         /// </summary>
         /// <param name="dbUser"></param>
         private void LoadTeachers(Models.User dbUser)
@@ -175,7 +176,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Load Schedule.
+        ///     Load Schedule.
         /// </summary>
         /// <param name="username"></param>
         /// <param name="dbUser"></param>
@@ -203,7 +204,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Load Lesson from JToken.
+        ///     Load Lesson from JToken.
         /// </summary>
         /// <param name="item"></param>
         /// <param name="courses"></param>
@@ -231,7 +232,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         /// <summary>
-        /// Check if evaluationmoment exists in the DB; if not create and add it.
+        ///     Check if evaluationmoment exists in the DB; if not create and add it.
         /// </summary>
         /// <param name="courses"></param>
         /// <param name="startTime"></param>
@@ -259,7 +260,7 @@ namespace AMPSystem.Classes.LoadData
         ///     Checks DB to see if exists any events that weren't load by DataReader.
         ///     If so they are custom events and this method adds the events to the items collection.
         /// </summary>
-        private void AddCustomEvents(Models.User user)
+        private void CustomEvents(Models.User user)
         {
             List<ITimeTableItem> knownEvaluations = null;
             try
@@ -268,22 +269,28 @@ namespace AMPSystem.Classes.LoadData
             }
             catch (ArgumentNullException e)
             {
+                Debug.WriteLine(e.Message);
             }
+            AddCustomEvents(user, knownEvaluations);
+        }
 
+        /// <summary>
+        /// Add Custom Event.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="knownEvaluations"></param>
+        private void AddCustomEvents(Models.User user, List<ITimeTableItem> knownEvaluations)
+        {
             foreach (var dbEvMoment in DbManager.Instance.EvaluationMoments(user))
             {
                 var knownEv = knownEvaluations?.FirstOrDefault(
-                    e =>
-                        (e.Name == dbEvMoment.Name) && (e.StartTime == dbEvMoment.StartTime) &&
-                        (e.EndTime == dbEvMoment.EndTime));
-
+                    e => (e.Name == dbEvMoment.Name) && (e.StartTime == dbEvMoment.StartTime) &&
+                         (e.EndTime == dbEvMoment.EndTime));
                 if (knownEv != null) return;
                 var rooms = (from room in dbEvMoment.Rooms
-                        let building = ((List<Building>) Buildings).FirstOrDefault(b => b.Name == room.Building.Name)
-                        select
-                        ((List<Room>) building.Rooms).FirstOrDefault(
-                            r => (r.Name == room.Name) && (r.Floor == room.Floor)))
-                    .ToList();
+                    let building = ((List<Building>) Buildings).FirstOrDefault(b => b.Name == room.Building.Name)
+                    select ((List<Room>) building.Rooms).FirstOrDefault(
+                        r => (r.Name == room.Name) && (r.Floor == room.Floor))).ToList();
                 var courses = new List<Course> {Courses.FirstOrDefault(c => c.Name == dbEvMoment.Course)};
                 var mItem = CreateEvaluationMoment(dbEvMoment.StartTime, dbEvMoment.EndTime, rooms, courses,
                     dbEvMoment.Name, dbEvMoment.Color, dbEvMoment.Description, true);
@@ -336,48 +343,58 @@ namespace AMPSystem.Classes.LoadData
         {
             return Factory.Instance.Create(startTime, endTime, rooms, courses, name, color, description, editable);
         }
+
         private static Course CreateCourse(int id, string name, ICollection<int> years)
         {
             return Factory.Instance.CreateCourse(id, name, years);
         }
+
         private static Building CreateBuilding(int id, string name, string address, ICollection<Room> rooms)
         {
             return Factory.Instance.CreateBuilding(id, name, address, rooms);
         }
+
         private static Room CreateRoom(int id, string name, int floor)
         {
             return Factory.Instance.CreateRoom(id, name, floor);
         }
+
         private static User CreateUser(int id, string name, string email, ICollection<string> roles,
             ICollection<Course> courses)
         {
             return Factory.Instance.CreateUser(id, name, email, roles, courses);
         }
+
         private static ITimeTableItem CreateLesson(int id, string name, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher)
         {
             return Factory.Instance.Create(id, name, startTime, endTime, rooms, courses, type, teacher);
         }
+
         private static ITimeTableItem CreateLesson(int id, string name, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, ICollection<Course> courses, string type, User teacher, string color)
         {
             return Factory.Instance.Create(id, name, color, startTime, endTime, rooms, courses, type, teacher);
         }
+
         private static ITimeTableItem CreateOfficeHours(int id, string name, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, User teacher)
         {
             return Factory.Instance.Create(id, startTime, endTime, rooms, teacher, name);
         }
+
         private static ITimeTableItem CreateOfficeHours(int id, string name, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, User teacher, string color)
         {
             return Factory.Instance.Create(id, startTime, endTime, rooms, teacher, name, color);
         }
+
         private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, ICollection<Course> courses, string name)
         {
             return Factory.Instance.Create(id, startTime, endTime, rooms, courses, name);
         }
+
         private static ITimeTableItem CreateEvaluationMoment(int id, DateTime startTime, DateTime endTime,
             ICollection<Room> rooms, ICollection<Course> courses, string name, string color)
         {
@@ -385,6 +402,7 @@ namespace AMPSystem.Classes.LoadData
         }
 
         #region Singleton
+
         private static Repository _instance;
 
         private Repository()
@@ -395,8 +413,9 @@ namespace AMPSystem.Classes.LoadData
             UserCourses = new List<Course>();
             Teachers = new List<User>();
         }
-        
+
         public static Repository Instance => _instance ?? (_instance = new Repository());
+
         #endregion
     }
 }

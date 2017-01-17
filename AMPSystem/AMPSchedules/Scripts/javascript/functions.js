@@ -21,9 +21,16 @@ function configureValidator() {
 
 //Makes Request to the server - Generic
 function requestGetType(requesturl, data) {
-    data["start"] = start;//$('#calendar').fullCalendar('getView').start.format();
-    data["end"] = end;//$('#calendar').fullCalendar('getView').end.format();
-    //console.log("dentro do");
+
+    if (viewCalendar) {
+        data["start"] = $("#calendar").fullCalendar("getView").start.format();
+        data["end"] = $("#calendar").fullCalendar("getView").end.format();
+    } else {
+        //If i'm in next event view just do other thing
+        data["start"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
+        data["end"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
+    }
+
     $.ajax({
         type: "GET",
         url: requesturl,
@@ -31,10 +38,6 @@ function requestGetType(requesturl, data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (events) {
-            /*
-            $('#calendar').fullCalendar('removeEvents'); //Removes Everything
-            $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
-            $('#calendar').fullCalendar('rerenderEvents');*/
             location.reload();
         },
         failure: function (response) {
@@ -74,9 +77,6 @@ function getRooms(functionRender) {
 
 //Return a Json with active alerts
 function getActiveAlerts(item, funtionSucess) {
-    item["start"] = start;//$('#calendar').fullCalendar('getView').start.format();
-    item["end"] = end;//$('#calendar').fullCalendar('getView').end.format();
-    //console.log(item);
     $.ajax({
         type: "GET",
         url: "/Alert/Index",
@@ -145,11 +145,12 @@ function calendar(urlToRequestData) {
             navLinks: true, // can click day/week names to navigate views
             editable: true,
             eventLimit: true, // allow "more" link when too many events
-            events: '' + urlToRequestData + '',
+            events: "" + urlToRequestData + "",
             eventClick: renderEventModal
         });
 }
 
+//Modal Info Screen
 function renderEventModal(event) {
     currentEvent = event;
     if (!event.editable) {
@@ -157,9 +158,9 @@ function renderEventModal(event) {
     } else {
         $("#removeEvent").removeAttr("disabled");
     }
-    $('#modalTitle').html(event.title);
-    $('#startTime').html(moment(event.start).format("Do MMM YYYY H:mm"));
-    $('#endTime').html(moment(event.end).format("Do MMM YYYY H:mm"));
+    $("#modalTitle").html(event.title);
+    $("#startTime").html(moment(event.start).format("Do MMM YYYY H:mm"));
+    $("#endTime").html(moment(event.end).format("Do MMM YYYY H:mm"));
     $("#rooms")
         .html(function () {
             var mRooms = "Room(s): <br><ul>";
@@ -176,30 +177,30 @@ function renderEventModal(event) {
             mRooms += "</ul>";
             return mRooms;
         });
-    if (event.teacher != null) {
+    if (event.teacher !== null) {
 
         $("#teacher").html("Teacher: " + event.teacher.Name);
         $("#lessonType").html("Lesson: " + event.lessonType);
     }
-    $('#description').html(event.description);
-    $('#fullCalModal').modal();
+    $("#description").html(event.description);
+    $("#fullCalModal").modal();
 }
 
 //Apply Filters
 function applyFilters() {
     var selectedFilter = $("input[type=checkbox]");
     var selectedElement = undefined;
-    var FilterToApply = {};
+    var filterToApply = {};
 
     selectedFilter.click(function () {
         selectedElement = $(this);
-        if ($(this).is(':checked')) {
-            FilterToApply[$(this).val()] = $(this).attr('name');
+        if ($(this).is(":checked")) {
+            filterToApply[$(this).val()] = $(this).attr('name');
 
             //All filters from the same type will be bocked
             selectedFilter.each(function () {
-                if ($(this).attr('name') == selectedElement.attr('name') &&
-                    $(this).val() != selectedElement.val()) {
+                if ($(this).attr("name") === selectedElement.attr("name") &&
+                    $(this).val() !== selectedElement.val()) {
                     $(this).attr("disabled", true);
                 }
             });
@@ -207,24 +208,18 @@ function applyFilters() {
 
         } else {
             var valueToRemove = $(this).val();
-            delete FilterToApply[valueToRemove];
-            console.log(FilterToApply);
+            delete filterToApply[valueToRemove];
+            console.log(filterToApply);
 
             selectedFilter.each(function () {
-                if ($(this).attr('name') == selectedElement.attr('name') &&
-                    $(this).val() != selectedElement.val()) {
-                    $(this).removeAttr('disabled');
+                if ($(this).attr("name") === selectedElement.attr("name") &&
+                    $(this).val() !== selectedElement.val()) {
+                    $(this).removeAttr("disabled");
                 }
             });
-
-
         }
         //Ajax Request
-        if (viewCalendar) {
-            start = $('#calendar').fullCalendar('getView').start.format();
-            end = $('#calendar').fullCalendar('getView').end.format();
-        }
-        requestGetType("/Filters/Add", FilterToApply);
+        requestGetType("/Filters/Add", filterToApply);
     });
 
 }
@@ -253,8 +248,6 @@ function renderFilterCheckBoxes(courses) {
 
 //Removes one alert from the database
 function removeAnAlert(datatoSend, onSuccess) {
-    datatoSend["start"] = start;
-    datatoSend["end"] = end;
     $.ajax({
         type: "GET",
         url: "/RemoveAlert/Index",
@@ -282,7 +275,7 @@ function renderActiveAlerts(activeAlerts) {
                     '<div class="col-sm-12 form-group">' +
                     '<div class="col-sm-10">' +
                     '<input class="form-control" value="' +
-                    value.Value +
+                    value.Value+
                     '" readonly=""/>' +
                     '</div>' +
                     '<div class="col-sm-2">' +
@@ -293,20 +286,22 @@ function renderActiveAlerts(activeAlerts) {
                     '</div>'
                 );
             });
+        //moment(value.Value, "YYYY-MM-DTHH:mm:ss").format("ddd Do MMM YYYY HH:mm")+
+
     }
 }
 
 //Sanitize Modal Fields
 function sanitizeModalFields() {
-    $("#new_event_name").val('');
-    $("#datetimepicker_starttime").val('');
-    $("#datetimepicker_endtime").val('');
-    $("#new_event_room").val('');
-    $("#new_event_course").val('');
-    $("#new_event_description").val('');
+    $("#new_event_name").val("");
+    $("#datetimepicker_starttime").val("");
+    $("#datetimepicker_endtime").val("");
+    $("#new_event_room").val("");
+    $("#new_event_course").val("");
+    $("#new_event_description").val("");
 }
 
-var counter = 0;
+var counter = 0; // Global Variable
 //Handles all the operations over alertModal
 function AlertModalFunctions() {
     $("#addAlert")
@@ -356,55 +351,49 @@ function AlertModalFunctions() {
             });
 
     $("#submit").click(function () {
-        if ($("#1").hasClass('active')) {
-            //console.log("Do Stuff 1");
+        if ($("#1").hasClass("active")) {
             $('#fullCalModal').modal('hide');
-        } else if ($("#2").hasClass('active')) {
+        } else if ($("#2").hasClass("active")) {
             var colorApplyer = {};
             //                  Event Name                  Color Picked for the event Selected.
             colorApplyer[$('#modalTitle').text()] = $('select[name="colorpicker"]').val();
             //Request Data
-            if (viewCalendar) {
-                start = $('#calendar').fullCalendar('getView').start.format();
-                end = $('#calendar').fullCalendar('getView').end.format();
-            }
             requestGetType("/Color/Add", colorApplyer);
             $('#fullCalModal').modal('hide');
-        } else if ($("#3").hasClass('active')) {
+        } else if ($("#3").hasClass("active")) {
             $("#alertForm").valid();
             //console.log(" " + $("#startTime").text()+ " " + $("#endTime").text());
-            var times = $('#alertForm').find('.number');
-            var units = $('#alertForm').find('.timeUnit');
+            var times = $("#alertForm").find(".number");
+            var units = $("#alertForm").find(".timeUnit");
             var alerts = {};
-            $error = false;
-            //This is for the time calendar
-            if (viewCalendar) {
-                start = $('#calendar').fullCalendar('getView').start.format();
-                end = $('#calendar').fullCalendar('getView').end.format();
-            }
-            alerts["start"] = start;
-            alerts["end"] = end;
+            var error = false;
             for (var i = 0; i < times.length; i++) {
-                var alert = {}
+                var alert = {};
                 if ($.isNumeric($(times[i]).val()) && $(times[i]).val() !== "") {
-                    alert['name'] = $('#modalTitle').text();
-                    alert['startTime'] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
-                        .format("YYYY-MM-DD HH:mm:ss");
-                    console.log(alert['startTime']);
-                    alert['endTime'] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
-                        .format("YYYY-MM-DD HH:mm:ss");
-                    alert['time'] = $(times[i]).val();
-                    alert['unit'] = $(units[i]).val();
+                    alert["name"] = $("#modalTitle").text();
+                    alert["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
+                    console.log(alert["startTime"]);
+                    alert["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
+                    alert["time"] = $(times[i]).val();
+                    alert["unit"] = $(units[i]).val();
 
                     alerts[i] = alert;
                 } else {
-                    $error = true;
+                    error = true;
                     break;
                 }
             }
-            console.log(alerts);
-            if ($error == false) {
 
+            //This is for the time calendar
+            if (viewCalendar) {
+                alerts["start"] = $("#calendar").fullCalendar("getView").start.format();
+                alerts["end"] = $("#calendar").fullCalendar("getView").end.format();
+            } else {
+                alerts["start"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
+                alerts["end"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
+            }
+
+            if (error === false) {
                 $.ajax({
                     type: "GET",
                     url: "/AddAlert/Index",
@@ -412,11 +401,6 @@ function AlertModalFunctions() {
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (events) {
-                        /*
-                        $('#calendar').fullCalendar('removeEvents'); //Removes Everything
-                        $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
-                        $('#calendar').fullCalendar('rerenderEvents');
-                        */
                         location.reload();
                     },
                     failure: function (response) {
@@ -425,10 +409,12 @@ function AlertModalFunctions() {
                     }
                 });
 
-                $('#fullCalModal').modal('hide');
+                $("#fullCalModal").modal("hide");
             } else {
                 console.log("Check the data you inputed.");
             }
+        }else if ($("#5").hasClass("active")) {
+            AddorEditReminder();
         }
     });
 
@@ -448,7 +434,7 @@ function bindAddEventButton() {
 function renderDatePickers() {
     $("#datetimepicker_starttime").datetimepicker({
         sideBySide: true,
-        minDate: moment().add(10, 'm'),
+        minDate: moment().add(10, "m"),
         format: "M/D/YYYY HH:mm"
     }).on("dp.change",
         function (selected) {
@@ -461,7 +447,7 @@ function renderDatePickers() {
 
     $("#datetimepicker_endtime").datetimepicker({
         sideBySide: true,
-        minDate: moment().add(20, 'm'),
+        minDate: moment().add(20, "m"),
         format: "M/D/YYYY HH:mm"
     }).on("dp.change",
         function (selected) {
@@ -494,22 +480,43 @@ function eventAddRequester() {
     endsAt = moment(endsAt, "M/D/YYYY HH:mm");
 
     //Add Values to Json
-    newEvent['title'] = name;
-    newEvent['beginsAt'] = beginsAt.format();
-    newEvent['endsAt'] = endsAt.format();
-    newEvent['room'] = room;
-    newEvent['course'] = course;
-    newEvent['description'] = description;
-    newEvent['reminder'] = reminder;
+    newEvent["title"] = name;
+    newEvent["beginsAt"] = beginsAt.format();
+    newEvent["endsAt"] = endsAt.format();
+    newEvent["room"] = room;
+    newEvent["course"] = course;
+    newEvent["description"] = description;
+    newEvent["reminder"] = reminder;
     console.log(newEvent);
-    $('#addEventModal').modal('hide');
+    $("#addEventModal").modal("hide");
     sanitizeModalFields();
-    //Request Ajax Send to Database.
     if (viewCalendar) {
-        start = $('#calendar').fullCalendar('getView').start.format();
-        end = $('#calendar').fullCalendar('getView').end.format();
+        newEvent["start"] = $("#calendar").fullCalendar("getView").start.format();
+        newEvent["end"] = $("#calendar").fullCalendar("getView").end.format();
+    } else {
+        newEvent["start"] = moment(beginsAt, "Do MMM YYYY H:mm").subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
+        newEvent["end"] = moment(endsAt, "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
     }
-    requestGetType("/AddEvent/AddEvent", newEvent);
+    //Request Ajax Send to Database.
+    requestEvent("/AddEvent/AddEvent", newEvent);
+}
+
+//Makes get Event
+function requestEvent(requesturl, data) {
+    $.ajax({
+        type: "GET",
+        url: requesturl,
+        data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (events) {
+            location.reload();
+        },
+        failure: function (response) {
+            console.log("Fail");
+            alert(response.d);
+        }
+    });
 }
 
 // Remove events
@@ -526,10 +533,6 @@ function removeUserAddedEvents() {
             data.endEvent = currentEvent.end;
         }
         console.log(data);
-        if (viewCalendar) {
-            start = $('#calendar').fullCalendar('getView').start.format();
-            end = $('#calendar').fullCalendar('getView').end.format();
-        }
         requestGetType("/RemoveEvent/", data);
         $("#fullCalModal").modal("hide");
     });
@@ -537,21 +540,22 @@ function removeUserAddedEvents() {
 
 //Clicks on active alerts tab number 4
 function clickTabFour() {
-    $('a[href="#4"]').click(function () {
-        if ($('#activeAlertForm').is(':empty')) {
+    $('a[href="#4"]').click(function() {
+        if ($("#activeAlertForm").is(":empty")) {
             //pass
         } else {
-            $('#activeAlertForm').html("");
+            $("#activeAlertForm").html("");
         }
         var selectedItem = {};
-        selectedItem["name"] = $('#modalTitle').text();
-        selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
-            .format("YYYY-MM-DD HH:mm:ss");
-        selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
-            .format("YYYY-MM-DD HH:mm:ss");
+        selectedItem["name"] = $("#modalTitle").text();
+        selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
+        selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
         if (viewCalendar) {
-            start = $('#calendar').fullCalendar('getView').start.format();
-            end = $('#calendar').fullCalendar('getView').end.format();
+            selectedItem["start"] = $("#calendar").fullCalendar("getView").start.format();
+            selectedItem["end"] = $("#calendar").fullCalendar("getView").end.format();
+        } else {
+            selectedItem["start"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
+            selectedItem["end"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
         }
         getActiveAlerts(selectedItem, renderActiveAlerts);
     });
@@ -588,7 +592,7 @@ function addJqueryValidator() {
         },
         messages: {
             number: "Please enter a number",
-            timeUnit: "Please select a time unit",
+            timeUnit: "Please select a time unit"
         },
         submitHandler: function (form) {
             return false;
@@ -610,22 +614,23 @@ function saveNewEventBtt() {
 
 //When button to remove an active alert is clicked
 function removeActiveAlert() {
-    $('#activeAlertForm').on('click',
-        '.rm-active-alert',
+    $("#activeAlertForm").on("click",
+        ".rm-active-alert",
         function (e) {
             removeAlert = {};
-            removeAlert['alertId'] = $(this).attr('id');
-            removeAlert["name"] = $('#modalTitle').text();
-            removeAlert["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
-                .format("YYYY-MM-DD HH:mm:ss");
-            removeAlert["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
-                .format("YYYY-MM-DD HH:mm:ss");
+            removeAlert["alertId"] = $(this).attr("id");
+            removeAlert["name"] = $("#modalTitle").text();
+            removeAlert["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
+            removeAlert["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").format("YYYY-MM-DD HH:mm:ss");
             //Removes Everything
-            $('#activeAlertForm').html("");
+            $("#activeAlertForm").html("");
             //Makes ajax request and receives it back
             if (viewCalendar) {
-                start = $('#calendar').fullCalendar('getView').start.format();
-                end = $('#calendar').fullCalendar('getView').end.format();
+                removeAlert["start"] = $("#calendar").fullCalendar("getView").start.format();
+                removeAlert["end"] = $("#calendar").fullCalendar("getView").end.format();
+            } else {
+                removeAlert["start"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
+                removeAlert["end"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
             }
             removeAnAlert(removeAlert, renderActiveAlerts);
         });
@@ -633,9 +638,6 @@ function removeActiveAlert() {
 
 //Ajax request to get a reminder that is associated to an item
 function getActiveReminders(item, renderReminder) {
-    item["start"] = start;//$('#calendar').fullCalendar('getView').start.format();
-    item["end"] = end;//$('#calendar').fullCalendar('getView').end.format();
-    //console.log(item);
     $.ajax({
         type: "GET",
         url: "/Reminder",
@@ -643,10 +645,7 @@ function getActiveReminders(item, renderReminder) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: renderReminder,
-        failure: function (response) {
-            console.log("Fail");
-            alert(response.d);
-        }
+        failure: renderReminder
     });
 
 }
@@ -661,19 +660,56 @@ function clickTabFive() {
         selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
             .format("YYYY-MM-DD HH:mm:ss");
         if (viewCalendar) {
-            start = $('#calendar').fullCalendar('getView').start.format();
-            end = $('#calendar').fullCalendar('getView').end.format();
+            selectedItem["start"] = $("#calendar").fullCalendar("getView").start.format();
+            selectedItem["end"] = $("#calendar").fullCalendar("getView").end.format();
+        } else {
+            selectedItem["start"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
+            selectedItem["end"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
         }
-        getActiveReminders(selectedItem, renderReminder);
+        getActiveReminders(selectedItem, renderReminderSuccess);
     });
 }
 
 //Gets the json and renders it's information on the interface
-function renderReminder(activeReminder) {
-        if (activeReminder === "") {
-            //There are no active reminders events
-            $("#display_reminder").html("There are no active reminders for this event");
-        } else {
-            $("#display_reminder").val(activeReminder);
+function renderReminderSuccess(activeReminder) {
+        $("#display_reminder").val(activeReminder['Message']);
+}
+
+//Updates Reminders Message or Adds a New One.
+function AddorEditReminder() {
+            newReminder = {};
+            newReminder["name"] = $('#modalTitle').text();
+            newReminder["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
+                .format("YYYY-MM-DD HH:mm:ss");
+            newReminder["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
+                .format("YYYY-MM-DD HH:mm:ss");
+            newReminder["reminder"] = $("#display_reminder").val();
+    if (viewCalendar) {
+        newReminder["start"] = $("#calendar").fullCalendar("getView").start.format();
+        newReminder["end"] = $("#calendar").fullCalendar("getView").end.format();
+    } else {
+        newReminder["start"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
+        newReminder["end"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
+    }
+       updateReminder(newReminder);
+}
+
+//Ajax Request for Reminder
+function updateReminder(json) {
+    $.ajax({
+        type: "GET",
+        url: "/Reminder/Update",
+        data: json,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (events) {
+            console.log("Sucesso");
+        },
+        failure: function (response) {
+            console.log("Fail");
+            alert(response.d);
         }
+    });
+
+
 }

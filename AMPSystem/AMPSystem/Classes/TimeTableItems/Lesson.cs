@@ -6,33 +6,6 @@ namespace AMPSystem.Classes.TimeTableItems
 {
     public class Lesson : ITimeTableItem
     {
-        /// <summary>
-        ///     Construtor. Used when data is loaded from the "API" (This data don't need to be persistent).
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <param name="rooms"></param>
-        /// <param name="courses"></param>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
-        /// <param name="teacher"></param>
-        /// <param name="description"></param>
-        public Lesson(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
-            string type, string name, User teacher, string description)
-        {
-            ExternId = id;
-            StartTime = startTime;
-            EndTime = endTime;
-            Rooms = rooms;
-            Type = type;
-            Courses = courses;
-            Name = name;
-            Teacher = teacher;
-            Description = description;
-            Alerts = new List<Alert>();
-        }
-
         public Lesson(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms, ICollection<Course> courses,
             string type, string name, User teacher)
         {

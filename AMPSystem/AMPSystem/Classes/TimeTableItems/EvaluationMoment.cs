@@ -6,29 +6,6 @@ namespace AMPSystem.Classes.TimeTableItems
 {
     public class EvaluationMoment : ITimeTableItem
     {
-        /// <summary>
-        ///     Construtor. Used when data is loaded from the "API" (This data don't need to be persistent).
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <param name="rooms"></param>
-        /// <param name="name"></param>
-        /// <param name="courses"></param>
-        /// <param name="description"></param>
-        public EvaluationMoment(int id, DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string description)
-        {
-            ExternId = id;
-            StartTime = startTime;
-            EndTime = endTime;
-            Rooms = rooms;
-            Courses = courses;
-            Name = name;
-            Description = description;
-            Alerts = new List<Alert>();
-        }
-
         public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
             ICollection<Course> courses, string name, string description, bool editable, string reminder)
         {
@@ -52,18 +29,6 @@ namespace AMPSystem.Classes.TimeTableItems
             Rooms = rooms;
             Courses = courses;
             Name = name;
-            Alerts = new List<Alert>();
-        }
-
-        public EvaluationMoment(DateTime startTime, DateTime endTime, ICollection<Room> rooms,
-            ICollection<Course> courses, string name, string description)
-        {
-            StartTime = startTime;
-            EndTime = endTime;
-            Rooms = rooms;
-            Courses = courses;
-            Name = name;
-            Description = description;
             Alerts = new List<Alert>();
         }
 

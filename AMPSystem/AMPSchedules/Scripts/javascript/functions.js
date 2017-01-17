@@ -631,3 +631,67 @@ function removeActiveAlert() {
         });
 }
 
+//Ajax request to get a reminder that is associated to an item
+function getActiveReminders(item, renderReminder) {
+    item["start"] = start;//$('#calendar').fullCalendar('getView').start.format();
+    item["end"] = end;//$('#calendar').fullCalendar('getView').end.format();
+    //console.log(item);
+    $.ajax({
+        type: "GET",
+        url: "/Remider",
+        data: item,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: funtionSucess,
+        failure: function (response) {
+            console.log("Fail");
+            alert(response.d);
+        }
+    });
+
+}
+
+//Check for a click in tab of reminders
+function clickTabFive() {
+    $('a[href="#5"]').click(function () {
+        var selectedItem = {};
+        selectedItem["name"] = $('#modalTitle').text();
+        selectedItem["startTime"] = moment($("#startTime").text(), "Do MMM YYYY H:mm")
+            .format("YYYY-MM-DD HH:mm:ss");
+        selectedItem["endTime"] = moment($("#endTime").text(), "Do MMM YYYY H:mm")
+            .format("YYYY-MM-DD HH:mm:ss");
+        if (viewCalendar) {
+            start = $('#calendar').fullCalendar('getView').start.format();
+            end = $('#calendar').fullCalendar('getView').end.format();
+        }
+        getActiveReminders(selectedItem, renderReminder);
+    });
+}
+
+//Gets the json and renders it's information on the interface
+function renderReminder(activeReminders) {
+        if (activeReminders.length === 0) {
+            //There are no active reminders events
+            $("#activeAlertForm").html("There are no active reminders for this event");
+        } else {
+        //    $.each(activeAlerts,
+        //        function (key, value) {
+        //            $("#activeAlertForm").append(
+        //                '' +
+        //                '<div class="col-sm-12 form-group">' +
+        //                '<div class="col-sm-10">' +
+        //                '<input class="form-control" value="' +
+        //                value.Value +
+        //                '" readonly=""/>' +
+        //                '</div>' +
+        //                '<div class="col-sm-2">' +
+        //                '<button class="rm-active-alert btn btn-danger" id="' +
+        //                value.Key +
+        //                '">Remove</button>' +
+        //                '</div>' +
+        //                '</div>'
+        //            );
+            //        });
+            console.log("There are active reminders");
+        }
+}

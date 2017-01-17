@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Diagnostics;
+using AMPSystem.Interfaces;
 
 namespace AMPSystem.Classes.Filters
 {
     public class TypeF : ISimpleFilter<object>
     {
-        public object FilterAttribute { get; set; }
-        public TimeTableManager Manager { get; set; }
-        public TypeCreator GeneratesTypes { get; set; }
-
         /// <summary>
-        /// Construtor.
+        ///     Construtor.
         /// </summary>
         /// <param name="filterName"></param>
-        /// <param name="manager"></param>
         public TypeF(string filterName)
         {
             GeneratesTypes = new TypeCreator();
@@ -21,13 +16,20 @@ namespace AMPSystem.Classes.Filters
             FilterAttribute = GeneratesTypes.CreateTypeOf(filterName);
         }
 
+        public TypeCreator GeneratesTypes { get; set; }
+        public object FilterAttribute { get; set; }
+        public TimeTableManager Manager { get; set; }
+
+        /// <summary>
+        ///     Apply filter
+        /// </summary>
         public void ApplyFilter()
         {
             for (var i = Manager.CountTimeTableItems() - 1; i >= 0; i--)
             {
-                if (Manager.TimeTable.ItemList == null || Manager.TimeTable.ItemList[i].GetType() == (Type) FilterAttribute)
+                if ((Manager.TimeTable.ItemList == null) ||
+                    (Manager.TimeTable.ItemList[i].GetType() == (Type) FilterAttribute))
                     continue;
-                Debug.Write(FilterAttribute);
                 Manager.RemoveTimeTableItem(i);
             }
         }

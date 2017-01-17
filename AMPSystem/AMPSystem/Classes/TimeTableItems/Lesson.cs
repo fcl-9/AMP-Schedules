@@ -19,6 +19,7 @@ namespace AMPSystem.Classes.TimeTableItems
         public ICollection<Room> Rooms { get; set; }
         public ICollection<Course> Courses { get; set; }
         public string Description { get; set; }
+        public string Reminder { get; set; }
 
         public bool Editable { get; set; }
         public ICollection<Alert> Alerts { get; set; }

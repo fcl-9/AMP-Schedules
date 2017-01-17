@@ -27,6 +27,7 @@ namespace AMPSchedules.Controllers
                         new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
                     "application/json");
         }
+
         public async Task<ActionResult> TemplateMethod()
         {
             LoadData();

@@ -18,6 +18,7 @@ namespace AMPSystem.Classes
         public override string color { get { return Item.Color; } }
         public override ICollection<Room> rooms { get { return Item.Rooms; } }
         public override string description { get { return Item.Description; } }
+        public override string reminder { get { return Item.Reminder; } }
         public override bool editable { get { return Item.Editable; } }
 
         public override User teacher

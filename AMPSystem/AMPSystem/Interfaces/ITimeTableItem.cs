@@ -13,6 +13,7 @@ namespace AMPSystem.Interfaces
         DateTime EndTime { get; set; }
         ICollection<Room> Rooms { get; set; }
         string Description { get; set; }
+        string Reminder { get; set; }
         bool Editable { get; set; }
         ICollection<Alert> Alerts { get; set; }
     }

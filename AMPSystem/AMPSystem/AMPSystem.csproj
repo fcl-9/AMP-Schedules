@@ -107,8 +107,6 @@
     <Compile Include="DAL\DbManager.cs" />
     <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Interfaces\IDataReader.cs" />
-    <Compile Include="Interfaces\IObserver.cs" />
-    <Compile Include="Interfaces\ISubject.cs" />
     <Compile Include="Interfaces\ITimeTableItem.cs" />
     <Compile Include="Models\Alert.cs" />
     <Compile Include="Models\Building.cs" />

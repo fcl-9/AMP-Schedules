@@ -29,18 +29,5 @@ namespace AMPSchedules.Controllers
                     new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
             }
         }
-
-        //TODO DELETE
-        public override ActionResult Hook()
-        {
-            //TODO: MOCKOBJ
-            foreach (var item in TimeTableManager.Instance.TimeTable.ItemList)
-            {
-                var random = new Random();
-                item.Reminder = "REMIMDER " + random.Next(0, 100);
-            }
-
-            return base.Hook();
-        }
     }
 }

@@ -25,18 +25,19 @@ namespace AMPSchedules.Controllers
             catch (Exception e)
             {
                 if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error",
+                return RedirectToAction($"Index", $"Error",
                     new {message = Resource.Error_Message + Request.RawUrl + ": " + e.Message});
             }
         }
 
-        //public override ActionResult Hook()
-        //{
-        //    return
-        //        Content(
-        //            JsonConvert.SerializeObject(TimeTableManager.Instance.TimeTable.ItemList.ToArray(),
-        //                new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
-        //            "application/json");
-        //}
+        public override ActionResult Hook()
+        {
+            
+            return
+                Content(
+                    JsonConvert.SerializeObject(TimeTableManager.Instance.TimeTable.ItemList.ToArray(),
+                        new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
+                    "application/json");
+        }
     }
 }

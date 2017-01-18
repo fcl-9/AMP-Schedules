@@ -94,7 +94,6 @@ namespace AMPSystem.Classes
             var dbAlert = AlertIntoBd(alertTime, item, Parameters(CurrentUser.Email, item));
             DbManager.Instance.SaveChanges();
             alert.Id = dbAlert.ID;
-            item.Alerts.Add(alert);
             ScheduleAlert(item.Name, item.StartTime, alertTime, endTime, CurrentUser.Email, dbAlert.ID, item.Reminder);
         }
 

@@ -270,7 +270,7 @@ function removeAnAlert(datatoSend, onSuccess) {
 
 //This function will render the form used to remove active alerts
 function renderActiveAlerts(activeAlerts) {
-    if (activeAlerts.length === 0) {
+    if ($.isEmptyObject(activeAlerts)) {
         //There are no events
         $("#activeAlertForm").html("There are no active alerts for the selected event.");
     } else {
@@ -407,9 +407,7 @@ function AlertModalFunctions() {
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (events) {
-                        console.log(events);
-                        console.log(events.success);
-                        if (!events.sucesss) {
+                        if (typeof(events.success) !== 'undefined' && !events.sucesss) {
                             $("#alertForm").append("<p style=\"color:red;\">" + events.responseText + "</p>");
                         } else {
                             if (viewCalendar) {

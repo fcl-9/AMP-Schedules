@@ -14,7 +14,12 @@ namespace AMPSchedules.ScheduledTasks
             {
                 message.Subject = "Lembrete Universidade da Madeira";
                 message.Body = "Relembramos que possui o seguinte evento académico: " + dataMap.GetString("Name") +
-                               " entre as " + dataMap.GetString("StartTime") + " e as " + dataMap.GetString("EndTime");
+                               " entre as " + dataMap.GetString("StartTime") + " e as " + dataMap.GetString("EndTime") + ".";
+
+                if (dataMap.GetString("Reminder") != "")
+                {
+                    message.Body += " Não se esqueça de: " + dataMap.GetString("Reminder");
+                }
                 using (var client = new SmtpClient
                 {
                     EnableSsl = true,

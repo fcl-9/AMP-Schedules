@@ -161,7 +161,7 @@ namespace AMPSystem
             }
             alert.Id = dbAlert.ID;
             item.Alerts.Add(alert);
-            ScheduleAlert(item.Name, item.StartTime, alertTime, endTime, CurrentUser.Email, dbAlert.ID);
+            ScheduleAlert(item.Name, item.StartTime, alertTime, endTime, CurrentUser.Email, dbAlert.ID, item.Reminder);
         }
 
         /// <summary>
@@ -520,13 +520,14 @@ namespace AMPSystem
         /// <param name="email"></param>
         /// <param name="id"></param>
         private void ScheduleAlert(string name, DateTime startTime, DateTime alertTime, DateTime endTime, string email,
-            int id)
+            int id, string reminder)
         {
             var job = JobBuilder.Create<EmailJob>()
                 .UsingJobData("Name", name)
                 .UsingJobData("StartTime", startTime.ToString("dd-MM-yyyy HH:mm"))
                 .UsingJobData("EndTime", endTime.ToString("dd-MM-yyyy HH:mm"))
                 .UsingJobData("Email", email)
+                .UsingJobData("Reminder", reminder)
                 .UsingJobData("Id", id)
                 .Build();
 

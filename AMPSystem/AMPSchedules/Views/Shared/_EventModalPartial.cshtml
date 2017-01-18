@@ -7,13 +7,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <button type="button" class="close" id="closeModelX" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
                 <h4 id="modalTitle" class="modal-title"></h4>
             </div>
             <div id="modalBody" class="modal-body">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#1" data-toggle="tab">Info</a>
+                        <a href="#1"  data-toggle="tab">Info</a>
                     </li>
                     <li>
                         <a href="#2" data-toggle="tab">Color</a>
@@ -61,8 +61,9 @@
                         </select>
                     </div>
                     <div class="tab-pane" id="3">
+                        <label class="control-label">Configure Alerts</label>
                         <form id="alertForm">
-                            <label class="control-label">Configure Alerts</label>
+
 
                         </form>
                         <button id="addAlert" class="btn btn-default">Add new alert</button>
@@ -86,7 +87,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" id="closeModal" data-dismiss="modal">Close</button>
                 <button class="btn btn-danger" id="removeEvent">Remove Event</button>
                 <button class="btn btn-primary" id="submit">Save</button>
             </div>

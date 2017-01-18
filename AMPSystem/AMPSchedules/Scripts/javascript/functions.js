@@ -148,15 +148,29 @@ function calendar(urlToRequestData) {
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
+            defaultView: 'agendaWeek',
             navLinks: true, // can click day/week names to navigate views
             editable: true,
             eventLimit: true, // allow "more" link when too many events
             events: "" + urlToRequestData + "",
-            eventClick: renderEventModal
+            eventClick: renderModal,
+            eventRender: function eventRender(event, element, view) {
+                if (event.start < moment.now()) {
+                    element.css('background-color', "#d3d3d3");
+                    element.css('border', "#d3d3d3");
+                }
+            }
+
         });
 }
 
 //Modal Info Screen
+function renderModal(event) {
+    if (event.start > moment.now()) {
+        renderEventModal(event);
+    }
+}
+
 function renderEventModal(event) {
     currentEvent = event;
     if (!event.editable) {
@@ -730,6 +744,30 @@ function updateReminder(json) {
             console.log("Fail");
             alert(response.d);
         }
+    });
+
+
+}
+//Updates the calendar each minute to disable past events
+function updateCalendarEvents() {
+    $("#calendar").fullCalendar("rerenderEvents");
+    setTimeout(updateCalendarEvents, 60000);
+}
+
+function cleanModal() {
+    $("#closeModal").click(function() {
+        /*if ($("#3").hasClass("active")) {
+            $("#alertForm").empty();
+        }else if ($("#4").hasClass("active")) {
+            $("#activeAlertForm").empty();
+        } else if ($("#5").hasClass("active")) {
+            $("#display_reminder").empty();
+        }*/
+        $('#modalBody a:first').tab('show');
+    });
+
+    $("#closeModelX").click(function() {
+        $('#modalBody a:first').tab('show');
     });
 
 

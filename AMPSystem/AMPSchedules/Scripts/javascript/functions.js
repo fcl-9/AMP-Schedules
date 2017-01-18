@@ -148,15 +148,29 @@ function calendar(urlToRequestData) {
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
+            defaultView: 'agendaWeek',
             navLinks: true, // can click day/week names to navigate views
             editable: true,
             eventLimit: true, // allow "more" link when too many events
             events: "" + urlToRequestData + "",
-            eventClick: renderEventModal
+            eventClick: renderModal,
+            eventRender: function eventRender(event, element, view) {
+                if (event.start < moment.now()) {
+                    element.css('background-color', "#d3d3d3");
+                    element.css('border', "#d3d3d3");
+                }
+            }
+
         });
 }
 
 //Modal Info Screen
+function renderModal(event) {
+    if (event.start > moment.now()) {
+        renderEventModal(event);
+    }
+}
+
 function renderEventModal(event) {
     currentEvent = event;
     if (!event.editable) {
@@ -733,4 +747,9 @@ function updateReminder(json) {
     });
 
 
+}
+
+function updateCalendarEvents() {
+    $("#calendar").fullCalendar("rerenderEvents");
+    setTimeout(updateCalendarEvents, 60000);
 }

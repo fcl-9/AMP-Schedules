@@ -19,14 +19,11 @@ using Room = AMPSystem.Models.Room;
 
 namespace AMPSchedules.Controllers
 {
-    public class ReminderController : Controller
+    public class ReminderController : BaseController
     {
         public ActionResult Index()
         {
-            var mail = ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value;
-            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
-            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
-            var facade = new AMPSystemFacade(mail, startDateTime, endDateTime);
+            var facade = PrepareAndGetFacade();
 
             return Content(JsonConvert.SerializeObject(facade.GetReminder(Request.QueryString["name"], Convert.ToDateTime(Request.QueryString["startTime"])),
                         new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
@@ -35,10 +32,8 @@ namespace AMPSchedules.Controllers
 
         public void Add()
         {
-            var mail = ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value;
-            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
-            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
-            var facade = new AMPSystemFacade(mail, startDateTime, endDateTime);
+            var facade = PrepareAndGetFacade();
+
             facade.AddReminder(Request.QueryString["name"], Convert.ToDateTime(Request.QueryString["startTime"]), Request.QueryString["reminder"]);
         }
     }

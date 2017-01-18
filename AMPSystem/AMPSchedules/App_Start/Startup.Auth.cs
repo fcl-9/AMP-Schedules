@@ -62,14 +62,7 @@ namespace AMPSchedules
                             ConfidentialClientApplication cca = new ConfidentialClientApplication(
                                 AppId, RedirectUri, new ClientCredential(AppSecret), new UserTokenCache(signedInUserId));
                             string[] scopes = GraphScopes.Split(new char[] { ' ' });
-
-                            AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
-                            var mail = new MailAddress(result.User.DisplayableId);
-
-                            IDataReader dataReader = new FileData();
-                            Repository.Instance.DataReader = dataReader;
-                            Repository.Instance.CleanRepository();
-                            Repository.Instance.LoadData(mail);
+                            await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
                         },
                         AuthenticationFailed = (context) =>
                         {

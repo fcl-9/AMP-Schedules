@@ -12,18 +12,13 @@ using Newtonsoft.Json.Linq;
 
 namespace AMPSchedules.Controllers
 {
-    public class ColorController : Controller
+    public class ColorController : BaseController
     {
-        public AMPSystemFacade Facade { get; set; }
-
         // GET: Color/Add
         public ActionResult Add()
         {
-            var mail = ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value;
-            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
-            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
-            var facade = new AMPSystemFacade(mail, startDateTime, endDateTime);
-            
+            var facade = PrepareAndGetFacade();
+
             //Read The Color that was sent
             string color = null;
             string itemName = null;

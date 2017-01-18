@@ -9,15 +9,12 @@ using Newtonsoft.Json;
 
 namespace AMPSchedules.Controllers
 {
-    public class BuildingsController : Controller
+    public class BuildingsController : BaseController
     {
         // GET: Rooms
         public ActionResult Index()
         {
-            var mail = ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value;
-            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
-            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
-            var facade = new AMPSystemFacade(mail, startDateTime, endDateTime);
+            var facade = PrepareAndGetFacade();
 
             return Content(JsonConvert.SerializeObject(facade.GetBuildings(),
                         new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),

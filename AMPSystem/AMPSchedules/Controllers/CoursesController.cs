@@ -10,15 +10,12 @@ using Newtonsoft.Json;
 
 namespace AMPSchedules.Controllers
 {
-    public class CoursesController : Controller
+    public class CoursesController : BaseController
     {
         // GET: Alerts
         public ActionResult Index()
         {
-            var mail = ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value;
-            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
-            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
-            var facade = new AMPSystemFacade(mail,startDateTime,endDateTime);
+            var facade = PrepareAndGetFacade();
 
             return Content(JsonConvert.SerializeObject(facade.GetCourses(),
                         new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),

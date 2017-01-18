@@ -9,17 +9,23 @@ using Newtonsoft.Json;
 
 namespace AMPSchedules.Controllers
 {
-    public class ItemsController : Controller
+    public class ItemsController : BaseController
     {
         // GET: Items
         public ActionResult Index()
         {
-            var mail = ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value;
-            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
-            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
-            var facade = new AMPSystemFacade(mail, startDateTime, endDateTime);
+            var facade = PrepareAndGetFacade();
 
             return Content(JsonConvert.SerializeObject(facade.GetItems(),
+                        new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
+                    "application/json");
+        }
+
+        public ActionResult OfficeHours()
+        {
+            var facade = PrepareAndGetFacade();
+
+            return Content(JsonConvert.SerializeObject(facade.GetContacts(),
                         new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
                     "application/json");
         }

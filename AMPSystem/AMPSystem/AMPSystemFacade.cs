@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
-using System.Security.Claims;
-using System.Threading;
+using AMPSchedules.ScheduledTasks;
 using AMPSystem.Classes;
 using AMPSystem.Classes.Filters;
 using AMPSystem.Classes.LoadData;
 using AMPSystem.Classes.TimeTableItems;
 using AMPSystem.DAL;
 using AMPSystem.Interfaces;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Quartz;
+using Quartz.Impl;
 using Room = AMPSystem.Models.Room;
 
 namespace AMPSystem
@@ -20,12 +19,13 @@ namespace AMPSystem
     public class AMPSystemFacade
     {
         private static readonly object _lockobject = new object();
-        public User CurrentUser { get; private set; }
 
         public AMPSystemFacade(string email, DateTime start, DateTime end)
         {
             LoadData(email, start, end);
         }
+
+        public User CurrentUser { get; private set; }
 
         public ICollection<Course> GetCourses()
         {
@@ -37,27 +37,119 @@ namespace AMPSystem
             return TimeTableManager.Instance.Repository.Buildings;
         }
 
-        public ICollection<Alert> GetAlerts()
+        public ICollection<Alert> GetAlerts(string itemName, DateTime startTime)
         {
-            return new List<Alert>();
+            var item = ((List<ITimeTableItem>) TimeTableManager.Instance.TimeTable.ItemList).Find(
+                i =>
+                    i.Name == itemName &&
+                    i.StartTime == startTime);
+
+            return item.Alerts.OrderBy(x => x.AlertTime).ToList();
         }
 
-        public void AddAlert()
+        public void AddAlert(string name, DateTime startTime, DateTime endTime, int time, string units)
         {
+            var item = ((List<ITimeTableItem>) TimeTableManager.Instance.TimeTable.ItemList).Find(
+                it =>
+                    it.Name == name &&
+                    it.StartTime == startTime);
 
+            TimeSpan timeSpan;
+            switch (units)
+            {
+                case "Minutes":
+                    timeSpan = new TimeSpan(0, time, 0);
+                    break;
+                case "Hours":
+                    timeSpan = new TimeSpan(time, 0, 0);
+                    break;
+                case "Days":
+                    timeSpan = new TimeSpan(time, 0, 0, 0);
+                    break;
+                case "Weeks":
+                    timeSpan = new TimeSpan(time * 7, 0, 0, 0);
+                    break;
+                default:
+                    timeSpan = new TimeSpan(0, 0, 0);
+                    break;
+            }
+            var alertTime = item.StartTime - timeSpan;
+            if (alertTime <= DateTime.Now)
+            {
+                throw new Exception("You're trying to schedule an alert for a date previous than current date.");
+            }
+            var alert = new Alert(alertTime, item);
+            Models.Alert dbAlert = null;
+            // Add alert to the DB
+            if (item is Lesson)
+            {
+                var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
+                var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(item.Rooms.First().Building.Name);
+                var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, item.Rooms.First().Floor,
+                    item.Rooms.First().Name);
+                var mLesson = DbManager.Instance.CreateLessonIfNotExists(item.Name, mRoom, mUser, item.Color,
+                    item.StartTime, item.EndTime);
+                dbAlert = DbManager.Instance.AddAlertToLesson(alertTime, mLesson);
+                DbManager.Instance.SaveChanges();
+            }
+            else if (item is EvaluationMoment)
+            {
+                var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
+                var mRooms = new List<Room>();
+                foreach (var room in item.Rooms)
+                {
+                    var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
+                    var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name);
+                    mRooms.Add(mRoom);
+                }
+                var mEvMoment = DbManager.Instance.CreateEvaluationMomentIfNotExists(item.Name, mRooms, mUser,
+                    item.Color,
+                    item.StartTime, item.EndTime, item.Description, null, item.Reminder);
+                // Courses could be null since this is an event that came from the API
+                dbAlert = DbManager.Instance.AddAlertToEvaluation(alertTime, mEvMoment);
+                DbManager.Instance.SaveChanges();
+            }
+            else if (item is OfficeHours)
+            {
+                var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
+                var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(item.Rooms.First().Building.Name);
+                var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, item.Rooms.First().Floor,
+                    item.Rooms.First().Name);
+                var mOfficeHour = DbManager.Instance.CreateOfficeHourIfNotExists(item.Name, mRoom, mUser, item.Color,
+                    item.StartTime, item.EndTime);
+                dbAlert = DbManager.Instance.AddAlertToOfficeH(alertTime, mOfficeHour);
+                DbManager.Instance.SaveChanges();
+            }
+            alert.Id = dbAlert.ID;
+            item.Alerts.Add(alert);
+            ScheduleAlert(item.Name, item.StartTime, alertTime, endTime, CurrentUser.Email, dbAlert.ID);
         }
 
-        public void RemoveAlert()
+        public ICollection<Alert> RemoveAlert(string name, DateTime startTime, int alertId)
         {
+            var item = ((List<ITimeTableItem>) TimeTableManager.Instance.TimeTable.ItemList).Find(
+                i =>
+                    i.Name == name &&
+                    i.StartTime == startTime);
 
+            var alert = ((List<Alert>) item.Alerts).Find(
+                i =>
+                    i.Id == alertId);
+
+            // Removes alert from the DB
+            var dbAlert = DbManager.Instance.ReturnAlert(alertId);
+            DbManager.Instance.RemoveAlert(dbAlert);
+
+            item.Alerts.Remove(alert);
+            return item.Alerts.OrderBy(x => x.AlertTime).ToList();
         }
 
         public void AddReminder(string itemName, DateTime itemStarTime, string reminder)
         {
-            var item = ((List<ITimeTableItem>)TimeTableManager.Instance.TimeTable.ItemList).Find(
-             i =>
-                 i.Name == itemName &&
-                 i.StartTime == itemStarTime);
+            var item = ((List<ITimeTableItem>) TimeTableManager.Instance.TimeTable.ItemList).Find(
+                i =>
+                    i.Name == itemName &&
+                    i.StartTime == itemStarTime);
 
             item.Reminder = reminder;
             var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
@@ -99,8 +191,8 @@ namespace AMPSystem
                     item.EndTime, mUser);
                 if (mEvaluation == null)
                     DbManager.Instance.CreateEvaluationMoment(item.Name, mRooms, mUser, item.Color,
-                            item.StartTime,
-                            item.EndTime, item.Description, null, item.Reminder);
+                        item.StartTime,
+                        item.EndTime, item.Description, null, item.Reminder);
                 // Courses could be null since this is an event that came from the API
                 else
                     DbManager.Instance.SaveEvaluationReminderChange(mEvaluation, item.Reminder);
@@ -110,7 +202,7 @@ namespace AMPSystem
 
         public JObject GetReminder(string itemName, DateTime itemStarTime)
         {
-            var item = ((List<ITimeTableItem>)TimeTableManager.Instance.TimeTable.ItemList).Find(
+            var item = ((List<ITimeTableItem>) TimeTableManager.Instance.TimeTable.ItemList).Find(
                 i =>
                     i.Name == itemName &&
                     i.StartTime == itemStarTime);
@@ -130,7 +222,6 @@ namespace AMPSystem
 
         public ICollection<CalendarItem> AddFilter(Dictionary<string, string> filters)
         {
-
             var mFilters = new AndCompositeFilter();
             foreach (var filter in filters)
                 if (filter.Key == "ClassName")
@@ -159,20 +250,17 @@ namespace AMPSystem
                 if (item.Name == name)
                 {
                     if (color != null)
-                    {
                         item.Color = color;
-                    }
                     else
-                    {
                         break;
-                    }
                     var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
                     if (item is Lesson)
                     {
                         var room = item.Rooms.First();
                         var mBuilding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
                         var mRoom = DbManager.Instance.CreateRoomIfNotExists(mBuilding, room.Floor, room.Name);
-                        var mLesson = DbManager.Instance.ReturnLessonIfExists(item.Name, item.StartTime, item.EndTime, mUser);
+                        var mLesson = DbManager.Instance.ReturnLessonIfExists(item.Name, item.StartTime, item.EndTime,
+                            mUser);
                         if (mLesson == null)
                             DbManager.Instance.CreateLesson(item.Name, mRoom, mUser, item.Color, item.StartTime,
                                 item.EndTime);
@@ -205,8 +293,8 @@ namespace AMPSystem
                             item.EndTime, mUser);
                         if (mEvaluation == null)
                             DbManager.Instance.CreateEvaluationMoment(item.Name, mRooms, mUser, item.Color,
-                                    item.StartTime,
-                                    item.EndTime, item.Description, null, item.Reminder);
+                                item.StartTime,
+                                item.EndTime, item.Description, null, item.Reminder);
                         // Courses could be null since this is an event that came from the API
                         else
                             DbManager.Instance.SaveEvaluationColorChange(mEvaluation, item.Color);
@@ -216,18 +304,70 @@ namespace AMPSystem
             return ParseData();
         }
 
-        public void AddEvent()
+        public ICollection<CalendarItem> AddEvent(string buildingName, string roomName, string course,
+            DateTime startTime, DateTime endTime, string name, string description, string reminder)
         {
+            var rooms = new List<Classes.Room>();
+            var mRooms = new List<Room>();
+            foreach (var building in TimeTableManager.Instance.Repository.Buildings)
+                if (building.Name == buildingName)
+                    foreach (var room in building.Rooms)
+                        if (room.Name == roomName)
+                        {
+                            rooms.Add(room);
+                            var mBulding = DbManager.Instance.CreateBuildingIfNotExists(room.Building.Name);
+                            mRooms.Add(DbManager.Instance.CreateRoomIfNotExists(mBulding, room.Floor, room.Name));
+                        }
+            if (rooms.Count == 0 || mRooms.Count == 0)
+                throw new Exception("There is a problem with the selected room.");
 
+            //Get The course
+            ICollection<Course> courses = new List<Course>();
+            foreach (var mCourse in TimeTableManager.Instance.Repository.Courses)
+                if (mCourse.Name == course)
+                    courses.Add(mCourse);
+
+            if (courses.Count == 0)
+                throw new Exception("There is a problem with the selected course.");
+
+
+            //Get the course
+            ITimeTableItem newEvent = new EvaluationMoment(startTime, endTime, rooms, courses, name, description, true,
+                reminder);
+            //Add new Event
+            Repository.Instance.Items.Add(newEvent);
+            TimeTableManager.Instance.AddTimetableItem(newEvent);
+            var mUser = DbManager.Instance.CreateUserIfNotExists(CurrentUser.Email);
+            DbManager.Instance.CreateEvaluationMoment(name, mRooms, mUser, null, startTime, endTime, description,
+                courses.First().Name, reminder);
+            DbManager.Instance.SaveChanges();
+            return ParseData();
         }
 
-        public void RemoveEvent()
+        public ICollection<CalendarItem> RemoveEvent(string itemName, DateTime starTime, DateTime endTime)
         {
-
+            var item = ((List<ITimeTableItem>) TimeTableManager.Instance.TimeTable.ItemList).Find(
+                i =>
+                    i.Name == itemName &&
+                    i.StartTime == starTime &&
+                    i.EndTime == endTime);
+            // Remove event
+            var dbUser = DbManager.Instance.ReturnUserIfExists(CurrentUser.Email);
+            var dbItem = DbManager.Instance.ReturnEvaluationMomentIfExists(item.Name, item.StartTime, item.EndTime,
+                dbUser);
+            DbManager.Instance.RemoveEvent(dbItem);
+            TimeTableManager.Instance.RemoveTimeTableItem(item);
+            Repository.Instance.Items.Remove(item);
+            return ParseData();
         }
+
         public ICollection<ITimeTableItem> GetContacts()
         {
-            return new List<ITimeTableItem>();
+            ICollection<ITimeTableItem> items = new List<ITimeTableItem>();
+            foreach (var officeHour in TimeTableManager.Instance.TimeTable.ItemList)
+                if (officeHour is OfficeHours)
+                    items.Add(officeHour);
+            return items;
         }
 
         private void LoadData(string email, DateTime start, DateTime end)
@@ -250,13 +390,9 @@ namespace AMPSystem
 
             var domain = mail.Host;
             if (domain == "student.uma.pt")
-            {
                 roles.Add("Student");
-            }
             else
-            {
                 roles.Add("Teacher");
-            }
 
             CurrentUser = Factory.Instance.CreateUser(user, mail.Address, roles, Repository.Instance.UserCourses);
             //The manager will start the timetableitem list with the data read from the repo
@@ -275,6 +411,31 @@ namespace AMPSystem
             //This flag , "JsonRequestBehavior.AllowGet" removes protection from gets 
             //return Json( TimeTableItemsList , JsonRequestBehavior.AllowGet);
             return parsedItems;
+        }
+
+        /// <summary>
+        ///     Schedules an email for the alert
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="startTime"></param>
+        /// <param name="alertTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="email"></param>
+        /// <param name="id"></param>
+        private void ScheduleAlert(string name, DateTime startTime, DateTime alertTime, DateTime endTime, string email,
+            int id)
+        {
+            var job = JobBuilder.Create<EmailJob>()
+                .UsingJobData("Name", name)
+                .UsingJobData("StartTime", startTime.ToString("dd-MM-yyyy HH:mm"))
+                .UsingJobData("EndTime", endTime.ToString("dd-MM-yyyy HH:mm"))
+                .UsingJobData("Email", email)
+                .UsingJobData("Id", id)
+                .Build();
+
+            var trigger = TriggerBuilder.Create().StartAt(alertTime).Build();
+
+            StdSchedulerFactory.GetDefaultScheduler().ScheduleJob(job, trigger);
         }
     }
 }

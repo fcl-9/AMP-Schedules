@@ -10,15 +10,13 @@ using Newtonsoft.Json;
 
 namespace AMPSchedules.Controllers
 {
-    public class FiltersController : Controller
+    public class FiltersController : BaseController
     {
         // GET: Filters/Add
         public ActionResult Add()
         {
-            var mail = ClaimsPrincipal.Current.FindFirst("preferred_username")?.Value;
-            var startDateTime = Convert.ToDateTime(Request.QueryString["start"]);
-            var endDateTime = Convert.ToDateTime(Request.QueryString["end"]);
-            var facade = new AMPSystemFacade(mail, startDateTime, endDateTime);
+            var facade = PrepareAndGetFacade();
+
             var filters = new Dictionary<string, string>();
             foreach (var filter in Request.QueryString)
             {

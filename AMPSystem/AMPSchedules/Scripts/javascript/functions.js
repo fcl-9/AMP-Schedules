@@ -85,7 +85,7 @@ function getRooms(functionRender) {
 function getActiveAlerts(item, funtionSucess) {
     $.ajax({
         type: "GET",
-        url: "/Alert/Index",
+        url: "/Alerts",
         data: item,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -256,7 +256,7 @@ function renderFilterCheckBoxes(courses) {
 function removeAnAlert(datatoSend, onSuccess) {
     $.ajax({
         type: "GET",
-        url: "/RemoveAlert/Index",
+        url: "/Alerts/Remove",
         data: datatoSend,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -281,12 +281,12 @@ function renderActiveAlerts(activeAlerts) {
                     '<div class="col-sm-12 form-group">' +
                     '<div class="col-sm-10">' +
                     '<input class="form-control" value="' +
-                    value.Value+
+                    value+
                     '" readonly=""/>' +
                     '</div>' +
                     '<div class="col-sm-2">' +
                     '<button class="rm-active-alert btn btn-danger" id="' +
-                    value.Key +
+                    key +
                     '">Remove</button>' +
                     '</div>' +
                     '</div>'
@@ -402,17 +402,24 @@ function AlertModalFunctions() {
             if (error === false) {
                 $.ajax({
                     type: "GET",
-                    url: "/AddAlert/Index",
+                    url: "/Alerts/Add",
                     data: alerts,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (events) {
-                        if (viewCalendar) {
-                            $('#calendar').fullCalendar('removeEvents'); //Removes Everything
-                            $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
-                            $('#calendar').fullCalendar('rerenderEvents')
+                        console.log(events);
+                        console.log(events.success);
+                        if (!events.sucesss) {
+                            $("#alertForm").append("<p style=\"color:red;\">" + events.responseText + "</p>");
                         } else {
-                            location.reload();
+                            if (viewCalendar) {
+                                $('#calendar').fullCalendar('removeEvents'); //Removes Everything
+                                $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
+                                $('#calendar').fullCalendar('rerenderEvents')
+                            } else {
+                                location.reload();
+                            }
+                            $("#fullCalModal").modal("hide");
                         }
                     },
                     failure: function (response) {
@@ -420,8 +427,6 @@ function AlertModalFunctions() {
                         alert(response.d);
                     }
                 });
-
-                $("#fullCalModal").modal("hide");
             } else {
                 console.log("Check the data you inputed.");
             }
@@ -510,7 +515,7 @@ function eventAddRequester() {
         newEvent["end"] = moment(endsAt, "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
     }
     //Request Ajax Send to Database.
-    requestEvent("/AddEvent/AddEvent", newEvent);
+    requestEvent("/Events/Add", newEvent);
 }
 
 //Makes get Event
@@ -539,7 +544,7 @@ function requestEvent(requesturl, data) {
 
 // Remove events
 function removeUserAddedEvents() {
-    $("#remove").click(function () {
+    $("#removeEvent").click(function () {
         var data = {};
         data.id = currentEvent.id;
         data.name = currentEvent.title;
@@ -551,7 +556,7 @@ function removeUserAddedEvents() {
             data.endEvent = currentEvent.end;
         }
         console.log(data);
-        requestGetType("/RemoveEvent/", data);
+        requestGetType("/Events/Remove", data);
         $("#fullCalModal").modal("hide");
     });
 }

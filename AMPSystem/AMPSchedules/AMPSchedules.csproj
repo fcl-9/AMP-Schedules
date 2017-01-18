@@ -197,15 +197,15 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\OldControllers\OldAddAlertController.cs" />
-    <Compile Include="Controllers\AlertsCourses.cs" />
+    <Compile Include="Controllers\AlertsController.cs" />
     <Compile Include="Controllers\ColorController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\FiltersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LessonsController.cs" />
     <Compile Include="Controllers\OldControllers\OldAlertController.cs" />
     <Compile Include="Controllers\OldControllers\OldEventController.cs" />
     <Compile Include="Controllers\OldControllers\OldReminderController.cs" />
@@ -228,8 +228,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScheduledTasks\EmailJob.cs" />
-    <Compile Include="ScheduledTasks\JobScheduler.cs" />
     <Compile Include="Services\EmailMessageBuilder.cs" />
     <Compile Include="Services\GraphResources.cs" />
     <Compile Include="Services\GraphService.cs" />
@@ -420,16 +418,10 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Contacts\Contacts.cshtml" />
+    <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Lessons\Create.cshtml" />
-    <Content Include="Views\Lessons\Delete.cshtml" />
-    <Content Include="Views\Lessons\Details.cshtml" />
-    <Content Include="Views\Lessons\Edit.cshtml" />
-    <Content Include="Views\Lessons\Index.cshtml" />
     <Content Include="Views\Account\SignOutCallback.cshtml" />
     <Content Include="Views\Shared\_EventModalPartial.cshtml" />
     <Content Include="Views\Shared\_AddEventPartial.cshtml" />
@@ -458,16 +450,7 @@
     <Folder Include="Content\images\" />
     <Folder Include="Helpers\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\AddAlert\" />
-    <Folder Include="Views\AddEvent\" />
-    <Folder Include="Views\Buildings\" />
-    <Folder Include="Views\Color\" />
-    <Folder Include="Views\Events\" />
-    <Folder Include="Views\Event\" />
-    <Folder Include="Views\Filters\" />
-    <Folder Include="Views\Items\" />
-    <Folder Include="Views\Reminder\" />
-    <Folder Include="Views\RemoveAlert\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

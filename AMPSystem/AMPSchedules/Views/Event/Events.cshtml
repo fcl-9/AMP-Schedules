@@ -165,9 +165,23 @@
                             floor = val.Floor;
                         });
                     if (initialDate === moment(startTime).format("YYYY-MM-DD")) {
-                        renderTodayEvent(className,startTime,classRoom,floor,color,JSON.stringify(value),reminder,endTime);
+                        renderTodayEvent(className,
+                            startTime,
+                            classRoom,
+                            floor,
+                            color,
+                            JSON.stringify(value),
+                            reminder,
+                            endTime);
                     } else {
-                        renderFutureEvent(className,startTime,classRoom,floor,color,JSON.stringify(value),reminder,endTime);
+                        renderFutureEvent(className,
+                            startTime,
+                            classRoom,
+                            floor,
+                            color,
+                            JSON.stringify(value),
+                            reminder,
+                            endTime);
                     }
 
 
@@ -178,23 +192,11 @@
 
         //Renders the actual events
         function renderTodayEvent(className, startTime, classRoom, floor, color, eventInfo, reminder, endTime) {
-
-            var dataAtual = new Date();
-            var dataStartTime = new Date(startTime);
-
-            if (dataAtual.getHours() < dataStartTime.getHours()) {
-                //Evento will start
-                eventColorInfo = color;
-            } else {
-                //Event Started
-                eventColorInfo = "rgba(152, 152, 152, 0.901961)";
-            }
-
-            $('.NextEvent').append(
+          $('.NextEvent').append(
                 '<div class="panel-group" >' +
                 '<div class="panel panel-primary ">' +
                 '<div class="panel-body header" style="background-color:' +
-                eventColorInfo +
+                color +
                 '">' +
                 '<input type="hidden" value=\'' +
                 eventInfo +
@@ -285,28 +287,34 @@
                             $(this).html("The event just passed");
                             $(this).css("background-color", "rgba(152, 152, 152, 0.9)");
                             $(this).css("color", "white");
-
-
+                            $(this).prev().prev().css('color', 'white').css("background-color", "rgba(152, 152, 152, 0.901961)");
+                            $(this).prev().css('color', '#757171').css("background-color", "rgba(187, 187, 187, 0.19)");
                         } else {
                             if (event.offset
                                 .totalMinutes <=
                                 10) //Time for the end is less or equal than then just put it in RED
                             {
-                                $(this).css("background-color", "rgba(255, 0, 0, 0.9)");
+                                $(this).css("background-color", "rgba(244, 67, 54, 1)");
                                 $(this).css("color", "white");
                             } else if (event.offset
                                 .totalMinutes <=
                                 30) { //Time for the end is less than 30 minutes put it in Yellow
-                                $(this).css("background-color", "rgba(221, 243, 40, 0.9)");
+                                $(this).css("background-color", "rgba(255, 235, 59, 1)");
                                 $(this).css("color", "white");
                             } else if (event.offset
                                 .totalMinutes >
                                 30) { //Time for the end is higher than 30 minutes put it in Yellow
-                                $(this).css("background-color", "rgba(51, 233, 44, 0.9)");
+                                $(this).css("background-color", "rgba(139, 195, 74, 1)");
                                 $(this).css("color", "white");
                             }
                         }
-                    });
+                    }).on('finish.countdown', function () {
+                        $(this).html("The event just passed");
+                        $(this).css("background-color", "rgba(152, 152, 152, 0.9)");
+                        $(this).css("color", "white");
+                        $(this).prev().prev().css('color', 'white').css("background-color", "rgba(152, 152, 152, 0.901961)");
+                        $(this).prev().css('color', '#757171').css("background-color", "rgba(187, 187, 187, 0.19)");
+                });
             });
 
         }
@@ -320,6 +328,7 @@
                     $(this).html("The event just passed");
                     $(this).css("background-color", "rgba(152, 152, 152, 0.9)");
                     $(this).css("color", "white");
+                    $(this).prev().prev().css('color', 'white').css("background-color", "rgba(152, 152, 152, 0.901961)");
                     $(this).prev().css('color', '#757171').css("background-color", "rgba(187, 187, 187, 0.19)");
                 }
             });

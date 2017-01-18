@@ -11,7 +11,6 @@ namespace AMPSystem.Classes
         /// </summary>
         /// <param name="startDateTime"></param>
         /// <param name="endDateTime"></param>
-        /// <param name="currentUser"></param>
         public Timetable(DateTime startDateTime, DateTime endDateTime)
         {
             StartDateTime = startDateTime;

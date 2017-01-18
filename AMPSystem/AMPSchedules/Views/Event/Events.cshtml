@@ -116,6 +116,7 @@
 
         //Ajax Request for events
         function requestEvents(returnFunction) {
+            alert(start);
             $.ajax({
                 type: "GET",
                 url: '/Event/ReturnEvents?start=' + start + '&end=' + end,
@@ -128,35 +129,13 @@
                 }
             });
         }
-        function Inicializations() {
-             //Add the Color Picker that's inside alerts modal
-            $('select[name="colorpicker"]').simplecolorpicker();
-            // Configures validator
-            configureValidator();
-            //Ajax Request
-            getCourses(renderFilterCheckBoxes);
-            //Binds Events to Alerts Modal
-            AlertModalFunctions();
-            // Binds Event to Add Event Button
-            bindAddEventButton();
-            //Renders the DatePickers
-            renderDatePickers();
-            //Removes User Added Events
-            removeUserAddedEvents();
-            //Adds Validator to New Event Submission Form
-            addJqueryValidator();
-            //Submit the Data of a new event
-            saveNewEventBtt();
-            //Request for active events that belong to a user
-            clickTabFour();
-            //Removes Active Alert From the Database
-            removeActiveAlert();
-        }
+        
         //Adds Information to the page
         function printInformation(events) {
             console.log(events);
             var ClassName = undefined;
             var StartingTime = undefined;
+            var EndTime = undefined;
             var ClassRoom = undefined;
             var Floor = undefined;
             var Reminder = undefined;
@@ -167,6 +146,7 @@
                     console.log(value);
                     ClassName = value.title;
                     StartingTime = value.start;
+                    EndTime = value.end;
                     Color = value.color;
                     Reminder = value.reminder;
                     $.each(value.rooms,
@@ -175,44 +155,69 @@
                             Floor = val.Floor;
                         });
                     if (DateInicial == moment(StartingTime).format("YYYY-MM-DD")) {
-                        renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value),Reminder);
+                        renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value),Reminder,EndTime);
                     } else {
-                        renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value),Reminder);
+                        renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, JSON.stringify(value), Reminder,EndTime);
                     }
 
                 });
         }
 
-        function renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo,Reminder) {
+        function renderTodayEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo, Reminder, EndTime) {
+            
+            var dataAtual = new Date();
+            var dataStartingTime = new Date(StartingTime);
+            var CorEventoCabecalho = undefined;
+            var CorInformacoesEvento = undefined;
+            var CorCountdownSection = undefined;
+            var CountdownMessage = undefined;
+            alert(dataAtual.getHours()+"   "+dataStartingTime.getHours());
+            if (dataAtual.getHours() < dataStartingTime.getHours())
+            {
+                
+                CorEventoCabecalho = Color;
+                CorInformacoesEvento = "#FFFFFF";
+                CorCountdownSection = "green";
+                CountdownMessage = "Time to this event : 50m";
+            }
+            else
+            {
+                CorEventoCabecalho = "#E6E6E6";
+                CorInformacoesEvento = "#E6E6E6";
+                CorCountdownSection = "#E6E6E6";
+                
+                CountdownMessage = "This Event just passed";
+            }
             $('.NextEvent').append(
                 '<div class="panel-group">' +
                 '<div class="panel panel-primary">' +
-                '<div class="panel-body" style="background:' + Color + '">' +
+                '<div class="panel-body" style="background:' + CorEventoCabecalho + '">' +
                  '<input type="hidden" value=\'' +
                 EventInfo +
                 '\'>' +
                 '<span style="float:right"  class="glyphicon glyphicon-cog" aria-hidden="true"></span>' +
                 '<h5>' + ClassName + '</h5></div>'+
-                '<div class="panel-body">' +
+                '<div class="panel-body" style="background:'+CorInformacoesEvento+'">' +
                 '<p>Inicio: ' +
-                StartingTime +
-                ' H</p>' +
+                moment(StartingTime).format("ddd Do MMM H:mm") +'</p>'+
+                '<p>Fim:' + moment(EndTime).format("ddd Do MMM H:mm") +
+                '</p>' +
                 '<p>' +
                 ClassRoom +
                 '</p>' +
                 '<p>Piso: ' +
                 Floor +
                 '</p>' +
+                '<br>'+
                 '<p>Reminder:' + Reminder + '</p>' +
                 '</div>' +
-                '<div class="panel-body"style="background:green"><p>Time to Event:50m</p></div>'+
+                '<div class="panel-body" style="background:'+CorCountdownSection+'"><p>'+CountdownMessage+'</p></div>'+
                 '</div>' +
                 '</div>'
             );
-
         }
 
-        function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo,Reminder) {
+        function renderFutureEvent(ClassName, StartingTime, ClassRoom, Floor, Color, EventInfo, Reminder, EndTime) {
             $('#FutureEvents').append(
                 '<div class="panel-group">' +
                 '<div class="panel panel-primary">' +
@@ -224,14 +229,16 @@
                 '<h5>' + ClassName + '</h5></div>'+
                 '<div class="panel-body">' +
                 '<p>Inicio: ' +
-                StartingTime +
-                ' H</p>' +
+                moment(StartingTime).format("ddd Do MMM H:mm") + '</p>' +
+                '<p>Fim:' + moment(EndTime).format("ddd Do MMM H:mm") +
+                '</p>'+
                 '<p>' +
                 ClassRoom +
                 '</p>' +
                 '<p>Piso: ' +
                 Floor +
                 '</p>' +
+                '<br>' +
                 '<p>Reminder:'+Reminder+'</p>'+
                 '</div>'+
                 '</div>' +
@@ -256,7 +263,6 @@
             }
             end = moment(addDays(mStart, DayInterval)).format("YYYY-MM-DD");
             start = moment(mStart).format("YYYY-MM-DD");
-            start += 'T' + hh + ':' + mm + ':' + ss;
             end += 'T23:53:53';
         }
         //Presents officehours of week
@@ -291,6 +297,31 @@
             };
 
         }());
+
+        function Inicializations() {
+            //Add the Color Picker that's inside alerts modal
+            $('select[name="colorpicker"]').simplecolorpicker();
+            // Configures validator
+            configureValidator();
+            //Ajax Request
+            getCourses(renderFilterCheckBoxes);
+            //Binds Events to Alerts Modal
+            AlertModalFunctions();
+            // Binds Event to Add Event Button
+            bindAddEventButton();
+            //Renders the DatePickers
+            renderDatePickers();
+            //Removes User Added Events
+            removeUserAddedEvents();
+            //Adds Validator to New Event Submission Form
+            addJqueryValidator();
+            //Submit the Data of a new event
+            saveNewEventBtt();
+            //Request for active events that belong to a user
+            clickTabFour();
+            //Removes Active Alert From the Database
+            removeActiveAlert();
+        }
     </script>
 
 }

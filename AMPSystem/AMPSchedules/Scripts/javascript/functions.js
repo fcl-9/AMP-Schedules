@@ -748,8 +748,27 @@ function updateReminder(json) {
 
 
 }
-
+//Updates the calendar each minute to disable past events
 function updateCalendarEvents() {
     $("#calendar").fullCalendar("rerenderEvents");
     setTimeout(updateCalendarEvents, 60000);
+}
+
+function cleanModal() {
+    $("#closeModal").click(function() {
+        /*if ($("#3").hasClass("active")) {
+            $("#alertForm").empty();
+        }else if ($("#4").hasClass("active")) {
+            $("#activeAlertForm").empty();
+        } else if ($("#5").hasClass("active")) {
+            $("#display_reminder").empty();
+        }*/
+        $('#modalBody a:first').tab('show');
+    });
+
+    $("#closeModelX").click(function() {
+        $('#modalBody a:first').tab('show');
+    });
+
+
 }

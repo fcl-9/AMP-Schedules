@@ -380,6 +380,8 @@ function AlertModalFunctions() {
             //Request Data
             requestGetType("/Color/Add", colorApplyer);
             $('#fullCalModal').modal('hide');
+            $('#modalBody a:first').tab('show');
+
         } else if ($("#3").hasClass("active")) {
             $("#alertForm").valid();
             //console.log(" " + $("#startTime").text()+ " " + $("#endTime").text());
@@ -427,11 +429,12 @@ function AlertModalFunctions() {
                             if (viewCalendar) {
                                 $('#calendar').fullCalendar('removeEvents'); //Removes Everything
                                 $('#calendar').fullCalendar('addEventSource', events); //Gets The Event
-                                $('#calendar').fullCalendar('rerenderEvents')
+                                $('#calendar').fullCalendar('rerenderEvents');
                             } else {
                                 location.reload();
                             }
                             $("#fullCalModal").modal("hide");
+                            $('#modalBody a:first').tab('show');
                         }
                     },
                     failure: function (response) {
@@ -726,7 +729,9 @@ function AddorEditReminder() {
         newReminder["start"] = moment($("#startTime").text(), "Do MMM YYYY H:mm").subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
         newReminder["end"] = moment($("#endTime").text(), "Do MMM YYYY H:mm").add(7, "days").format("YYYY-MM-DD HH:mm:ss");
     }
-       updateReminder(newReminder);
+    updateReminder(newReminder);
+    $("#fullCalModal").modal("hide");
+    $('#modalBody a:first').tab('show');
 }
 
 //Ajax Request for Reminder
@@ -738,11 +743,12 @@ function updateReminder(json) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (events) {
-            console.log("Sucesso");
+           
         },
         failure: function (response) {
-            console.log("Fail");
-            alert(response.d);
+            console.log("The reminder addition failed");
+            $("#fullCalModal").modal("hide");
+
         }
     });
 

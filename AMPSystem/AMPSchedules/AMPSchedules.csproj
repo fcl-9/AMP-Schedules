@@ -199,31 +199,17 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
-    <Compile Include="Controllers\OldControllers\OldAddAlertController.cs" />
     <Compile Include="Controllers\AlertsController.cs" />
     <Compile Include="Controllers\ColorController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\FiltersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\OldControllers\OldAlertController.cs" />
-    <Compile Include="Controllers\OldControllers\OldEventController.cs" />
-    <Compile Include="Controllers\OldControllers\OldReminderController.cs" />
     <Compile Include="Controllers\ReminderController.cs" />
-    <Compile Include="Controllers\OldControllers\OldRemoveAlertController.cs" />
-    <Compile Include="Controllers\OldControllers\OldRemoveEventController.cs" />
-    <Compile Include="Controllers\OldControllers\OldAddEventController.cs" />
-    <Compile Include="Controllers\OldControllers\OldColorController.cs" />
-    <Compile Include="Controllers\OldControllers\OldRoomsController.cs" />
-    <Compile Include="Controllers\OldControllers\OldCoursesController.cs" />
-    <Compile Include="Controllers\OldControllers\OldFilterController.cs" />
-    <Compile Include="Controllers\OldControllers\OldContactsController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\BuildingsController.cs" />
-    <Compile Include="Controllers\OldControllers\OldTemplateController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\OldControllers\OldHomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

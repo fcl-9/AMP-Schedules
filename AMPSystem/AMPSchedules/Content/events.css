@@ -1,0 +1,20 @@
+﻿.panel-group .panel {
+    -ms-border-radius: 0;
+    border-radius: 0;
+    border-color: gray;
+}
+
+.header {
+    border-bottom: solid thin gray;
+    height: 45px;
+}
+
+.footer {
+    border-top: solid thin gray;
+    text-align: center;
+    height: 45px;
+}
+
+.glyphicon-cog {
+    font-size: larger;
+}

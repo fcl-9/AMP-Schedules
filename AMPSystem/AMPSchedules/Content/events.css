@@ -7,6 +7,8 @@
 .header {
     border-bottom: solid thin gray;
     height: 45px;
+    background-color: rgb(51, 122, 183);
+    color: white;
 }
 
 .footer {

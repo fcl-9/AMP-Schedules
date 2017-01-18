@@ -710,6 +710,7 @@ function clickTabFive() {
 
 //Gets the json and renders it's information on the interface
 function renderReminderSuccess(activeReminder) {
+    console.log("Display Reminders");
         $("#display_reminder").val(activeReminder['Message']);
 }
 
@@ -732,6 +733,7 @@ function AddorEditReminder() {
     updateReminder(newReminder);
     $("#fullCalModal").modal("hide");
     $('#modalBody a:first').tab('show');
+    location.reload();
 }
 
 //Ajax Request for Reminder
@@ -743,7 +745,6 @@ function updateReminder(json) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (events) {
-           
         },
         failure: function (response) {
             console.log("The reminder addition failed");

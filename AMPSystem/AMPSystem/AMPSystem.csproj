@@ -70,7 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AMPSystemFacade.cs" />
+    <Compile Include="Classes\AMPSystemFacade.cs" />
     <Compile Include="Classes\CalendarItem.cs" />
     <Compile Include="Classes\Filters\Name.cs" />
     <Compile Include="Classes\Filters\AndCompositeFilter.cs" />

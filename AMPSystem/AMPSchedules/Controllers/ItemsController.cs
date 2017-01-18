@@ -25,7 +25,7 @@ namespace AMPSchedules.Controllers
         {
             var facade = PrepareAndGetFacade();
 
-            return Content(JsonConvert.SerializeObject(facade.GetContacts(),
+            return Content(JsonConvert.SerializeObject(facade.GetOfficeHours(),
                         new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
                     "application/json");
         }

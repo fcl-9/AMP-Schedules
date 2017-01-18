@@ -53,7 +53,7 @@ namespace AMPSchedules.Controllers
         {
             var facade = PrepareAndGetFacade();
 
-            return Content(JsonConvert.SerializeObject(facade.RemoveEvent(Request.QueryString["name"], Convert.ToDateTime(Request.QueryString["startEvent"]), Convert.ToDateTime(Request.QueryString["endEvent"])),
+            return Content(JsonConvert.SerializeObject(facade.RemoveEvent(Request.QueryString["name"], Convert.ToDateTime(Request.QueryString["startEvent"])),
                         new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
                     "application/json");
         }

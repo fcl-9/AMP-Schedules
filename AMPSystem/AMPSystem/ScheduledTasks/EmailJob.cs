@@ -25,7 +25,7 @@ namespace AMPSchedules.ScheduledTasks
                     EnableSsl = true,
                     Host = "smtp.office365.com",
                     Port = 587,
-                    Credentials = new NetworkCredential("2054313@student.uma.pt", "EEm5KK2k22")
+                    Credentials = new NetworkCredential(EMAIL, PASSWORD)
                 })
                 {
                     client.Send(message);
